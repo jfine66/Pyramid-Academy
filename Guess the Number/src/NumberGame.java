@@ -5,6 +5,7 @@ public class NumberGame {
     private static String playerName;
     private static int numberOfGuesses;
     private static int targetNumber;
+    private static int guessedNumber;
 
     public static void main(String[] args) {
         System.out.println("Hello! What is your name?");
@@ -13,31 +14,46 @@ public class NumberGame {
 
     }
 
-    // get player input
+    // get player input includes try & catch block
     public static String getPlayerName(){
-        Scanner nameObj = new Scanner(System.in);
-        return nameObj.nextLine();
+        try {
+            Scanner nameObj = new Scanner(System.in);
+            return nameObj.nextLine();
+        } catch (Exception e){
+            System.out.println("Something went wrong. Please restart application");
+            System.exit(0);
+        }
+        return "Player";
     }
 
-    public static String getGuess(){
-        Scanner guessObj = new Scanner(System.in);
-        return guessObj.nextLine();
+    public static int getGuess(){
+        try{
+            Scanner guessObj = new Scanner(System.in);
+            String guess = guessObj.nextLine();
+            guessedNumber = Integer.parseInt(guess);
+            return guessedNumber;
+        } catch(Exception e){
+            System.out.println("That input is not a valid choice. Please enter a number.");
+            getGuess();
+        }
+        return guessedNumber;
     }
 
-    // Check player input
+    // Check to see if player lost
     public static void checkNumberOfGuesses(){
         if(numberOfGuesses == 0){
             displayLoser();
         }
     }
 
-    public static void checkGuess(String guess){
-        int guessNumber = Integer.parseInt(guess);
-        if(guessNumber == targetNumber){
+    //Check player input
+    public static void checkGuess(int guess){
+        //System.out.println(guess);
+        if(guess == targetNumber){
             displayWinner();
-        } else if(guessNumber < targetNumber){
+        } else if(guess < targetNumber){
             System.out.println("Your guess is too low. Number of guesses reminding: " + (numberOfGuesses - 1) + ", take another guess: ");
-        } else if(guessNumber > targetNumber){
+        } else if(guess > targetNumber){
             System.out.println("Your guess is too high. Number of guesses reminding: " + (numberOfGuesses - 1) + ", take another guess: ");
         }
     }
@@ -47,13 +63,15 @@ public class NumberGame {
         targetNumber = createTarget();
         numberOfGuesses = 6;
 
+        //System.out.println(targetNumber);
         System.out.println("Well, " + playerName + ", I am thinking of a number between 1 and 20. Take a guess.");
 
-        while(numberOfGuesses > 0){
+        while(numberOfGuesses > 0 && targetNumber != guessedNumber){
             checkGuess(getGuess());
             numberOfGuesses--;
             checkNumberOfGuesses();
         }
+
     }
 
 
@@ -69,33 +87,31 @@ public class NumberGame {
     //Outcomes of the game
     public static void displayLoser(){
         System.out.println("Uh-oh, it looks like you ran out of guesses. You Lose. Would you like to play again? (y or n)");
-        Scanner loseInputObj = new Scanner(System.in);
-        endGame(loseInputObj.nextLine());
+        endGame();
     }
 
     public static void displayWinner(){
         System.out.println("Good job! " + playerName + "! You guessed my number with " + numberOfGuesses + " guesses left! Would you like to play again? (y or n)");
-        Scanner inputObj = new Scanner(System.in);
-        endGame(inputObj.nextLine());
+        endGame();
     }
 
-    public static void endGame(String yayNay){
-        Scanner command = new Scanner(System.in);
+    public static void endGame(){
+        try {
+            Scanner command = new Scanner(System.in);
+            String yayNay = command.nextLine();
 
-        if(yayNay.equals("y")){
-            gameStart();
-        } else if(yayNay.equals("n")){
-            System.exit(0);
-        } else {
-            System.out.println("Please enter valid command: ");
-            endGame(command.nextLine());
+            if (yayNay.equals("y")) {
+                gameStart();
+            } else if (yayNay.equals("n")) {
+                System.exit(0);
+            } else {
+                System.out.println("Please enter valid command: y or n");
+                endGame();
+            }
+        } catch(Exception e){
+            System.out.print(e.getMessage());
         }
     }
-
-
-
-
-
 
 }
 

@@ -15,25 +15,35 @@ public class Dragon {
     }
 
     public static void userInput(){
+        try{
         Scanner myObj = new Scanner(System.in);
         String choice = myObj.next();
         outcome(choice);
+        } catch(Exception e){
+            System.out.println("An Error has occurred: Starting over");
+            Prologue();
+        }
     }
 
     public static void outcome(String choice){
-        if(choice.equals("1")){
-            System.out.println("You approach the cave...");
-            System.out.println("It is dark and spooky...");
-            System.out.println("A large dragon jumps out in front of you! He opens his jaws and...");
-            System.out.println("Gobbles you down in one bite!");
-        } else if(choice.equals("2")){
-            System.out.println("You approach the cave...");
-            System.out.println("You hear a sweet and soft melody");
-            System.out.println("A large dragon appears in front of you. It takes a moment to take your measure");
-            System.out.println("You seemed to have impressed her, she offers you have of her treasure");
-        } else {
-            System.out.println("Please enter valid command: ");
-            userInput();
+        try {
+            if (choice.equals("1")) {
+                System.out.println("You approach the cave...");
+                System.out.println("It is dark and spooky...");
+                System.out.println("A large dragon jumps out in front of you! He opens his jaws and...");
+                System.out.println("Gobbles you down in one bite!");
+            } else if (choice.equals("2")) {
+                System.out.println("You approach the cave...");
+                System.out.println("You hear a sweet and soft melody");
+                System.out.println("A large dragon appears in front of you. It takes a moment to take your measure");
+                System.out.println("You seemed to have impressed her, she offers you have of her treasure");
+            } else {
+                System.out.println("Please enter valid command: ");
+                userInput();
+            }
+        } catch(Exception e){
+            System.out.println("Something went wrong. Starting over");
+            Prologue();
         }
     }
 
