@@ -10,10 +10,6 @@ public class Land {
        createBoard();
    }
 
-    public static void main(String[] args) {
-
-    }
-
    public void createBoard(){
        for(int i = 0; i < area; i++){
            if(i % side == 0){
@@ -21,6 +17,22 @@ public class Land {
            }
            board.append("[]");
        }
+   }
+
+   public void defaultPosition(Human player){
+       board.replace(1,3, player.toString());
+   }
+
+   public int getCurrentLocation(Human player){
+       return board.indexOf(player.toString());
+   }
+
+   public void setLocation(int start, int end, Human player){
+       board.replace(start,end,player.toString());
+   }
+
+   public void resetSquare(int start, int end){
+       board.replace(start, end, "[]");
    }
 
     @Override
