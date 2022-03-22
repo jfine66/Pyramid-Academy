@@ -55,17 +55,22 @@ public class Hangman {
     }
 
     public static void checkGuess(String guess){
-        checkLetter(guess);
+        try{
+            checkLetter(guess);
 
-        if(targetWord.contains(guess)){
+            if(targetWord.contains(guess)){
 
-         for(int index = targetWord.indexOf(guess); index >= 0 ; index = targetWord.indexOf(guess, index + 1)){
-             displayedWord.setCharAt(index, guess.charAt(0));
-         }
+                for(int index = targetWord.indexOf(guess); index >= 0 ; index = targetWord.indexOf(guess, index + 1)){
+                    displayedWord.setCharAt(index, guess.charAt(0));
+                }
 
-        } else {
-            numGuesses--;
-            updateGallows(numGuesses);
+            } else {
+                numGuesses--;
+                updateGallows(numGuesses);
+            }
+        } catch (Exception e){
+            System.out.println("Something went wrong please restart application.");
+            System.exit(0);
         }
     }
 
