@@ -1,14 +1,37 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
 public class Application {
-    static Land board = new Land(3,3);
-    static Human player = new Human(board);
-    static Goblin goblin = new Goblin(board);
+    static Human player = new Human();
+    static Goblin goblin = new Goblin();
+    static Goblin goblinOne = new Goblin();
+    static Goblin goblinTwo = new Goblin();
+    static Goblin goblinThree = new Goblin();
+    static Goblin goblinFour = new Goblin();
+    static Land board = new Land(player, goblin, goblinOne, goblinTwo, goblinThree, goblinFour);
+    static int goblins = 5;
+    static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
+        gameStart();
+    }
+
+    public static void gameStart(){
         board.setPlayerStart();
         board.setGoblins();
-        System.out.println(board);
-        player.move("e");
-        player.move("e");
-        System.out.println(board);
+        while(goblins > 0){
+            System.out.println(board);
+            System.out.println("use n/w/s/e to move: ");
+            board.move(player,input.nextLine());
+        }
+    }
+
+    public static String gMove(){
+        ArrayList<String> dir = new ArrayList<>(Arrays.asList("n","w","s","e"));
+        Collections.shuffle(dir);
+        return dir.get(0);
     }
 }
