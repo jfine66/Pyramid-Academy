@@ -25,7 +25,8 @@ public class Application {
         while(goblins > 0){
             System.out.println(board);
             System.out.println("use n/w/s/e to move: ");
-            board.move(player,input.nextLine());
+            board.move(goblin,input.nextLine());
+            System.out.println(player.getHealth());
         }
     }
 

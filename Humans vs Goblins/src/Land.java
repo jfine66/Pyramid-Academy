@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.Arrays;
+
 
 public class Land {
     private final int side;
@@ -39,13 +39,13 @@ public class Land {
 
     @Override
     public String toString() {
-       String display = "";
+       StringBuilder display = new StringBuilder();
 
         for (ArrayList<Object> strings : board) {
-            display += strings + "\n";
+            display.append(strings).append("\n");
         }
 
-        return display;
+        return display.toString();
     }
 
     public void setPlayerStart(){
@@ -77,100 +77,112 @@ public class Land {
         int outer = piecePos[0];
         int inner = piecePos[1];
 
-       if(checkDir(direction, inner, outer)){
-           updatePos(object,direction,inner,outer);
-       } else{
-           battle(getEnemy(direction, inner, outer));
-       }
+        updatePos(object, direction, inner,outer);
     }
+
 
     private void updatePos(Object object, String direction,int inner,int outer){
-     try{
-         board.get(outer).set(inner, "#");
-         switch (direction){
-             case "e":
-                 board.get(outer).set(inner + 1, object);
-                 break;
-             case "w":
-                 board.get(outer).set(inner - 1, object);
-                 break;
-             case "n":
-                 board.get(outer - 1).set(inner, object);
-                 break;
-             case "s":
-                 board.get(outer + 1).set(inner, object);
-                 break;
-             default:
-                 System.out.println("Something went wrong");
+         boolean isHuman = object.getClass().getSimpleName().equals("Human");
+         boolean isGoblin = object.getClass().getSimpleName().equals("Goblin");
+
+         try{
+             board.get(outer).set(inner, "#");
+             switch (direction){
+                 case "e":
+                     if(board.get(outer).get(inner + 1).getClass().getSimpleName().equals("String")){
+                         board.get(outer).set(inner + 1, object);
+
+                     } else if(isHuman && board.get(outer).get(inner + 1).getClass().getSimpleName().equals("Goblin") ){
+                         battle(board.get(outer).get(inner + 1));
+                         board.get(outer).set(inner, object);
+
+                     } else if(isGoblin && board.get(outer).get(inner + 1).getClass().getSimpleName().equals("Human")) {
+                         battle(object);
+                         //((Goblin) object).attack((Human) board.get(outer).get(inner + 1));
+                         board.get(outer).set(inner, object);
+
+                     } else {
+                         System.out.println("Catch");
+                         board.get(outer).set(inner, object);
+                     }
+                     break;
+                 case "w":
+                     if(board.get(outer).get(inner - 1).getClass().getSimpleName().equals("String")){
+                         board.get(outer).set(inner - 1, object);
+
+                     } else if(isHuman && board.get(outer).get(inner - 1).getClass().getSimpleName().equals("Goblin")){
+                         battle(board.get(outer).get(inner - 1));
+                         board.get(outer).set(inner, object);
+
+                     } else if(isGoblin && board.get(outer).get(inner - 1).getClass().getSimpleName().equals("Human")){
+                         battle(board.get(outer).get(inner - 1));
+                         //((Goblin) object).attack((Human) board.get(outer).get(inner - 1));
+                         board.get(outer).set(inner, object);
+
+                     } else{
+                         board.get(outer).set(inner, object);
+                     }
+                     break;
+                 case "n":
+                     if(board.get(outer - 1).get(inner).getClass().getSimpleName().equals("String")){
+                         board.get(outer - 1).set(inner, object);
+
+                     } else if(isHuman && board.get(outer - 1).get(inner).getClass().getSimpleName().equals("Goblin")){
+                         ((Human) object).attack((Goblin) board.get(outer - 1).get(inner));
+                         board.get(outer).set(inner, object);
+
+                     } else if(isGoblin && board.get(outer - 1).get(inner).getClass().getSimpleName().equals("Human")){
+                         ((Goblin) object).attack((Human) board.get(outer - 1).get(inner));
+                         board.get(outer).set(inner, object);
+
+                     } else{
+                         board.get(outer).set(inner, object);
+                     }
+                     break;
+                 case "s":
+                     if(board.get(outer + 1).get(inner).getClass().getSimpleName().equals("String")){
+                         board.get(outer + 1).set(inner, object);
+
+                     } else if(isHuman && board.get(outer + 1).get(inner).getClass().getSimpleName().equals("Goblin")){
+                         ((Human) object).attack((Goblin) board.get(outer + 1).get(inner));
+                         board.get(outer).set(inner, object);
+
+                     } else if(isGoblin && board.get(outer + 1).get(inner).getClass().getSimpleName().equals("Human")){
+                         ((Goblin) object).attack((Human) board.get(outer + 1).get(inner));
+                         board.get(outer).set(inner, object);
+
+                     } else {
+                         board.get(outer).set(inner, object);
+                     }
+                     break;
+                 default:
+                     board.get(outer).set(inner, object);
+             }
+         } catch(Exception e){
+             board.get(outer).set(inner, object);
          }
-     } catch(Exception e){
-         board.get(outer).set(inner, object);
-     }
     }
 
-    public boolean checkDir(String direction, int inner, int outer){
-       boolean isPresent;
-       try{
-           switch (direction){
-               case "e":
-                   isPresent = board.get(outer).get(inner + 1).getClass().getSimpleName().equals("String");
-                   break;
-               case "w":
-                   isPresent = board.get(outer).get(inner - 1).getClass().getSimpleName().equals("String");
-                   break;
-               case "n":
-                   isPresent = board.get(outer - 1).get(inner).getClass().getSimpleName().equals("String");
-                   break;
-               case "s":
-                   isPresent = board.get(outer + 1).get(inner).getClass().getSimpleName().equals("String");
-                   break;
-               default:
-                   isPresent = false;
-           }
-           return isPresent;
-       } catch (Exception e){
-           return true;
-       }
 
-    }
-
-    public Goblin getEnemy(String direction, int inner,int outer){
-       Goblin enemy = enemyOne;
-
-        switch (direction){
-            case "e":
-                return (Goblin) board.get(outer).get(inner + 1);
-            case "w":
-                return (Goblin) board.get(outer).get(inner - 1);
-            case "n":
-                return (Goblin) board.get(outer - 1).get(inner);
-            case "s":
-                return (Goblin) board.get(outer + 1).get(inner);
-            default:
-                System.out.println("Something went wrong.");
-        }
-        return enemy;
-    }
 
     public void battle(Object object){
         int[] piecePos;
-
-        System.out.println("Battle start!!!");
-        player.attack((Goblin) object);
-
-        if(((Goblin) object).getHealth() <= 0){
-            System.out.println("You have slain a goblin!");
-            piecePos = getCurrentPos((Goblin) object);
-            board.get(piecePos[0]).set(piecePos[1], "#");
-        } else {
-            ((Goblin) object).attack(player);
-        }
 
         if(player.getHealth() <= 0){
             System.out.println("You have been slain.\nGame Over!");
             System.exit(0);
         }
 
+        System.out.println("Battle start!!!");
+        player.attack((Goblin) object);
+
+        if(((Goblin) object).getHealth() <= 0){
+            piecePos = getCurrentPos(object);
+            board.get(piecePos[0]).set(piecePos[1], "#");
+            System.out.println("You have slain a goblin!");
+        } else {
+            ((Goblin) object).attack(player);
+        }
     }
 }
 
