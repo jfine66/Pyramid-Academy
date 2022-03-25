@@ -1,3 +1,8 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
+
 public class GameLogic {
     private final Land board;
     private final Human player;
@@ -45,11 +50,15 @@ public class GameLogic {
                     } else if(isHuman && board.getColumn(column).get(row + 1).getClass().getSimpleName().equals("Goblin")){
                         ((Human) object).attack((Goblin) board.getColumn(column).get(row + 1));
                         board.setPos(object, column, row);
+                        removeDead((Goblin) board.getColumn(column).get(row + 1));
 
                     } else if(isGoblin && board.getColumn(column).get(row + 1).getClass().getSimpleName().equals("Human")){
                         ((Goblin) object).attack((Human) board.getColumn(column).get(row + 1));
                         board.setPos(object,column,row);
+                        checkPlayerHp();
 
+                    } else {
+                        board.setPos(object,column,row);
                     }
                     break;
 
@@ -59,8 +68,13 @@ public class GameLogic {
                     } else if(isHuman && board.getColumn(column).get(row - 1).getClass().getSimpleName().equals("Goblin")){
                         ((Human) object).attack((Goblin) board.getColumn(column).get(row - 1));
                         board.setPos(object, column, row);
+                        removeDead((Goblin) board.getColumn(column).get(row - 1));
+
                     } else if(isGoblin && board.getColumn(column).get(row + 1).getClass().getSimpleName().equals("Human")){
                         ((Goblin) object).attack((Human) board.getColumn(column).get(row - 1));
+                        board.setPos(object,column,row);
+                        checkPlayerHp();
+                    } else {
                         board.setPos(object,column,row);
                     }
                     break;
@@ -72,8 +86,13 @@ public class GameLogic {
                     } else if(isHuman && board.getColumn(column - 1).get(row).getClass().getSimpleName().equals("Goblin")){
                         ((Human) object).attack((Goblin) board.getColumn(column - 1).get(row));
                         board.setPos(object, column, row);
+                        removeDead((Goblin) board.getColumn(column - 1).get(row));
+
                     } else if(isGoblin && board.getColumn(column - 1).get(row).getClass().getSimpleName().equals("Human")){
                         ((Goblin) object).attack((Human) board.getColumn(column - 1).get(row));
+                        board.setPos(object,column,row);
+                        checkPlayerHp();
+                    } else {
                         board.setPos(object,column,row);
                     }
                     break;
@@ -85,38 +104,87 @@ public class GameLogic {
                     } else if(isHuman && board.getColumn(column + 1).get(row).getClass().getSimpleName().equals("Goblin")){
                         ((Human) object).attack((Goblin) board.getColumn(column + 1).get(row));
                         board.setPos(object, column, row);
+                        removeDead((Goblin) board.getColumn(column + 1).get(row));
+
                     } else if(isGoblin && board.getColumn(column + 1).get(row).getClass().getSimpleName().equals("Human")){
                         ((Goblin) object).attack((Human) board.getColumn(column + 1).get(row));
                         board.setPos(object,column,row);
+                        checkPlayerHp();
+                    } else {
+                        board.setPos(object,column,row);
                     }
                     break;
-
                 default:
                     board.setPos(object,column,row);
             }
         } catch (Exception e){
-            System.out.println("Exception was caught: " + e.getMessage());
+            //System.out.println("Exception was caught: " + e.getMessage());
             board.setPos(object,column,row);
         }
     }
+
+    public boolean checkGoblinAlive(Goblin object){
+        return object.getHealth() > 0;
+    }
+
+    public void removeDead(Goblin object){
+        int[] piecePos = board.getCurrentPos(object);
+
+        if(!checkGoblinAlive(object)){
+            System.out.println("YOU HAVE SLAIN A GOBLIN!!!");
+            board.setPos("#", piecePos[0], piecePos[1]);
+        }
+    }
+
+    public void checkPlayerHp(){
+        if(player.getHealth() <= 0){
+            System.out.println("You have been slain!\nGame Over.");
+            System.exit(0);
+        }
+    }
+
+    public void playerTurn(String direction){
+        move(player, direction);
+    }
+
+    public void goblinsTurn(){
+        ArrayList<String> dir = new ArrayList<>(Arrays.asList("n", "e","s","w"));
+
+
+        if(checkGoblinAlive(enemyOne)){
+            Collections.shuffle(dir);
+            move(enemyOne, dir.get(0));
+        }
+
+        if(checkGoblinAlive(enemyTwo)){
+            Collections.shuffle(dir);
+            move(enemyTwo, dir.get(0));
+        }
+
+        if(checkGoblinAlive(enemyThree)){
+            Collections.shuffle(dir);
+            move(enemyThree, dir.get(0));
+        }
+
+        if(checkGoblinAlive(enemyOne)){
+            Collections.shuffle(dir);
+            move(enemyThree, dir.get(0));
+        }
+
+        if(checkGoblinAlive(enemyFour)){
+            Collections.shuffle(dir);
+            move(enemyFour, dir.get(0));
+        }
+
+        if(checkGoblinAlive(enemyFive)){
+            Collections.shuffle(dir);
+            move(enemyFive, dir.get(0));
+        }
+    }
+
+    public boolean goblinsAlive(){
+        return enemyOne.getHealth() > 0 || enemyTwo.getHealth() > 0 || enemyThree.getHealth() > 0 || enemyFour.getHealth() > 0 || enemyFive.getHealth() > 0;
+    }
 }
 
-//    public void battle(Object object){
-//        int[] piecePos;
-//
-//        if(player.getHealth() <= 0){
-//            System.out.println("You have been slain.\nGame Over!");
-//            System.exit(0);
-//        }
-//
-//        System.out.println("Battle start!!!");
-//        player.attack((Goblin) object);
-//
-//        if(((Goblin) object).getHealth() <= 0){
-//            piecePos = getCurrentPos(object);
-//            board.get(piecePos[0]).set(piecePos[1], "#");
-//            System.out.println("You have slain a goblin!");
-//        } else {
-//            ((Goblin) object).attack(player);
-//        }
-//    }
+

@@ -9,7 +9,6 @@ public class Application {
     static Goblin goblinThree = new Goblin();
     static Goblin goblinFour = new Goblin();
     static Land board = new Land();
-    static int goblins = 5;
     static GameLogic game = new GameLogic(board, player, goblin, goblinOne, goblinTwo, goblinThree, goblinFour);
     static Scanner input = new Scanner(System.in);
 
@@ -19,11 +18,27 @@ public class Application {
 
     public static void gameStart(){
         game.defaultPos();
-        int test = 5;
-        while(test > 0){
+        while(game.goblinsAlive()){
             game.display();
-            System.out.println("Move with n/w/s/e: ");
-            game.move(player, input.nextLine());
+            System.out.println("Player Turn!\nMove with n/e/s/w: ");
+            game.playerTurn(input.nextLine());
+            game.goblinsTurn();
+            System.out.println("Careful the goblins have made their move!");
+        }
+        System.out.println("YOU WIN!!! THE MOST FEARSOME WARRIOR I HAVE EVERY SEEN");
+        System.out.println("Would you like to play again?");
+        playAgain(input.nextLine());
+
+    }
+
+    public static void playAgain(String yayNay){
+        if(yayNay.equals("n")){
+            System.exit(0);
+        } else if(yayNay.equals("y")){
+            gameStart();
+        } else {
+            System.out.println("Please enter valid choice: ");
+            playAgain(input.nextLine());
         }
     }
 }

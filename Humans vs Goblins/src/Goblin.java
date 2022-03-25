@@ -18,7 +18,7 @@ public class Goblin {
         int strength = 5;
         int atk = (int) Math.floor(Math.random() * strength + 1);
         object.setHealth(object.getHealth() - atk);
-        System.out.println("Goblin attacked player for " + atk + " damage");
+        System.out.println("GOBLIN ATTACKED PLAYER FOR " + atk + " DAMAGE");
     }
 
     @Override
