@@ -1,6 +1,5 @@
-public class Human {
+public class Human{
     private int health = 12;
-    private int strength = 10;
 
     public Human(){
 
@@ -11,16 +10,13 @@ public class Human {
         return health;
     }
 
-    public int getStrength() {
-        return strength;
-    }
-
     public void setHealth(int health) {
         this.health = health;
     }
 
 
     public void attack(Goblin object){
+        int strength = 10;
         int atk = (int) Math.floor(Math.random() * strength + 1);
         object.setHealth(object.getHealth() - atk);
         System.out.println("You attacked goblin for " + atk + " damage");
