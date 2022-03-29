@@ -1,10 +1,9 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Hangman {
@@ -15,6 +14,18 @@ public class Hangman {
     private static StringBuilder displayedWord;
     private static ArrayList<String> letters = new ArrayList<>();
     private static final ArrayList<String> words = new ArrayList<>();
+    private static List<String> data;
+
+    static {
+        try {
+            data = Files.readAllLines(Paths.get("src/scoreCard.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String playerName;
+    private static int score;
 
     static {
         try {
@@ -33,6 +44,10 @@ public class Hangman {
     }
 
     public static void gameStart() throws IOException {
+        System.out.println("What is your name?");
+        playerName = input.nextLine();
+        getHighScore();
+
         numGuesses = 6;
         letters = new ArrayList<>();
         targetWord = getTargetWord();
@@ -45,6 +60,34 @@ public class Hangman {
             checkGuess(input.nextLine());
             result();
         }
+    }
+
+    public static List<String> updateScoreCard(){
+        if(data.contains(playerName)){
+            int localScore = Integer.parseInt(data.get(data.indexOf(playerName) + 1));
+            score += localScore;
+            data.set(data.indexOf(playerName) + 1, String.valueOf(score));
+        } else{
+            data.add(playerName);
+            data.add(String.valueOf(score));
+        }
+
+        return data;
+    }
+
+    public static void getHighScore(){
+        List<String> scores = IntStream.range(0, data.size())
+                .filter(n -> n % 2 != 0).mapToObj(data::get).collect(Collectors.toList());
+
+        ArrayList<Integer> scoreNumbers = new ArrayList<>();
+
+        scores.forEach(line -> scoreNumbers.add(Integer.valueOf(line)));
+
+        int highScore = Collections.max(scoreNumbers);
+
+        int indexOfName = data.indexOf(String.valueOf(highScore)) - 1;
+
+        System.out.println("The current high-score is " + highScore + ". It is held by " + data.get(indexOfName));
     }
 
     public static String getTargetWord() throws IOException {
@@ -70,6 +113,8 @@ public class Hangman {
                         .map(letter -> finalDisplayList.contains(letter) ? letter : guess.equals(letter) ? guess : "-")
                         .collect(Collectors.toList());
 
+
+                score += 10;
                 displayedWord = new StringBuilder(String.join("", displayList));
 
             } else {
@@ -122,6 +167,7 @@ public class Hangman {
     public static void result() throws IOException {
         if(displayedWord.toString().equals(targetWord)){
             System.out.println("You win!!! Would you like to play again? y/n");
+            System.out.println("You're score will be kept track of if you press y but not updated in the file until you hit n");
             playAgain(input.nextLine());
         } else if(numGuesses == 0){
            updateGallows(numGuesses);
@@ -134,6 +180,16 @@ public class Hangman {
         if(yayNay.equals("y")){
             gameStart();
         } else if(yayNay.equals("n")){
+                BufferedWriter writer = new BufferedWriter(new FileWriter("src/scoreCard.txt"));
+                updateScoreCard().forEach(line -> {
+                    try {
+                        writer.write(line + "\n");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+            writer.close();
             System.exit(0);
         } else {
             System.out.println("Please enter a valid choice: ");
