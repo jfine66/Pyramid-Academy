@@ -50,6 +50,9 @@ public class MainMenu {
     private void createStartButton(){
         MenuButtons startButton = new MenuButtons("PLAY");
         addButton(startButton);
+
+
+        startButton.setOnAction(actionEvent -> SceneController.toLevelOne());
     }
 
     private void createInstructionsButton(){

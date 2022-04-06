@@ -16,10 +16,15 @@ public class SceneController {
     //PATH FOR ICON
     private String ICON_PATH = "pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png";
     //GET OTHER SCENES
-    private static MainMenu menu = new MainMenu();
-    private static Scene menuScene = menu.getMenuScene();
-    private static RulesMenu rules = new RulesMenu();
-    private static Scene rulesScene = rules.getRuleScene();
+    private static final MainMenu menu = new MainMenu();
+    private static final Scene menuScene = menu.getMenuScene();
+    private static final RulesMenu rules = new RulesMenu();
+    private static final Scene rulesScene = rules.getRuleScene();
+    private static final RestScene camp = new RestScene();
+    private static final Scene campScene = camp.getCampScene();
+    private static final FirstLevel levelOne = new FirstLevel();
+    private static final Scene levelOneScene = levelOne.getScene();
+
 
     public SceneController(){
         mainWindow = new AnchorPane();
@@ -46,5 +51,12 @@ public class SceneController {
         mainStage.setScene(rulesScene);
     }
 
+    public static void toCamp(){
+        mainStage.setScene(campScene);
+    }
+
+    public static void toLevelOne(){
+        mainStage.setScene(levelOneScene);
+    }
 
 }
