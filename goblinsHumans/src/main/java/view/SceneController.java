@@ -1,9 +1,11 @@
 package view;
 
+import gameLogic.GameLogic;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.Human;
 
 public class SceneController {
     //WIDTH AND HEIGHT FOR STAGE
@@ -15,6 +17,9 @@ public class SceneController {
     private static Stage mainStage;
     //PATH FOR ICON
     private String ICON_PATH = "pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png";
+    //SET UP GAME
+    private static final Human player = new Human();
+    private static final GameLogic game = new GameLogic(player);
     //GET OTHER SCENES
     private static final MainMenu menu = new MainMenu();
     private static final Scene menuScene = menu.getMenuScene();
@@ -36,7 +41,7 @@ public class SceneController {
         mainStage.getIcons().add(icon);
         mainStage.setResizable(false);
 
-        mainStage.setScene(menuScene);
+        mainStage.setScene(levelOneScene);
     }
 
     public Stage getMainStage(){
@@ -59,4 +64,11 @@ public class SceneController {
         mainStage.setScene(levelOneScene);
     }
 
+    public static Human getPlayer() {
+        return player;
+    }
+
+    public static GameLogic getGame(){
+        return game;
+    }
 }

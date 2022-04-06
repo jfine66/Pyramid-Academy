@@ -1,9 +1,7 @@
 package model;
 
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -33,20 +31,9 @@ public class MenuButtons extends Button {
 
     private void initializeButtonListeners(){
 
-        setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                setEffect(new DropShadow());
+        setOnMouseEntered(mouseEvent -> setEffect(new DropShadow()));
 
-            }
-        });
-
-        setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                setEffect(null);
-            }
-        });
+        setOnMouseExited(mouseEvent -> setEffect(null));
 
     }
 
