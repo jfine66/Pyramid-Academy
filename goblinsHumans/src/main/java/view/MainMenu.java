@@ -1,50 +1,36 @@
 package view;
 
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
+import javafx.scene.layout.*;
 import model.MenuButtons;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainMenu {
-    // Width and Height for window
     private static final int WIDTH = 1024;
     private static final int HEIGHT = 768;
     //setting up window panes
     private final AnchorPane menuPane;
-    private Scene menuScene;
-    private Stage menuStage;
-    //Path to icon image
-    private String ICON_PATH = "pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png";
+    private final Scene menuScene;
     //Create buttons
     private final static int MENU_BUTTON_START_X = 300;
     private final static int MENU_BUTTON_START_Y = 150;
     List<MenuButtons> menuButtons;
 
 
-
     public MainMenu(){
         menuPane = new AnchorPane();
         menuScene = new Scene(menuPane, WIDTH, HEIGHT);
-        menuStage = new Stage();
-        Image icon = new Image(ICON_PATH);
-        menuStage.setTitle("Humans vs Goblins");
-        menuStage.getIcons().add(icon);
-        menuStage.setResizable(false);
-        menuStage.setScene(menuScene);
         menuButtons = new ArrayList<>();
         createButtons();
-
+        createBackground();
     }
 
-    public Stage getMenuStage(){
-        return menuStage;
+    public Scene getMenuScene(){
+        return menuScene;
     }
 
     //Create Buttons Methods
@@ -69,18 +55,23 @@ public class MainMenu {
     private void createInstructionsButton(){
         MenuButtons instructionsButton = new MenuButtons("RULES");
         addButton(instructionsButton);
+
+        instructionsButton.setOnAction(actionEvent -> SceneController.toRules());
     }
 
     private void createExitButton(){
         MenuButtons exitButton = new MenuButtons("EXIT");
         addButton(exitButton);
 
-        exitButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                System.exit(0);
-            }
-        });
+        exitButton.setOnAction(actionEvent -> System.exit(0));
     }
+
+    //Set Main Menu Background
+    private void createBackground(){
+        Image backgroundImage = new Image("fantasy_art-digital_art-mountains-castle.jpg", 1024,768,false,true);
+        BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
+        menuPane.setBackground(new Background(background));
+    }
+
 
 }

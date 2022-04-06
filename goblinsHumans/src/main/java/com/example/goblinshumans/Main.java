@@ -1,18 +1,15 @@
 package com.example.goblinshumans;
 
 import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import view.MainMenu;
+import view.SceneController;
 
 
 public class Main extends Application {
     @Override
     public void start(Stage stage){
-        MainMenu menu = new MainMenu();
-        stage = menu.getMenuStage();
+        SceneController main = new SceneController();
+        stage = main.getMainStage();
         stage.show();
     }
 
