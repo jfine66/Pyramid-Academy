@@ -28,9 +28,9 @@ public class FirstLevel implements Level {
         createBattleMap(backgroundImage, levelOnePane);
         createGrid(levelOnePane);
         player.setTokenPos(512,256);
-        player.addButtons();
-        levelOnePane.getChildren().add(player.getToken());
         levelOnePane.getChildren().add(openMenu(player));
+        addButtons(player, levelOnePane);
+        levelOnePane.getChildren().add(player.getToken());
     }
 
     public Scene getScene() {

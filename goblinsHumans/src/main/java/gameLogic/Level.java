@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import model.ActionButton;
 import model.Human;
 
 import java.util.ArrayList;
@@ -39,6 +40,20 @@ public interface Level {
         setMenuPos(token);
         menuPane.getChildren().add(playerMenu);
         return menuPane;
+    }
+
+    default void closeMenu(){
+        menuPane.getChildren().clear();
+    }
+
+    default void backMenu(Human token){
+        ActionButton back = createBackButton();
+        setMenuPos(token);
+        back.setTranslateY(64);
+        menuPane.getChildren().add(back);
+        back.setOnMouseClicked(mouseEvent -> {
+            openMenu(token);
+        });
     }
 
     default void setMenuPos(Human token){
@@ -97,6 +112,46 @@ public interface Level {
                 pane.getChildren().add(recList.get(i));
             }
         }
+    }
+
+
+    default void addButtons(Human token, AnchorPane pane){
+        ActionButton attack = createAttackButton();
+        ActionButton move = createMoveButton();
+        ActionButton item = createItemButton();
+
+        attack.setOnMouseClicked(mouseEvent -> {
+            attackGrid(token, pane);
+            closeMenu();
+            backMenu(token);
+        });
+//        move.setOnMouseClicked(mouseEvent -> moveGrid());
+//        item.setOnMouseClicked(mouseEvent -> itemsScreen());
+
+        attack.setTranslateY(-64);
+        item.setTranslateY(64);
+
+        menuPane.getChildren().add(attack);
+        menuPane.getChildren().add(move);
+        menuPane.getChildren().add(item);
+    }
+
+
+    //CREATE MENU BUTTONS
+    private ActionButton createAttackButton(){
+        return new ActionButton("ATTACK");
+    }
+
+    private ActionButton createMoveButton(){
+        return new ActionButton("MOVE");
+    }
+
+    private ActionButton createItemButton(){
+        return new ActionButton("ITEMS");
+    }
+
+    private ActionButton createBackButton(){
+        return new ActionButton("BACK");
     }
 
 }
