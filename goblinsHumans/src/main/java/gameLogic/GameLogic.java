@@ -5,29 +5,23 @@ import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 import model.Banner;
 import model.Human;
+import view.SceneController;
 
 
 public class GameLogic {
-    private Human player;
+    private final Human player = SceneController.getPlayer();
     private Banner banner = new Banner();
     private final StackPane playerBanner = banner.getPlayerBanner();
 
+    public GameLogic(){
 
-    public GameLogic(Human player){
-        this.player = player;
     }
 
     private void playerTurn(){
         moveBanner();
-        turnMenu();
-    }
-
-    private void turnMenu(){
-
     }
 
 

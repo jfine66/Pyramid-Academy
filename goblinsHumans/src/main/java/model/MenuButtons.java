@@ -7,14 +7,13 @@ import javafx.scene.text.Font;
 
 public class MenuButtons extends Button {
 
-    private final String BUTTON_FREE_STYLE = "-fx-background-color: transparent; -fx-background-image: url('fantasy_button.png');";
-
     public MenuButtons(String text){
         setText(text);
         setTextFill(Color.WHITE);
         setButtonFont();
         setPrefWidth(418);
         setPrefHeight(150);
+        String BUTTON_FREE_STYLE = "-fx-background-color: transparent; -fx-background-image: url('fantasy_button.png');";
         setStyle(BUTTON_FREE_STYLE);
         initializeButtonListeners();
     }

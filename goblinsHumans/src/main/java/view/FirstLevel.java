@@ -1,5 +1,6 @@
 package view;
 
+import gameLogic.GameLogic;
 import gameLogic.Level;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -14,6 +15,8 @@ import java.util.List;
 
 public class FirstLevel implements Level {
     private static final Human player = SceneController.getPlayer();
+    private final GameLogic game = new GameLogic();
+
 
     private final AnchorPane levelOnePane;
     private final Scene levelOne;
@@ -24,6 +27,9 @@ public class FirstLevel implements Level {
         Image backgroundImage = new Image("test - Unnamed Level.png", 1024, 768, false, true);
         createBattleMap(backgroundImage, levelOnePane);
         createGrid(levelOnePane);
+        player.setTokenPos(256,64);
+        levelOnePane.getChildren().add(player.getToken());
+        attackGrid(player, levelOnePane);
     }
 
     public Scene getScene() {

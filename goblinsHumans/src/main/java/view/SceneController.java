@@ -19,7 +19,6 @@ public class SceneController {
     private String ICON_PATH = "pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png";
     //SET UP GAME
     private static final Human player = new Human();
-    private static final GameLogic game = new GameLogic(player);
     //GET OTHER SCENES
     private static final MainMenu menu = new MainMenu();
     private static final Scene menuScene = menu.getMenuScene();
@@ -66,9 +65,5 @@ public class SceneController {
 
     public static Human getPlayer() {
         return player;
-    }
-
-    public static GameLogic getGame(){
-        return game;
     }
 }

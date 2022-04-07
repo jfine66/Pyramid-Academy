@@ -1,12 +1,11 @@
 package model;
 
-import javafx.animation.TranslateTransition;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
+
 
 public class Banner {
     private final Rectangle r = new Rectangle(0,0,1024, 128);
