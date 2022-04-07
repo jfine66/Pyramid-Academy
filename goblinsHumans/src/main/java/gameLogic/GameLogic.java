@@ -8,39 +8,11 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import model.Banner;
 
+
+
 public class GameLogic {
     private Banner banner = new Banner();
     private final StackPane playerBanner = banner.getPlayerBanner();
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     //BANNER ANIMATION
     private void moveBanner(){
