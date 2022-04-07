@@ -8,7 +8,7 @@ import javafx.scene.shape.Circle;
 
 public class Goblin extends Circle {
     private int health;
-    private int strength;
+    private int strength = 10;
     private int ac = 5;
     private final ImageView token = new ImageView("pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png");
     Circle testCircle = new Circle(250,250,120);
