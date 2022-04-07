@@ -12,6 +12,10 @@ import java.util.ArrayList;
 public interface Level {
     int WIDTH = 1024;
     int HEIGHT = 768;
+
+    Rectangle playerMenu = new Rectangle(0,0, 128, 192);
+    StackPane menuPane = new StackPane();
+
     ArrayList<Rectangle> recList = new ArrayList<>();
 
     default void createGrid(AnchorPane pane){
@@ -28,6 +32,29 @@ public interface Level {
     default void createBattleMap(Image map, AnchorPane pane){
         BackgroundImage background = new BackgroundImage(map, BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
         pane.setBackground(new Background(background));
+    }
+
+    default StackPane openMenu(Human token){
+        menuPane.getChildren().clear();
+        setMenuPos(token);
+        menuPane.getChildren().add(playerMenu);
+        return menuPane;
+    }
+
+    default void setMenuPos(Human token){
+        int x = token.getTokenX();
+        int y = token.getTokenY();
+
+        playerMenu.setFill(Color.BLUE);
+        playerMenu.setOpacity(0.3);
+
+        if(x > 256){
+            menuPane.setLayoutX(x - 128);
+            menuPane.setLayoutY(y);
+        } else if(x <= 256){
+            menuPane.setLayoutX(x + 64);
+            menuPane.setLayoutY(y);
+        }
     }
 
     default void attackGrid(Human token, AnchorPane pane){

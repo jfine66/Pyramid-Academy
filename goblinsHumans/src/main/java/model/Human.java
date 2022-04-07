@@ -1,5 +1,6 @@
 package model;
 
+import gameLogic.Level;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -8,12 +9,11 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
-public class Human extends ImageView {
+public class Human extends ImageView implements Level{
     private int health;
     private int strength;
     private final ImageView token = new ImageView("pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png");
-    private final Rectangle playerMenu = new Rectangle(0,0, 128, 192);
-    private final StackPane menuPane = new StackPane();
+
 
 
     public Human(){
@@ -39,32 +39,7 @@ public class Human extends ImageView {
         token.setLayoutY(y);
     }
 
-    public StackPane openMenu(){
-        menuPane.getChildren().clear();
-        setMenuPos();
-        menuPane.getChildren().add(playerMenu);
-        addButtons();
-        return menuPane;
-    }
-
-    private void setMenuPos(){
-        int x = (int) token.getLayoutX();
-        int y = (int) token.getLayoutY();
-
-        playerMenu.setFill(Color.BLUE);
-        playerMenu.setOpacity(0.4);
-
-
-        if(x > 256){
-            menuPane.setLayoutX(x - 128);
-            menuPane.setLayoutY(y);
-        } else if(x <= 256){
-            menuPane.setLayoutX(x + 64);
-            menuPane.setLayoutY(y);
-        }
-    }
-
-    private void addButtons(){
+    public void addButtons(){
         ActionButton attack = createAttackButton();
         ActionButton move = createMoveButton();
         ActionButton item = createItemButton();
