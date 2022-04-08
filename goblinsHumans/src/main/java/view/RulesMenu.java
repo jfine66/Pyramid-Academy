@@ -3,6 +3,7 @@ package view;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import model.MenuButtons;
 
 public class RulesMenu{
@@ -11,6 +12,8 @@ public class RulesMenu{
     //setting up window panes
     private final AnchorPane rulesPane;
     private final Scene ruleScene;
+    private final Text text = new Text();
+    private final StackPane rules = new StackPane();
 
 
 
@@ -19,6 +22,7 @@ public class RulesMenu{
         ruleScene = new Scene(rulesPane, WIDTH,HEIGHT);
         createBackground();
         createBackButton();
+        createRulesText();
     }
 
     public Scene getRuleScene() {
@@ -38,6 +42,18 @@ public class RulesMenu{
         rulesPane.getChildren().add(backButton);
 
         backButton.setOnAction(actionEvent -> SceneController.toMainMenu());
+    }
+
+    private void createRulesText(){
+        Image backgroundImage = new Image("old_paper_letter_template.png", 700,700,false, true);
+        BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
+        rules.setBackground(new Background(background));
+
+        rules.setPrefWidth(700);
+        rules.setPrefHeight(700);
+        text.setText("PLACEHOLDER");
+        rules.getChildren().add(text);
+        rulesPane.getChildren().add(rules);
     }
 
 

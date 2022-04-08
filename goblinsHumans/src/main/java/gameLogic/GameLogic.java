@@ -10,6 +10,8 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import model.ActionButton;
 import model.Banner;
@@ -36,8 +38,13 @@ public class GameLogic {
     private final StackPane defeatBanner = defeatDisplay.getDefeatBanner(mainMenuButton());
     private AnchorPane currentPane;
 
-    Rectangle playerMenu = new Rectangle(0,0, 128, 192);
+    Rectangle playerMenu = new Rectangle(0,0, 128, 256);
     StackPane menuPane = new StackPane();
+    Rectangle playerStatus = new Rectangle(0,0, 64, 128);
+    StackPane statusPane = new StackPane();
+
+
+
 
     private MediaPlayer mediaPlayer;
     private boolean hasAttacked = false;
@@ -61,7 +68,7 @@ public class GameLogic {
     public void gameStart(){
         currentPane.getChildren().add(player.getToken());
         currentPane.getChildren().add(testGoblin.getToken());
-        player.setTokenPos(512,384);
+        player.setTokenPos(512,256);
         testGoblin.setTokenPos(512,320);
         player.setHealth(5);
         testGoblin.setHealth(10);
@@ -70,6 +77,7 @@ public class GameLogic {
 
     //EVERYTHING PLAYER RELATED
     private void playerTurn(){
+        showMenu();
         if(testGoblin.getHealth() < 0){
             currentPane.getChildren().remove(testGoblin.getToken());
             testGoblin.setTokenPos(0,0);
@@ -89,8 +97,30 @@ public class GameLogic {
 
     }
 
+    //SEE PLAYER STATUS
+    private void showMenu(){
+        statusPane.getChildren().clear();
+        setMenuPos();
+        statusPane.getChildren().add(playerStatus);
+
+        player.getToken().setOnMouseEntered(mouseEvent -> {
+            statusText();
+            currentPane.getChildren().add(statusPane);
+        });
+        player.getToken().setOnMouseExited(mouseEvent -> currentPane.getChildren().remove(statusPane));
+    }
+
+    private void statusText(){
+        Text hp = new Text();
+        hp.setText("HP: " + player.getHealth());
+        hp.setTranslateY(-30);
+        hp.setFont(Font.font("Verdana", 20));
+        hp.setFill(Color.WHITE);
+        statusPane.getChildren().add(hp);
+    }
+
     //TURN MENU
-    public void openMenu(){
+    private void openMenu(){
         menuPane.getChildren().clear();
         setMenuPos();
         menuPane.getChildren().add(playerMenu);
@@ -109,14 +139,29 @@ public class GameLogic {
 
         playerMenu.setFill(Color.BLUE);
         playerMenu.setOpacity(0.3);
+        playerStatus.setFill(Color.BLUE);
+        playerStatus.setOpacity(0.3);
 
         if(x > 256){
             menuPane.setLayoutX(x - 128);
             menuPane.setLayoutY(y);
+            statusPane.setLayoutX(x + 64);
+            statusPane.setLayoutY(y);
         } else {
             menuPane.setLayoutX(x + 64);
             menuPane.setLayoutY(y);
+            statusPane.setLayoutX(x - 64);
+            statusPane.setLayoutY(y);
         }
+
+        if(y < 192 && x >= 256){
+            menuPane.setLayoutX(x + 64);
+            menuPane.setLayoutY(0);
+        } else if(y > 512 && x > 256){
+            menuPane.setLayoutX(x - 128);
+            menuPane.setLayoutY(512);
+        }
+
     }
 
     private void addButtons(){
@@ -160,9 +205,10 @@ public class GameLogic {
             goblinTurn();
         });
 
-        attack.setTranslateY(-64);
-        item.setTranslateY(64);
-        endTurn.setTranslateY(128);
+        attack.setTranslateY(-100);
+        move.setTranslateY(-30);
+        item.setTranslateY(30);
+        endTurn.setTranslateY(100);
 
         menuPane.getChildren().add(attack);
         menuPane.getChildren().add(move);
@@ -280,7 +326,12 @@ public class GameLogic {
 
     //PLAYER MOVE GRID
     public void getPossibleMoves(){
+        gridXAxis = new HashMap<>();
+        gridYAxis = new HashMap<>();
         fillAxis();
+
+
+
         int x = player.getTokenX();
         int y = player.getTokenY();
 

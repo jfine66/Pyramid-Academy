@@ -62,6 +62,7 @@ public class SceneController {
     }
 
     public static void toCamp(){
+        menuMusic();
         mainStage.setScene(campScene);
     }
 
