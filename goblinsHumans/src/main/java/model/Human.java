@@ -10,8 +10,9 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 
 public class Human extends ImageView{
-    private int health = 30;
+    private int health = 5;
     private int strength = 10;
+    private  int ac = 0;
     private final ImageView token = new ImageView("test_player_token.png");
 
 
@@ -32,7 +33,7 @@ public class Human extends ImageView{
    }
 
    private void damage(Goblin goblin){
-        int attack = (int) Math.floor(Math.random() * strength);
+        int attack = 30; //(int) Math.floor(Math.random() * strength);
        System.out.println("You hit goblin for " + attack + " damage.");
         goblin.setHealth(goblin.getHealth() - attack);
    }
@@ -51,12 +52,20 @@ public class Human extends ImageView{
         return (int) token.getLayoutY();
     }
 
+    public int getHealth() {
+        return health;
+    }
+
+    public int getAc() {
+        return ac;
+    }
+
     public void setTokenPos(int x, int y){
         token.setLayoutX(x);
         token.setLayoutY(y);
     }
 
-    public int getHealth() {
-        return health;
+    public void setHealth(int health) {
+        this.health = health;
     }
 }

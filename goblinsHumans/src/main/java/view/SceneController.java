@@ -26,8 +26,8 @@ public class SceneController {
     private static final Scene rulesScene = rules.getRuleScene();
     private static final RestScene camp = new RestScene();
     private static final Scene campScene = camp.getCampScene();
-    private static final FirstLevel levelOne = new FirstLevel();
-    private static final Scene levelOneScene = levelOne.getScene();
+    private static FirstLevel levelOne = new FirstLevel();
+    private static Scene levelOneScene = levelOne.getScene();
 
 
     public SceneController(){
@@ -60,6 +60,8 @@ public class SceneController {
     }
 
     public static void toLevelOne(){
+        levelOne = new FirstLevel();
+        levelOneScene = levelOne.getScene();
         mainStage.setScene(levelOneScene);
     }
 

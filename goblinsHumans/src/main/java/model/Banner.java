@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import view.SceneController;
 
 
 public class Banner {
@@ -32,6 +33,32 @@ public class Banner {
         r.setOpacity(0.5);
         text.setText("ENEMY TURN");
         stack.getChildren().addAll(r, text);
+        return stack;
+    }
+
+    public StackPane getVictoryBanner(){
+        stack.getChildren().clear();
+        r.setFill(Color.GREEN);
+        r.setOpacity(0.5);
+        r.setHeight(192);
+        text.setText("YOU HAVE SLAIN ALL THE GOBLINS\nPROCEED TO CAMP?");
+        text.setTranslateY(-50);
+        ActionButton toCamp = new ActionButton("PROCEED");
+        toCamp.setPrefWidth(192);
+        toCamp.setTranslateY(64);
+        toCamp.setOnMouseClicked(mouseEvent -> SceneController.toCamp());
+        stack.getChildren().addAll(r, text, toCamp);
+        return stack;
+    }
+
+    public StackPane getDefeatBanner(ActionButton button){
+        stack.getChildren().clear();
+        r.setFill(Color.RED);
+        r.setOpacity(0.5);
+        r.setHeight(192);
+        text.setText("YOU HAVE BEEN SLAIN");
+        text.setTranslateY(-50);
+        stack.getChildren().addAll(r, text, button);
         return stack;
     }
 

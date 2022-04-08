@@ -9,7 +9,7 @@ import javafx.scene.layout.*;
 
 
 
-public class FirstLevel extends GameLogic implements Level {
+public class FirstLevel implements Level {
 
     private final AnchorPane levelOnePane;
     private final Scene levelOne;
@@ -20,7 +20,8 @@ public class FirstLevel extends GameLogic implements Level {
         Image backgroundImage = new Image("test - Unnamed Level.png", 1024, 768, false, true);
         createBattleMap(backgroundImage, levelOnePane);
         createGrid(levelOnePane);
-        gameStart(levelOnePane);
+        GameLogic game = new GameLogic(levelOnePane);
+
     }
 
     public Scene getScene() {

@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import model.MenuButtons;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class MainMenu {
         createButtons();
         createBackground();
     }
+
 
     public Scene getMenuScene(){
         return menuScene;

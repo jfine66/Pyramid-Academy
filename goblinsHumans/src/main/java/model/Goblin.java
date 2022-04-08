@@ -7,8 +7,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 public class Goblin extends Circle {
-    private int health;
-    private int strength = 10;
+    private int health = 10;
+    private int strength = 100;
     private int ac = 5;
     private final ImageView token = new ImageView("pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png");
     Circle testCircle = new Circle(250,250,120);
@@ -52,5 +52,21 @@ public class Goblin extends Circle {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public void toHit(Human player){
+        int toHit = (int) Math.floor(Math.random() * 10);
+        if(toHit > player.getAc()){
+            damage(player);
+        } else {
+            System.out.println("Attacked missed");
+        }
+
+    }
+
+    private void damage(Human player){
+        int attack = (int) Math.floor(Math.random() * strength);
+        System.out.println("Goblin hit you for " + attack + " damage.");
+        player.setHealth(player.getHealth() - attack);
     }
 }
