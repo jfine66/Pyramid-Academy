@@ -70,11 +70,6 @@ public class GameLogic {
 
     //EVERYTHING PLAYER RELATED
     private void playerTurn(){
-        if(player.getHealth() < 0){
-            outComeBanner(defeatBanner);
-            currentPane.getChildren().add(defeatBanner);
-        }
-
         if(testGoblin.getHealth() < 0){
             currentPane.getChildren().remove(testGoblin.getToken());
             testGoblin.setTokenPos(0,0);
@@ -87,6 +82,7 @@ public class GameLogic {
             currentPane.getChildren().remove(goblinBanner);
             openMenu();
         } else {
+            playerClearLevelSound();
             outComeBanner(victoryBanner);
             currentPane.getChildren().add(victoryBanner);
         }
@@ -274,7 +270,6 @@ public class GameLogic {
 
     private void setAttackListeners(Rectangle r, Goblin goblin, ActionButton back){
         r.setOnMouseClicked(mouseEvent -> {
-            humanAttackSound();
             player.toHit(goblin);
             hasAttacked = true;
             clearAttackGrid();
@@ -339,12 +334,21 @@ public class GameLogic {
     // EVERYTHING RELATED TO GOBLINS
     private void goblinTurn(){
         currentPane.getChildren().remove(playerBanner);
-        currentPane.getChildren().add(goblinBanner);
-        moveBanner(goblinBanner);
-        getGoblinsMoves();
-        goblinAttack();
 
-        playerTurn();
+        if(testGoblin.getHealth() > 0){
+            currentPane.getChildren().add(goblinBanner);
+            moveBanner(goblinBanner);
+            getGoblinsMoves();
+            goblinAttack();
+        }
+
+        if(player.getHealth() > 0){
+            playerTurn();
+        } else {
+            playerDeathSound();
+            outComeBanner(defeatBanner);
+            currentPane.getChildren().add(defeatBanner);
+        }
     }
 
     private Goblin getCurrentGoblin(){
@@ -501,19 +505,19 @@ public class GameLogic {
         return toCamp;
     }
 
-
     //SOUNDS
-    private void humanAttackSound(){
-        String url = "src/main/resources/524215__magnuswaker__schwing-1.wav";
+    private void playerDeathSound(){
+        String url = "src/main/resources/553724__maxim-nick__sad-defeat-emotion-maxim-nick.wav";
         Media h = new Media(Paths.get(url).toUri().toString());
         mediaPlayer = new MediaPlayer(h);
         mediaPlayer.play();
     }
 
-
-
-
-
-
+    private void playerClearLevelSound(){
+        String url = "src/main/resources/462250__silverillusionist__victory-sound-1.wav";
+        Media h = new Media(Paths.get(url).toUri().toString());
+        mediaPlayer = new MediaPlayer(h);
+        mediaPlayer.play();
+    }
 
 }

@@ -4,8 +4,12 @@ import gameLogic.GameLogic;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import model.Human;
+
+import java.nio.file.Paths;
 
 public class SceneController {
     //WIDTH AND HEIGHT FOR STAGE
@@ -28,6 +32,7 @@ public class SceneController {
     private static final Scene campScene = camp.getCampScene();
     private static FirstLevel levelOne = new FirstLevel();
     private static Scene levelOneScene = levelOne.getScene();
+    private static MediaPlayer mediaPlayer;
 
 
     public SceneController(){
@@ -48,6 +53,7 @@ public class SceneController {
     }
 
     public static void toMainMenu(){
+        menuMusic();
         mainStage.setScene(menuScene);
     }
 
@@ -68,4 +74,15 @@ public class SceneController {
     public static Human getPlayer() {
         return player;
     }
+
+    //SCENE MUSIC
+    private static void menuMusic(){
+        String url = "src/main/resources/2019-07-29_-_Elven_Forest_-_FesliyanStudios.com_-_David_Renda.mp3";
+        Media h = new Media(Paths.get(url).toUri().toString());
+        mediaPlayer = new MediaPlayer(h);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.play();
+    }
+
+
 }

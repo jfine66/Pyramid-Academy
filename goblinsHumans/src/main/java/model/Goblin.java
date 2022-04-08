@@ -2,16 +2,21 @@ package model;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
+import java.nio.file.Paths;
+
 public class Goblin extends Circle {
     private int health = 10;
-    private int strength = 1;
+    private int strength = 100;
     private int ac = 5;
     private final ImageView token = new ImageView("pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png");
     Circle testCircle = new Circle(250,250,120);
+    MediaPlayer mediaPlayer;
 
     public Goblin(){
         makeSprite();
@@ -65,8 +70,16 @@ public class Goblin extends Circle {
     }
 
     private void damage(Human player){
+        goblinAttackSound();
         int attack = (int) Math.floor(Math.random() * strength);
         System.out.println("Goblin hit you for " + attack + " damage.");
         player.setHealth(player.getHealth() - attack);
+    }
+
+    private void goblinAttackSound(){
+        String url = "src/main/resources/238316__sonidotv__attack-3.wav";
+        Media h = new Media(Paths.get(url).toUri().toString());
+        mediaPlayer = new MediaPlayer(h);
+        mediaPlayer.play();
     }
 }
