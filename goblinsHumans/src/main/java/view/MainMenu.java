@@ -4,9 +4,12 @@ package view;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import model.MenuButtons;
 
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +23,14 @@ public class MainMenu {
     private final static int MENU_BUTTON_START_X = 300;
     private final static int MENU_BUTTON_START_Y = 150;
     List<MenuButtons> menuButtons;
+    MediaPlayer mediaPlayer;
 
 
     public MainMenu(){
         menuPane = new AnchorPane();
         menuScene = new Scene(menuPane, WIDTH, HEIGHT);
         menuButtons = new ArrayList<>();
+        mainBackgroundMusic();
         createButtons();
         createBackground();
     }
@@ -54,7 +59,10 @@ public class MainMenu {
         addButton(startButton);
 
 
-        startButton.setOnAction(actionEvent -> SceneController.toLevelOne());
+        startButton.setOnAction(actionEvent -> {
+            mediaPlayer.stop();
+            SceneController.toLevelOne();
+        });
     }
 
     private void createInstructionsButton(){
@@ -77,6 +85,15 @@ public class MainMenu {
         BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
         menuPane.setBackground(new Background(background));
     }
+
+    private void mainBackgroundMusic(){
+        String url = "src/main/resources/2019-07-29_-_Elven_Forest_-_FesliyanStudios.com_-_David_Renda.mp3";
+        Media h = new Media(Paths.get(url).toUri().toString());
+        mediaPlayer = new MediaPlayer(h);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.play();
+    }
+
 
 
 }

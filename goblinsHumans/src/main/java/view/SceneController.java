@@ -40,7 +40,7 @@ public class SceneController {
         mainStage.getIcons().add(icon);
         mainStage.setResizable(false);
 
-        mainStage.setScene(levelOneScene);
+        mainStage.setScene(menuScene);
     }
 
     public Stage getMainStage(){
