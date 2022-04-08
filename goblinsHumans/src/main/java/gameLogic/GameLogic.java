@@ -6,6 +6,8 @@ import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -16,6 +18,7 @@ import model.Human;
 import view.SceneController;
 
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -36,6 +39,7 @@ public class GameLogic {
     Rectangle playerMenu = new Rectangle(0,0, 128, 192);
     StackPane menuPane = new StackPane();
 
+    private MediaPlayer mediaPlayer;
     private boolean hasAttacked = false;
     private boolean hasMoved = false;
     private int numberOfGoblins = 1;
@@ -64,42 +68,7 @@ public class GameLogic {
         playerTurn();
     }
 
-    private void fillAxis(){
-        for(int x = 0; x < 961; x += 64){
-            if(x == player.getTokenX() || x == testGoblin.getTokenX()){
-                gridXAxis.put(x, "filled");
-            } else{
-                gridXAxis.put(x, "empty");
-            }
-        }
-
-        for(int y = 0; y < 705; y += 64){
-            if(y == player.getTokenY() || y == testGoblin.getTokenY()){
-                gridYAxis.put(y, "filled");
-            } else {
-                gridYAxis.put(y, "empty");
-            }
-        }
-    }
-
-    private void getGoblinsPos(){
-        for(int x = 0; x < 961; x += 64){
-            if(x == testGoblin.getTokenX()){
-                goblinsXPos.put(x, "filled");
-            } else{
-                goblinsXPos.put(x, "empty");
-            }
-        }
-
-        for(int y = 0; y < 705; y += 64){
-            if(y == testGoblin.getTokenY()){
-                goblinsYPos.put(y, "filled");
-            } else {
-                goblinsYPos.put(y, "empty");
-            }
-        }
-    }
-
+    //EVERYTHING PLAYER RELATED
     private void playerTurn(){
         if(player.getHealth() < 0){
             outComeBanner(defeatBanner);
@@ -122,42 +91,6 @@ public class GameLogic {
             currentPane.getChildren().add(victoryBanner);
         }
 
-    }
-
-    private void goblinTurn(){
-        currentPane.getChildren().remove(playerBanner);
-        currentPane.getChildren().add(goblinBanner);
-        moveBanner(goblinBanner);
-        getGoblinsMoves();
-        goblinAttack();
-
-        playerTurn();
-    }
-
-
-    //BANNER ANIMATION
-    private void moveBanner(StackPane banner){
-        banner.setLayoutX(1024);
-        banner.setLayoutY(180);
-
-        TranslateTransition slideIn = new TranslateTransition();
-        slideIn.setDuration(Duration.seconds(0.3));
-        slideIn.setToX(-1024);
-
-        PauseTransition pause = new PauseTransition(Duration.millis(800));
-
-        TranslateTransition slideOut = new TranslateTransition();
-        slideOut.setDuration(Duration.seconds(0.3));
-        slideOut.setToX(-2048);
-
-        SequentialTransition seqT = new SequentialTransition(banner, slideIn, pause, slideOut);
-
-        seqT.play();
-    }
-
-    private void outComeBanner(StackPane banner){
-        banner.setLayoutX(0);
-        banner.setLayoutY(192);
     }
 
     //TURN MENU
@@ -241,19 +174,43 @@ public class GameLogic {
         menuPane.getChildren().add(endTurn);
     }
 
-    private ActionButton mainMenuButton(){
-        ActionButton toCamp = new ActionButton("MAIN MENU");
-        toCamp.setPrefWidth(192);
-        toCamp.setTranslateY(64);
-        toCamp.setOnMouseClicked(mouseEvent -> {
-            currentPane.getChildren().clear();
-            SceneController.toMainMenu();
-        });
+    // EVERYTHING GRID RELATED
+    private void fillAxis(){
+        for(int x = 0; x < 961; x += 64){
+            if(x == player.getTokenX() || x == testGoblin.getTokenX()){
+                gridXAxis.put(x, "filled");
+            } else{
+                gridXAxis.put(x, "empty");
+            }
+        }
 
-        return toCamp;
+        for(int y = 0; y < 705; y += 64){
+            if(y == player.getTokenY() || y == testGoblin.getTokenY()){
+                gridYAxis.put(y, "filled");
+            } else {
+                gridYAxis.put(y, "empty");
+            }
+        }
     }
 
-    //ATTACK MENU
+    private void getGoblinsPos(){
+        for(int x = 0; x < 961; x += 64){
+            if(x == testGoblin.getTokenX()){
+                goblinsXPos.put(x, "filled");
+            } else{
+                goblinsXPos.put(x, "empty");
+            }
+        }
+
+        for(int y = 0; y < 705; y += 64){
+            if(y == testGoblin.getTokenY()){
+                goblinsYPos.put(y, "filled");
+            } else {
+                goblinsYPos.put(y, "empty");
+            }
+        }
+    }
+
     public void attackGrid(){
         createAttackGrid();
         setAttackGrid();
@@ -317,37 +274,13 @@ public class GameLogic {
 
     private void setAttackListeners(Rectangle r, Goblin goblin, ActionButton back){
         r.setOnMouseClicked(mouseEvent -> {
+            humanAttackSound();
             player.toHit(goblin);
             hasAttacked = true;
             clearAttackGrid();
             currentPane.getChildren().remove(back);
             openMenu();
         });
-    }
-
-    private Goblin getCurrentGoblin(){
-        for(int i = 0; i < 961; i += 64){
-            for(int j = 0; j < 705; j += 64){
-                if(i == testGoblin.getTokenX() && j == testGoblin.getTokenY()){
-                    return testGoblin;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private void clearAttackGrid(){
-        for (Rectangle rectangle : recList) {
-            currentPane.getChildren().remove(rectangle);
-        }
-    }
-
-    private void clearMovementGrid(){
-        for (Rectangle rectangle : moveGrid) {
-            currentPane.getChildren().remove(rectangle);
-        }
-        moveGrid = new ArrayList<>();
     }
 
     //PLAYER MOVE GRID
@@ -388,6 +321,42 @@ public class GameLogic {
 
             currentPane.getChildren().add(r);
         }
+    }
+
+    private void clearAttackGrid(){
+        for (Rectangle rectangle : recList) {
+            currentPane.getChildren().remove(rectangle);
+        }
+    }
+
+    private void clearMovementGrid(){
+        for (Rectangle rectangle : moveGrid) {
+            currentPane.getChildren().remove(rectangle);
+        }
+        moveGrid = new ArrayList<>();
+    }
+
+    // EVERYTHING RELATED TO GOBLINS
+    private void goblinTurn(){
+        currentPane.getChildren().remove(playerBanner);
+        currentPane.getChildren().add(goblinBanner);
+        moveBanner(goblinBanner);
+        getGoblinsMoves();
+        goblinAttack();
+
+        playerTurn();
+    }
+
+    private Goblin getCurrentGoblin(){
+        for(int i = 0; i < 961; i += 64){
+            for(int j = 0; j < 705; j += 64){
+                if(i == testGoblin.getTokenX() && j == testGoblin.getTokenY()){
+                    return testGoblin;
+                }
+            }
+        }
+
+        return null;
     }
 
     //GOBLINS CONTROLLER
@@ -491,5 +460,60 @@ public class GameLogic {
 
         clearAttackGrid();
     }
+
+
+    //BANNER RELATED
+    private void moveBanner(StackPane banner){
+        banner.setLayoutX(1024);
+        banner.setLayoutY(180);
+
+        TranslateTransition slideIn = new TranslateTransition();
+        slideIn.setDuration(Duration.seconds(0.3));
+        slideIn.setToX(-1024);
+
+        PauseTransition pause = new PauseTransition(Duration.millis(800));
+
+        TranslateTransition slideOut = new TranslateTransition();
+        slideOut.setDuration(Duration.seconds(0.3));
+        slideOut.setToX(-2048);
+
+        SequentialTransition seqT = new SequentialTransition(banner, slideIn, pause, slideOut);
+
+        seqT.play();
+    }
+
+    private void outComeBanner(StackPane banner){
+        banner.setLayoutX(0);
+        banner.setLayoutY(192);
+    }
+
+
+
+    private ActionButton mainMenuButton(){
+        ActionButton toCamp = new ActionButton("MAIN MENU");
+        toCamp.setPrefWidth(192);
+        toCamp.setTranslateY(64);
+        toCamp.setOnMouseClicked(mouseEvent -> {
+            currentPane.getChildren().clear();
+            SceneController.toMainMenu();
+        });
+
+        return toCamp;
+    }
+
+
+    //SOUNDS
+    private void humanAttackSound(){
+        String url = "src/main/resources/524215__magnuswaker__schwing-1.wav";
+        Media h = new Media(Paths.get(url).toUri().toString());
+        mediaPlayer = new MediaPlayer(h);
+        mediaPlayer.play();
+    }
+
+
+
+
+
+
 
 }
