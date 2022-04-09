@@ -4,6 +4,7 @@ package gameLogic;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
@@ -13,16 +14,15 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import model.ActionButton;
-import model.Banner;
-import model.Goblin;
-import model.Human;
+import model.*;
 import view.SceneController;
 
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class GameLogic {
@@ -36,6 +36,9 @@ public class GameLogic {
     private final StackPane victoryBanner = victoryDisplay.getVictoryBanner();
     private final Banner defeatDisplay = new Banner();
     private final StackPane defeatBanner = defeatDisplay.getDefeatBanner(mainMenuButton());
+    private final DialogueBox dialogueBox = new DialogueBox();
+
+
     private AnchorPane currentPane;
 
     Rectangle playerMenu = new Rectangle(0,0, 128, 256);
@@ -43,9 +46,7 @@ public class GameLogic {
     Rectangle playerStatus = new Rectangle(0,0, 64, 128);
     StackPane statusPane = new StackPane();
 
-
-
-
+    private String msg = "";
     private MediaPlayer mediaPlayer;
     private boolean hasAttacked = false;
     private boolean hasMoved = false;
@@ -68,7 +69,7 @@ public class GameLogic {
     public void gameStart(){
         currentPane.getChildren().add(player.getToken());
         currentPane.getChildren().add(testGoblin.getToken());
-        player.setTokenPos(512,256);
+        player.setTokenPos(64,64);
         testGoblin.setTokenPos(512,320);
         player.setHealth(5);
         testGoblin.setHealth(10);
@@ -78,6 +79,8 @@ public class GameLogic {
     //EVERYTHING PLAYER RELATED
     private void playerTurn(){
         showMenu();
+        Timer timer = new Timer();
+
         if(testGoblin.getHealth() < 0){
             currentPane.getChildren().remove(testGoblin.getToken());
             testGoblin.setTokenPos(0,0);
@@ -88,7 +91,12 @@ public class GameLogic {
             currentPane.getChildren().add(playerBanner);
             moveBanner(playerBanner);
             currentPane.getChildren().remove(goblinBanner);
-            openMenu();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Platform.runLater(() -> openMenu());
+                }
+            }, 1450);
         } else {
             playerClearLevelSound();
             outComeBanner(victoryBanner);
@@ -165,6 +173,7 @@ public class GameLogic {
     }
 
     private void addButtons(){
+
         ActionButton attack = new ActionButton("ATTACK");
         ActionButton move = new ActionButton("MOVE");
         ActionButton item = new ActionButton("ITEMS");
@@ -200,6 +209,8 @@ public class GameLogic {
 
         endTurn.setOnMouseClicked(mouseEvent -> {
             currentPane.getChildren().remove(menuPane);
+            currentPane.getChildren().remove(dialogueBox.getPlayerDialogue(msg));
+            currentPane.getChildren().remove(playerBanner);
             hasAttacked = false;
             hasMoved = false;
             goblinTurn();
@@ -315,10 +326,22 @@ public class GameLogic {
     }
 
     private void setAttackListeners(Rectangle r, Goblin goblin, ActionButton back){
+        Timer timer = new Timer();
+
         r.setOnMouseClicked(mouseEvent -> {
-            player.toHit(goblin);
+            msg = player.toHit(goblin);
             hasAttacked = true;
             clearAttackGrid();
+
+            dialogueBox.getPlayerDialogue(msg).setLayoutX(player.getTokenX() - 64);
+            dialogueBox.getPlayerDialogue(msg).setLayoutY(player.getTokenY() - 64);
+            currentPane.getChildren().add(dialogueBox.getPlayerDialogue(msg));
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Platform.runLater(() -> currentPane.getChildren().remove(dialogueBox.getPlayerDialogue(msg)));
+                }
+            }, 1000);
             currentPane.getChildren().remove(back);
             openMenu();
         });
@@ -384,22 +407,51 @@ public class GameLogic {
 
     // EVERYTHING RELATED TO GOBLINS
     private void goblinTurn(){
-        currentPane.getChildren().remove(playerBanner);
+        Timer timer = new Timer();
 
         if(testGoblin.getHealth() > 0){
-            currentPane.getChildren().add(goblinBanner);
-            moveBanner(goblinBanner);
-            getGoblinsMoves();
-            goblinAttack();
+
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Platform.runLater(() -> {
+                        currentPane.getChildren().add(goblinBanner);
+                        moveBanner(goblinBanner);
+                    });
+                }
+            }, 1000);
+
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Platform.runLater(() -> getGoblinsMoves());
+                }
+            }, 3000);
+
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Platform.runLater(() ->goblinAttack());
+                }
+            }, 4000);
         }
 
-        if(player.getHealth() > 0){
-            playerTurn();
-        } else {
-            playerDeathSound();
-            outComeBanner(defeatBanner);
-            currentPane.getChildren().add(defeatBanner);
-        }
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    if(player.getHealth() > 0){
+                        playerTurn();
+                    } else {
+                        playerDeathSound();
+                        outComeBanner(defeatBanner);
+                        currentPane.getChildren().add(defeatBanner);
+                    }
+                });
+            }
+        }, 4100);
+
+
     }
 
     private Goblin getCurrentGoblin(){

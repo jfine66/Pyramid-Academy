@@ -2,15 +2,11 @@ package model;
 
 
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 import java.nio.file.Paths;
-import java.util.ArrayList;
+
 
 public class Human extends ImageView{
     private int health = 5;
@@ -25,22 +21,21 @@ public class Human extends ImageView{
 
     }
 
-   public void toHit(Goblin goblin){
+   public String toHit(Goblin goblin){
         int toHit = (int) Math.floor(Math.random() * 10);
         int ac = goblin.getAC();
         if(toHit > ac){
-            damage(goblin);
+            return damage(goblin);
         } else {
-            System.out.println("Attacked missed");
+            return "Attack Missed";
         }
-
    }
 
-   private void damage(Goblin goblin){
+   private String damage(Goblin goblin){
         humanAttackSound();
-        int attack = 30; //(int) Math.floor(Math.random() * strength);
-       System.out.println("You hit goblin for " + attack + " damage.");
+        int attack = 1; //(int) Math.floor(Math.random() * strength);
         goblin.setHealth(goblin.getHealth() - attack);
+        return "Hit Goblin for " + attack + "damage";
    }
 
     public ImageView getToken(){
