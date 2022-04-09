@@ -35,6 +35,7 @@ public class Human extends ImageView{
         humanAttackSound();
         int attack =  (int) Math.floor(Math.random() * strength);
         goblin.setHealth(goblin.getHealth() - attack);
+       System.out.println("Hit Goblin for " + attack + " damage");
         return "Hit Goblin for " + attack + " damage";
    }
 

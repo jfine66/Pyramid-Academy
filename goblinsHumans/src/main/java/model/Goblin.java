@@ -64,7 +64,7 @@ public class Goblin extends Circle {
         if(toHit > player.getAc()){
             damage(player);
         } else {
-            System.out.println("Attacked missed");
+            System.out.println("Goblin attacked missed");
         }
 
     }

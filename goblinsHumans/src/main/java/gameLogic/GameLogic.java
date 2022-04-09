@@ -39,7 +39,7 @@ public class GameLogic {
     private final DialogueBox dialogueBox = new DialogueBox();
 
 
-    private AnchorPane currentPane;
+    private final AnchorPane currentPane;
 
     Rectangle playerMenu = new Rectangle(0,0, 128, 256);
     StackPane menuPane = new StackPane();
@@ -55,8 +55,7 @@ public class GameLogic {
 
     ArrayList<Rectangle> recList = new ArrayList<>();
     ArrayList<Rectangle> moveGrid = new ArrayList<>();
-    HashMap<Integer, String> gridXAxis = new HashMap<>();
-    HashMap<Integer, String> gridYAxis = new HashMap<>();
+    HashMap<Integer, Integer> gridPositions = new HashMap<>();
     HashMap<Integer, String> goblinsXPos = new HashMap<>();
     HashMap<Integer, String> goblinsYPos = new HashMap<>();
 
@@ -108,21 +107,13 @@ public class GameLogic {
 
     //EVERYTHING PLAYER RELATED
     private void playerTurn(){
+        currentPane.getChildren().remove(goblinBanner);
         showMenu();
         Timer timer = new Timer();
-
-        for (Goblin goblin : listOfGoblins){
-            if(goblin.getHealth() < 0){
-                currentPane.getChildren().remove(goblin.getToken());
-                goblin.setTokenPos(0,0);
-                numberOfGoblins--;
-            }
-        }
 
         if(numberOfGoblins > 0){
             currentPane.getChildren().add(playerBanner);
             moveBanner(playerBanner);
-            currentPane.getChildren().remove(goblinBanner);
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -209,6 +200,7 @@ public class GameLogic {
         ActionButton move = new ActionButton("MOVE");
         ActionButton item = new ActionButton("ITEMS");
         ActionButton endTurn = new ActionButton("END");
+        Timer timer = new Timer();
 
         back.setOnMouseClicked(mouseEvent -> {
             clearMovementGrid();
@@ -244,7 +236,19 @@ public class GameLogic {
             currentPane.getChildren().remove(playerBanner);
             hasAttacked = false;
             hasMoved = false;
-            goblinTurn();
+            currentPane.getChildren().add(goblinBanner);
+            moveBanner(goblinBanner);
+            int time = 2000;
+            for(Goblin goblin : listOfGoblins){
+                goblinTurn(goblin, time);
+                time += 1000;
+            }
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Platform.runLater(() -> playerTurn());
+                }
+            }, time);
         });
 
         attack.setTranslateY(-90);
@@ -260,15 +264,12 @@ public class GameLogic {
 
     // EVERYTHING GRID RELATED
     private void fillAxis(){
-        gridXAxis.put(player.getTokenX(), "filled");
-        gridYAxis.put(player.getTokenY(), "filled");
+        gridPositions = new HashMap<>();
+
+        gridPositions.put(player.getTokenX(), player.getTokenY());
 
         for(Goblin goblin : listOfGoblins){
-            gridXAxis.put(goblin.getTokenX(), "filled");
-        }
-
-        for(Goblin goblin : listOfGoblins){
-            gridYAxis.put(goblin.getTokenY(), "filled");
+            gridPositions.put(goblin.getTokenX(), goblin.getTokenY());
         }
 
     }
@@ -350,6 +351,7 @@ public class GameLogic {
         r.setOnMouseClicked(mouseEvent -> {
             msg = player.toHit(goblin);
             hasAttacked = true;
+            if(goblin.getHealth() < 0) removeDeadGoblin(goblin);
             clearAttackGrid();
 
             dialogueBox.getPlayerDialogue(msg).setLayoutX(player.getTokenX() - 64);
@@ -366,12 +368,17 @@ public class GameLogic {
         });
     }
 
+    private  void removeDeadGoblin(Goblin goblin){
+        currentPane.getChildren().remove(goblin.getToken());
+        goblin.setTokenPos(0,0);
+        listOfGoblins.remove(goblin);
+        numberOfGoblins--;
+    }
+
+
     //PLAYER MOVE GRID
     public void getPossibleMoves(){
-        gridXAxis = new HashMap<>();
-        gridYAxis = new HashMap<>();
         fillAxis();
-
         int x = player.getTokenX();
         int y = player.getTokenY();
 
@@ -382,9 +389,7 @@ public class GameLogic {
 
         for(int i = startX; i < maxRight; i += 64){
             for(int j = startY; j < maxDown; j += 64){
-                if(gridXAxis.containsKey(i) && gridYAxis.containsKey(j)){
-                    continue;
-                }
+                if(isSpaceTaken(i,j)) continue;
                 Rectangle r = new Rectangle(i, j, 64,64);
                 r.setOpacity(0.2);
                 r.setFill(Color.BLUE);
@@ -423,71 +428,31 @@ public class GameLogic {
     }
 
     // EVERYTHING RELATED TO GOBLINS
-    private void goblinTurn(){
+    private void goblinTurn(Goblin goblin, int time){
         Timer timer = new Timer();
-        boolean anyGoblinsAlive = false;
 
-        for(Goblin goblin: listOfGoblins){
-            if (goblin.getHealth() > 0) {
-                anyGoblinsAlive = true;
-                break;
+        //ACTION GOBLINS TAKE ON THEIR TURN
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> getGoblinsMoves(goblin));
             }
-        }
-
-        if(anyGoblinsAlive){
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    Platform.runLater(() -> {
-                        currentPane.getChildren().add(goblinBanner);
-                        moveBanner(goblinBanner);
-                    });
-                }
-            }, 1000);
-        }
-
-
-        for(Goblin goblin : listOfGoblins){
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        Platform.runLater(() -> getGoblinsMoves(goblin));
-                    }
-                }, 3000);
-
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        Platform.runLater(() -> goblinAttack(goblin));
-                    }
-                }, 4000);
-        }
-
-        currentPane.getChildren().remove(goblinBanner);
+        }, time);
 
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                Platform.runLater(() -> {
-                    if(player.getHealth() > 0){
-                        playerTurn();
-                    } else {
-                        playerDeathSound();
-                        outComeBanner(defeatBanner);
-                        currentPane.getChildren().add(defeatBanner);
-                    }
-                });
+                Platform.runLater(() -> goblinAttack(goblin));
             }
-        }, 4100);
+        }, time);
+
     }
 
     private Goblin getCurrentGoblin(){
         for(Goblin goblin : listOfGoblins){
-            for(Integer x : goblinsXPos.keySet()){
-                for(Integer y : goblinsYPos.keySet()){
-                    if(goblin.getTokenX() == x && goblin.getTokenY() == y) return goblin;
-                }
-            }
+            int x = goblin.getTokenX();
+            int y = goblin.getTokenY();
+            if(gridPositions.containsKey(x) && gridPositions.get(x) == y) return goblin;
         }
 
         return null;
@@ -495,6 +460,7 @@ public class GameLogic {
 
     //GOBLINS CONTROLLER
     private void getGoblinsMoves(Goblin goblin){
+        fillAxis();
         int goblinX = goblin.getTokenX();
         int goblinY = goblin.getTokenY();
         int playerX = player.getTokenX();
@@ -524,9 +490,7 @@ public class GameLogic {
 
         for(int i = startX; i < maxRight; i += 64){
             for(int j = startY; j < maxDown; j += 64){
-                if(playerX == i && playerY == j){
-                    continue;
-                }
+                if(isSpaceTaken(i,j)) continue;
                 Rectangle r = new Rectangle(i, j, 64,64);
                 r.setOpacity(0.2);
                 r.setFill(Color.BLUE);
@@ -539,13 +503,17 @@ public class GameLogic {
             currentPane.getChildren().add(r);
         }
 
-        if(closetX == playerX && closetY == playerY){
-            goblin.setTokenPos(goblinX,goblinY);
-        } else{
-            goblin.setTokenPos(closetX, closetY);
+        if(!isSpaceTaken(closetX,closetY)){
+            goblin.setTokenPos(closetX,closetY);
+        } else if(isSpaceTaken(closetX, closetY)){
+            goblin.setTokenPos(goblinX, goblinY);
         }
 
         clearMovementGrid();
+    }
+
+    private boolean isSpaceTaken(int x, int y){
+        return gridPositions.containsKey(x) && gridPositions.get(x) == y;
     }
 
     private void goblinAttack(Goblin goblin){
@@ -567,25 +535,37 @@ public class GameLogic {
                 case 0:
                     recList.get(i).setLayoutX(goblinX);
                     recList.get(i).setLayoutY(goblinY + upAndLeft);
-                    if(x == recList.get(i).getLayoutX() && y == recList.get(i).getLayoutY()) goblin.toHit(player);
+                    if(x == recList.get(i).getLayoutX() && y == recList.get(i).getLayoutY()) {
+                        goblin.toHit(player);
+                        if(player.getHealth() < 0) gameOver();
+                    }
                     currentPane.getChildren().add(recList.get(i));
                     break;
                 case 1:
                     recList.get(i).setLayoutX(goblinX + rightAndDown);
                     recList.get(i).setLayoutY(goblinY);
-                    if(x == recList.get(i).getLayoutX() && y == recList.get(i).getLayoutY()) goblin.toHit(player);
+                    if(x == recList.get(i).getLayoutX() && y == recList.get(i).getLayoutY()) {
+                        goblin.toHit(player);
+                        if(player.getHealth() < 0) gameOver();
+                    }
                     currentPane.getChildren().add(recList.get(i));
                     break;
                 case 2:
                     recList.get(i).setLayoutX(goblinX);
                     recList.get(i).setLayoutY(rightAndDown + goblinY);
-                    if(x == recList.get(i).getLayoutX() && y == recList.get(i).getLayoutY()) goblin.toHit(player);
+                    if(x == recList.get(i).getLayoutX() && y == recList.get(i).getLayoutY()) {
+                        goblin.toHit(player);
+                        if(player.getHealth() < 0) gameOver();
+                    }
                     currentPane.getChildren().add(recList.get(i));
                     break;
                 case 3:
                     recList.get(i).setLayoutX(upAndLeft + goblinX);
                     recList.get(i).setLayoutY(goblinY);
-                    if(x == recList.get(i).getLayoutX() && y == recList.get(i).getLayoutY()) goblin.toHit(player);
+                    if(x == recList.get(i).getLayoutX() && y == recList.get(i).getLayoutY()) {
+                        goblin.toHit(player);
+                        if(player.getHealth() < 0) gameOver();
+                    }
                     currentPane.getChildren().add(recList.get(i));
                     break;
                 default:
@@ -593,6 +573,12 @@ public class GameLogic {
         }
 
         clearAttackGrid();
+    }
+
+    private void gameOver(){
+        playerDeathSound();
+        outComeBanner(defeatBanner);
+        currentPane.getChildren().add(defeatBanner);
     }
 
 
