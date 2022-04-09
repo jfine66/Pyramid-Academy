@@ -10,8 +10,8 @@ import java.nio.file.Paths;
 
 public class Human extends ImageView{
     private int health = 5;
-    private int strength = 10;
-    private  int ac = 0;
+    private int strength = 20;
+    private  int ac = 10;
     private final ImageView token = new ImageView("test_player_token.png");
     MediaPlayer mediaPlayer;
 
@@ -33,9 +33,9 @@ public class Human extends ImageView{
 
    private String damage(Goblin goblin){
         humanAttackSound();
-        int attack = 1; //(int) Math.floor(Math.random() * strength);
+        int attack =  (int) Math.floor(Math.random() * strength);
         goblin.setHealth(goblin.getHealth() - attack);
-        return "Hit Goblin for " + attack + "damage";
+        return "Hit Goblin for " + attack + " damage";
    }
 
     public ImageView getToken(){

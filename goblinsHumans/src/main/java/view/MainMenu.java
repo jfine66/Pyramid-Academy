@@ -91,6 +91,7 @@ public class MainMenu {
         Media h = new Media(Paths.get(url).toUri().toString());
         mediaPlayer = new MediaPlayer(h);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        System.out.println("I'm playing!!!!");
         mediaPlayer.play();
     }
 

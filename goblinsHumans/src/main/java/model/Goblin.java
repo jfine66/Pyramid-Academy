@@ -12,8 +12,8 @@ import java.nio.file.Paths;
 
 public class Goblin extends Circle {
     private int health = 10;
-    private int strength = 1;
-    private int ac = 0;
+    private int strength = 5;
+    private int ac = 3;
     private final ImageView token = new ImageView("pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png");
     Circle testCircle = new Circle(250,250,120);
     MediaPlayer mediaPlayer;
