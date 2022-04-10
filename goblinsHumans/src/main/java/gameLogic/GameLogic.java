@@ -26,7 +26,7 @@ public class GameLogic {
     public static final Human player = SceneController.getPlayer();
     protected final Goblin testGoblin = new Goblin();
     protected final Goblin goblinTwo = new Goblin();
-    private ArrayList<Goblin> listOfGoblins = new ArrayList<>();
+    private final ArrayList<Goblin> listOfGoblins = new ArrayList<>();
 
     private final Banner banner = new Banner();
     private final StackPane playerBanner = banner.getPlayerBanner();
@@ -71,7 +71,7 @@ public class GameLogic {
 
     public void gameStart(){
         currentPane.getChildren().add(player.getToken());
-        player.setTokenPos(512,0);
+        player.setTokenPos(512,448);
         testGoblin.setTokenPos(512, 512);
         currentPane.getChildren().add(testGoblin.getToken());
         //setGoblinPos();
@@ -111,24 +111,22 @@ public class GameLogic {
     //EVERYTHING PLAYER RELATED
     private void playerTurn(){
         currentPane.getChildren().remove(goblinBanner);
-        showMenu();
-        Timer timer = new Timer();
-
-        if(numberOfGoblins > 0){
+        if(player.getHealth() > 0){
             currentPane.getChildren().add(playerBanner);
             moveBanner(playerBanner);
+            showMenu();
+        }
+
+        Timer timer = new Timer();
+
+        if(anyGoblinsAlive() && player.getHealth() > 0){
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     Platform.runLater(() -> openMenu());
                 }
             }, 1450);
-        } else {
-            playerClearLevelSound();
-            outComeBanner(victoryBanner);
-            currentPane.getChildren().add(victoryBanner);
         }
-
     }
 
     //SEE PLAYER STATUS
@@ -203,7 +201,7 @@ public class GameLogic {
         ActionButton move = new ActionButton("MOVE");
         ActionButton item = new ActionButton("ITEMS");
         ActionButton endTurn = new ActionButton("END");
-        Timer timer = new Timer();
+
 
         back.setOnMouseClicked(mouseEvent -> {
             clearMovementGrid();
@@ -234,24 +232,7 @@ public class GameLogic {
         });
 
         endTurn.setOnMouseClicked(mouseEvent -> {
-            currentPane.getChildren().remove(menuPane);
-            currentPane.getChildren().remove(dialogueBox.getPlayerDialogue(msg));
-            currentPane.getChildren().remove(playerBanner);
-            hasAttacked = false;
-            hasMoved = false;
-            currentPane.getChildren().add(goblinBanner);
-            moveBanner(goblinBanner);
-            int time = 2000;
-            for(Goblin goblin : listOfGoblins){
-                goblinTurn(goblin, time);
-                time += 1000;
-            }
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    Platform.runLater(() -> playerTurn());
-                }
-            }, time);
+            endTurnPhase();
         });
 
         attack.setTranslateY(-90);
@@ -265,6 +246,35 @@ public class GameLogic {
         menuPane.getChildren().add(endTurn);
     }
 
+    private void endTurnPhase(){
+        Timer timer = new Timer();
+
+        currentPane.getChildren().remove(menuPane);
+        currentPane.getChildren().remove(dialogueBox.getPlayerDialogue(msg));
+        currentPane.getChildren().remove(playerBanner);
+        hasAttacked = false;
+        hasMoved = false;
+        if(anyGoblinsAlive()){
+            currentPane.getChildren().add(goblinBanner);
+            moveBanner(goblinBanner);
+            int time = 2000;
+            for(Goblin goblin : listOfGoblins){
+                goblinTurn(goblin, time);
+                time += 1000;
+            }
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Platform.runLater(() -> playerTurn());
+                }
+            }, time);
+        } else {
+            playerClearLevelSound();
+            outComeBanner(victoryBanner);
+            currentPane.getChildren().add(victoryBanner);
+        }
+    }
+
     // EVERYTHING GRID RELATED
     private void fillAxis(){
         gridPos = new HashMap<>();
@@ -274,6 +284,16 @@ public class GameLogic {
         for(Goblin goblin : listOfGoblins){
             gridPos.put(new ArrayList<>(Arrays.asList(goblin.getTokenX(), goblin.getTokenY())), goblin);
         }
+    }
+
+    private boolean anyGoblinsAlive(){
+        boolean isAlive = false;
+
+        for(Goblin goblin : listOfGoblins){
+            isAlive = goblin.getHealth() > 0;
+        }
+
+        return isAlive;
     }
 
     private void getGoblinsPos(){
@@ -488,7 +508,6 @@ public class GameLogic {
         }
 
         fillAxis();
-        System.out.println("Goblin grid" + gridPos);
     }
 
     private boolean isSpaceTaken(int x, int y){

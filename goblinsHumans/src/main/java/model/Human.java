@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 public class Human extends ImageView{
     private int health = 5;
     private int strength = 20;
-    private  int ac = 10;
+    private  int ac = 0;
     private final ImageView token = new ImageView("test_player_token.png");
     MediaPlayer mediaPlayer;
 
