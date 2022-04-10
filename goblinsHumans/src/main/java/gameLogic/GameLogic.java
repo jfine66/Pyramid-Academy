@@ -464,6 +464,7 @@ public class GameLogic {
         int closetX = goblinX;
         int closetY = goblinY;
 
+        //NEED TO ADD A WAY TO MOVE UP-LEFT, UP-RIGHT
         if(goblinX > playerX){
             closetX = goblinX - 64;
         } else if(goblinX < playerX){
@@ -494,54 +495,28 @@ public class GameLogic {
         int x = player.getTokenX();
         int y = player.getTokenY();
 
-        int upAndLeft = -64;
-        int rightAndDown = 64;
         int goblinX = goblin.getTokenX();
         int goblinY = goblin.getTokenY();
 
-        for(int i = 0; i < 4; i++){
-            switch (i){
-                case 0:
-                    recList.get(i).setLayoutX(goblinX);
-                    recList.get(i).setLayoutY(goblinY + upAndLeft);
-                    if(x == recList.get(i).getLayoutX() && y == recList.get(i).getLayoutY()) {
-                        goblin.toHit(player);
-                        if(player.getHealth() < 0) gameOver();
-                    }
-                    currentPane.getChildren().add(recList.get(i));
-                    break;
-                case 1:
-                    recList.get(i).setLayoutX(goblinX + rightAndDown);
-                    recList.get(i).setLayoutY(goblinY);
-                    if(x == recList.get(i).getLayoutX() && y == recList.get(i).getLayoutY()) {
-                        goblin.toHit(player);
-                        if(player.getHealth() < 0) gameOver();
-                    }
-                    currentPane.getChildren().add(recList.get(i));
-                    break;
-                case 2:
-                    recList.get(i).setLayoutX(goblinX);
-                    recList.get(i).setLayoutY(rightAndDown + goblinY);
-                    if(x == recList.get(i).getLayoutX() && y == recList.get(i).getLayoutY()) {
-                        goblin.toHit(player);
-                        if(player.getHealth() < 0) gameOver();
-                    }
-                    currentPane.getChildren().add(recList.get(i));
-                    break;
-                case 3:
-                    recList.get(i).setLayoutX(upAndLeft + goblinX);
-                    recList.get(i).setLayoutY(goblinY);
-                    if(x == recList.get(i).getLayoutX() && y == recList.get(i).getLayoutY()) {
-                        goblin.toHit(player);
-                        if(player.getHealth() < 0) gameOver();
-                    }
-                    currentPane.getChildren().add(recList.get(i));
-                    break;
-                default:
+        recList.get(0).setLayoutX(goblinX);
+        recList.get(0).setLayoutY(goblinY + 64);
+
+        recList.get(1).setLayoutX(goblinX + 64);
+        recList.get(1).setLayoutY(goblinY);
+
+        recList.get(2).setLayoutX(goblinX);
+        recList.get(2).setLayoutY(goblinY - 64);
+
+        recList.get(3).setLayoutX(goblinX - 64);
+        recList.get(3).setLayoutY(goblinY);
+
+        for (Rectangle rectangle : recList) {
+            if (x == rectangle.getLayoutX() && y == rectangle.getLayoutY()) {
+                goblin.toHit(player);
+                if (player.getHealth() < 0) gameOver();
             }
         }
 
-        clearAttackGrid();
     }
 
     private void gameOver(){
