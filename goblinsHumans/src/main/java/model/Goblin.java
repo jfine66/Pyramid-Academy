@@ -5,6 +5,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class Goblin extends ImageView {
     private int health = 1;
@@ -12,9 +13,12 @@ public class Goblin extends ImageView {
     private int ac = 0;
     private final ImageView token = new ImageView("pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png");
     MediaPlayer mediaPlayer;
+    private final ArrayList<String> drops = new ArrayList<>();
 
     public Goblin(){
-
+//        drops.add("Monkey");
+//        drops.add("Fish");
+        drops.add("Gold");
     }
 
 
@@ -58,6 +62,16 @@ public class Goblin extends ImageView {
         }
 
     }
+
+    public String didDrop(){
+        boolean anyDrop;
+
+        int dropChance = (int) Math.floor(Math.random() * 1);
+        anyDrop = dropChance <= drops.size() && dropChance != drops.size();
+
+        return anyDrop ? drops.get(dropChance) : "no drop";
+    }
+
 
     private void damage(Human player){
         goblinAttackSound();

@@ -137,6 +137,7 @@ public class GameLogic {
         setPlayerMenuPos();
 
         player.getToken().setOnMouseEntered(mouseEvent -> {
+            System.out.println(player.getInventory());
             setStatusMenu(player.getTokenX(),player.getTokenY());
             statusPane.getChildren().add(playerStatus);
             statusText(player.getHealth());
@@ -396,6 +397,7 @@ public class GameLogic {
     }
 
     private  void removeDeadGoblin(Goblin goblin){
+        player.addToInventory(goblin.didDrop());
         currentPane.getChildren().remove(goblin.getToken());
         goblin.setTokenPos(0,0);
         listOfGoblins.remove(goblin);
