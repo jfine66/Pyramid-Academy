@@ -29,11 +29,9 @@ public class MenuButtons extends Button {
     }
 
     private void initializeButtonListeners(){
-
         setOnMouseEntered(mouseEvent -> setEffect(new DropShadow()));
 
         setOnMouseExited(mouseEvent -> setEffect(null));
-
     }
 
 }

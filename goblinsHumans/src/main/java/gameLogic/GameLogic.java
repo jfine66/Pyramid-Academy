@@ -140,7 +140,7 @@ public class GameLogic {
             System.out.println(player.getInventory());
             setStatusMenu(player.getTokenX(),player.getTokenY());
             statusPane.getChildren().add(playerStatus);
-            statusText(player.getHealth());
+            statusText(player.getHealth(), player.getMagic());
             currentPane.getChildren().add(statusPane);
         });
         player.getToken().setOnMouseExited(mouseEvent -> {
@@ -152,7 +152,7 @@ public class GameLogic {
             goblin.getToken().setOnMouseEntered(mouseEvent -> {
                 setStatusMenu(goblin.getTokenX(), goblin.getTokenY());
                 statusPane.getChildren().add(goblinStatus);
-                statusText(goblin.getHealth());
+                statusText(goblin.getHealth(), 5);
                 currentPane.getChildren().add(statusPane);
             });
 
@@ -164,13 +164,21 @@ public class GameLogic {
 
     }
 
-    private void statusText(int value){
+    private void statusText(int hitPoints, int magicPoints){
         Text hp = new Text();
-        hp.setText("HP: " + value);
+        hp.setText("HP: " + hitPoints);
         hp.setTranslateY(-30);
         hp.setFont(Font.font("Verdana", 20));
         hp.setFill(Color.WHITE);
-        statusPane.getChildren().add(hp);
+
+        Text mp = new Text();
+        mp.setText("MP: " + magicPoints);
+        mp.setTranslateY(30);
+        mp.setFont(Font.font("Verdana", 20));
+        mp.setFill(Color.WHITE);
+
+
+        statusPane.getChildren().addAll(hp, mp);
     }
 
 
@@ -222,6 +230,22 @@ public class GameLogic {
         }
     }
 
+    private void itemMenu(){
+        menuPane.getChildren().clear();
+        int testPos = 0;
+
+        for(ITEMS item : player.getInventory().keySet()){
+            ItemButton itemButton = new ItemButton(item);
+            itemButton.setTranslateX(testPos += 64);
+            menuPane.getChildren().add(itemButton);
+        }
+
+
+        menuPane.setLayoutX(player.getTokenX());
+        menuPane.setLayoutY(player.getTokenY());
+        currentPane.getChildren().add(menuPane);
+    }
+
     private void addButtons(){
         ActionButton attack = new ActionButton("ATTACK");
         ActionButton move = new ActionButton("MOVE");
@@ -255,6 +279,11 @@ public class GameLogic {
                 back.setLayoutY(player.getTokenY() + 128);
                 currentPane.getChildren().add(back);
             }
+        });
+
+        item.setOnMouseClicked(mouseEvent -> {
+            closeMenu();
+            itemMenu();
         });
 
         endTurn.setOnMouseClicked(mouseEvent -> endTurnPhase());
@@ -397,7 +426,7 @@ public class GameLogic {
     }
 
     private  void removeDeadGoblin(Goblin goblin){
-        player.addToInventory(goblin.didDrop());
+       // player.addToInventory(goblin.didDrop());
         currentPane.getChildren().remove(goblin.getToken());
         goblin.setTokenPos(0,0);
         listOfGoblins.remove(goblin);

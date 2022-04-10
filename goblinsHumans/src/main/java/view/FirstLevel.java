@@ -14,8 +14,8 @@ public class FirstLevel implements Level {
     private final AnchorPane levelOnePane;
     private final Scene levelOne;
 
-    public FirstLevel(){
-        levelOnePane = new AnchorPane();
+    public FirstLevel(AnchorPane pane){
+        this.levelOnePane = pane;
         levelOne = new Scene(levelOnePane, WIDTH, HEIGHT);
         Image backgroundImage = new Image("test - Unnamed Level.png", 1024, 768, false, true);
         createBattleMap(backgroundImage, levelOnePane);
@@ -28,8 +28,7 @@ public class FirstLevel implements Level {
         return levelOne;
     }
 
-
-
-
-
+    public AnchorPane getLevelOnePane() {
+        return levelOnePane;
+    }
 }

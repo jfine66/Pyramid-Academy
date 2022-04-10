@@ -16,9 +16,7 @@ public class Goblin extends ImageView {
     private final ArrayList<String> drops = new ArrayList<>();
 
     public Goblin(){
-//        drops.add("Monkey");
-//        drops.add("Fish");
-        drops.add("Gold");
+        drops.add("Health Potion");
     }
 
 

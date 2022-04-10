@@ -30,7 +30,8 @@ public class SceneController {
     private static final Scene rulesScene = rules.getRuleScene();
     private static final RestScene camp = new RestScene();
     private static final Scene campScene = camp.getCampScene();
-    private static FirstLevel levelOne = new FirstLevel();
+    private static FirstLevel levelOne = new FirstLevel(new AnchorPane());
+    private static final AnchorPane levelOnePane = levelOne.getLevelOnePane();
     private static Scene levelOneScene = levelOne.getScene();
     private static MediaPlayer mediaPlayer;
 
@@ -67,7 +68,7 @@ public class SceneController {
     }
 
     public static void toLevelOne(){
-        levelOne = new FirstLevel();
+        levelOne = new FirstLevel(new AnchorPane());
         levelOneScene = levelOne.getScene();
         mainStage.setScene(levelOneScene);
     }
