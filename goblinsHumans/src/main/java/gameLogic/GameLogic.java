@@ -50,7 +50,6 @@ public class GameLogic {
     private MediaPlayer mediaPlayer;
     private boolean hasAttacked = false;
     private boolean hasMoved = false;
-    private int numberOfGoblins;
     ActionButton back = new ActionButton("BACK");
 
     ArrayList<Rectangle> recList = new ArrayList<>();
@@ -62,8 +61,7 @@ public class GameLogic {
     public GameLogic(AnchorPane pane){
         this.currentPane = pane;
         listOfGoblins.add(testGoblin);
-        //listOfGoblins.add(goblinTwo);
-        numberOfGoblins = listOfGoblins.size();
+        listOfGoblins.add(goblinTwo);
 
         gameStart();
     }
@@ -72,11 +70,11 @@ public class GameLogic {
     public void gameStart(){
         currentPane.getChildren().add(player.getToken());
         player.setTokenPos(512,448);
-        testGoblin.setTokenPos(512, 512);
-        currentPane.getChildren().add(testGoblin.getToken());
+        testGoblin.setTokenPos(512, 384);
+        goblinTwo.setTokenPos(448,448);
+        currentPane.getChildren().addAll(testGoblin.getToken(), goblinTwo.getToken());
         //setGoblinPos();
         player.setHealth(5);
-        testGoblin.setHealth(10);
         fillAxis();
         playerTurn();
     }
@@ -231,9 +229,7 @@ public class GameLogic {
             }
         });
 
-        endTurn.setOnMouseClicked(mouseEvent -> {
-            endTurnPhase();
-        });
+        endTurn.setOnMouseClicked(mouseEvent -> endTurnPhase());
 
         attack.setTranslateY(-90);
         move.setTranslateY(-30);
@@ -327,43 +323,25 @@ public class GameLogic {
         getGoblinsPos();
         int x = player.getTokenX();
         int y = player.getTokenY();
-
-        int upAndLeft = -64;
-        int rightAndDown = 64;
-
         back.setLayoutX(x - 128);
-        back.setLayoutY(y + rightAndDown);
+        back.setLayoutY(y + 64);
         currentPane.getChildren().add(back);
 
-        for(int i = 0; i < 4; i++){
-            switch (i){
-                case 0:
-                    recList.get(i).setLayoutX(x);
-                    recList.get(i).setLayoutY(y + upAndLeft);
-                    if(goblinsXPos.containsKey( (int) recList.get(i).getLayoutX()) && goblinsYPos.containsKey((int) recList.get(i).getLayoutY()))
-                        setAttackListeners(recList.get(i), getCurrentGoblin(), back);
-                    currentPane.getChildren().add(recList.get(i));
-                    break;
-                case 1:
-                    recList.get(i).setLayoutX(x + rightAndDown);
-                    recList.get(i).setLayoutY(y);
-                    if(goblinsXPos.containsKey( (int) recList.get(i).getLayoutX()) && goblinsYPos.containsKey((int) recList.get(i).getLayoutY())) setAttackListeners(recList.get(i), getCurrentGoblin(), back);
-                    currentPane.getChildren().add(recList.get(i));
-                    break;
-                case 2:
-                    recList.get(i).setLayoutX(x);
-                    recList.get(i).setLayoutY(rightAndDown + y);
-                    if(goblinsXPos.containsKey((int)recList.get(i).getLayoutX()) && goblinsYPos.containsKey((int)recList.get(i).getLayoutY())) setAttackListeners(recList.get(i), getCurrentGoblin(), back);
-                    currentPane.getChildren().add(recList.get(i));
-                    break;
-                case 3:
-                    recList.get(i).setLayoutX(upAndLeft + x);
-                    recList.get(i).setLayoutY(y);
-                    if(goblinsXPos.containsKey((int)recList.get(i).getLayoutX()) && goblinsYPos.containsKey((int)recList.get(i).getLayoutY())) setAttackListeners(recList.get(i), getCurrentGoblin(), back);
-                    currentPane.getChildren().add(recList.get(i));
-                    break;
-                default:
+        recList.get(0).setLayoutX(x - 64);
+        recList.get(0).setLayoutY(y);
+        recList.get(1).setLayoutX(x + 64);
+        recList.get(1).setLayoutY(y);
+
+        recList.get(2).setLayoutX(x);
+        recList.get(2).setLayoutY(y + 64);
+        recList.get(3).setLayoutX(x);
+        recList.get(3).setLayoutY(y - 64);
+
+        for(int l = 0; l < 4; l++){
+            if(goblinsXPos.containsKey((int) recList.get(l).getLayoutX()) && goblinsYPos.containsKey((int) recList.get(l).getLayoutY())){
+                setAttackListeners(recList.get(l), getCurrentGoblin( (int) recList.get(l).getLayoutX(), (int) recList.get(l).getLayoutY()), back);
             }
+            currentPane.getChildren().add(recList.get(l));
         }
     }
 
@@ -373,6 +351,7 @@ public class GameLogic {
         r.setOnMouseClicked(mouseEvent -> {
             msg = player.toHit(goblin);
             hasAttacked = true;
+            System.out.println(goblin.getTokenX() + " " + goblin.getTokenY());
             if(goblin.getHealth() < 0) removeDeadGoblin(goblin);
             clearAttackGrid();
 
@@ -394,7 +373,6 @@ public class GameLogic {
         currentPane.getChildren().remove(goblin.getToken());
         goblin.setTokenPos(0,0);
         listOfGoblins.remove(goblin);
-        numberOfGoblins--;
     }
 
 
@@ -415,7 +393,8 @@ public class GameLogic {
                 Rectangle r = new Rectangle(i, j, 64,64);
                 r.setOpacity(0.2);
                 r.setFill(Color.BLUE);
-                r.setStroke(Color.RED);
+                r.setStroke(Color.WHITE);
+                r.setStrokeWidth(1);
                 moveGrid.add(r);
             }
         }
@@ -470,14 +449,8 @@ public class GameLogic {
 
     }
 
-    private Goblin getCurrentGoblin(){
-        for(Goblin goblin : listOfGoblins){
-            int x = goblin.getTokenX();
-            int y = goblin.getTokenY();
-            return (Goblin) gridPos.get(new ArrayList<>(Arrays.asList(x,y)));
-        }
-
-        return null;
+    private Goblin getCurrentGoblin(int x, int y){
+        return (Goblin) gridPos.get(new ArrayList<>(Arrays.asList(x,y)));
     }
 
     //GOBLINS CONTROLLER
@@ -503,9 +476,7 @@ public class GameLogic {
             closetY = goblinY + 64;
         }
 
-        if(!isSpaceTaken(closetX, closetY)){
-            goblin.setTokenPos(closetX, closetY);
-        }
+        if(!isSpaceTaken(closetX, closetY)) goblin.setTokenPos(closetX, closetY);
 
         fillAxis();
     }

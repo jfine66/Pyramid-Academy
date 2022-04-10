@@ -7,9 +7,9 @@ import javafx.scene.media.MediaPlayer;
 import java.nio.file.Paths;
 
 public class Goblin extends ImageView {
-    private int health = 10;
-    private int strength = 50;
-    private int ac = 3;
+    private int health = 1;
+    private int strength = 1;
+    private int ac = 0;
     private final ImageView token = new ImageView("pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png");
     MediaPlayer mediaPlayer;
 
