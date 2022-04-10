@@ -44,6 +44,7 @@ public class GameLogic {
     Rectangle playerMenu = new Rectangle(0,0, 128, 256);
     StackPane menuPane = new StackPane();
     Rectangle playerStatus = new Rectangle(0,0, 64, 128);
+    Rectangle goblinStatus = new Rectangle(0,0,64,128);
     StackPane statusPane = new StackPane();
 
     private String msg = "";
@@ -70,11 +71,9 @@ public class GameLogic {
     public void gameStart(){
         currentPane.getChildren().add(player.getToken());
         player.setTokenPos(512,448);
-        testGoblin.setTokenPos(512, 384);
-        goblinTwo.setTokenPos(448,448);
-        currentPane.getChildren().addAll(testGoblin.getToken(), goblinTwo.getToken());
-        //setGoblinPos();
+        setGoblinPos();
         player.setHealth(5);
+        testGoblin.setHealth(10);
         fillAxis();
         playerTurn();
     }
@@ -130,29 +129,54 @@ public class GameLogic {
     //SEE PLAYER STATUS
     private void showMenu(){
         statusPane.getChildren().clear();
-        setMenuPos();
-        statusPane.getChildren().add(playerStatus);
+        goblinStatus.setFill(Color.RED);
+        goblinStatus.setOpacity(0.3);
+        playerStatus.setFill(Color.BLUE);
+        playerStatus.setOpacity(0.3);
+
+        setPlayerMenuPos();
 
         player.getToken().setOnMouseEntered(mouseEvent -> {
-            statusText();
+            setStatusMenu(player.getTokenX(),player.getTokenY());
+            statusPane.getChildren().add(playerStatus);
+            statusText(player.getHealth());
             currentPane.getChildren().add(statusPane);
         });
-        player.getToken().setOnMouseExited(mouseEvent -> currentPane.getChildren().remove(statusPane));
+        player.getToken().setOnMouseExited(mouseEvent -> {
+            statusPane.getChildren().clear();
+            currentPane.getChildren().remove(statusPane);
+        });
+
+        for(Goblin goblin : listOfGoblins){
+            goblin.getToken().setOnMouseEntered(mouseEvent -> {
+                setStatusMenu(goblin.getTokenX(), goblin.getTokenY());
+                statusPane.getChildren().add(goblinStatus);
+                statusText(goblin.getHealth());
+                currentPane.getChildren().add(statusPane);
+            });
+
+            goblin.getToken().setOnMouseExited(mouseEvent -> {
+                statusPane.getChildren().clear();
+                currentPane.getChildren().remove(statusPane);
+            });
+        }
+
     }
 
-    private void statusText(){
+    private void statusText(int value){
         Text hp = new Text();
-        hp.setText("HP: " + player.getHealth());
+        hp.setText("HP: " + value);
         hp.setTranslateY(-30);
         hp.setFont(Font.font("Verdana", 20));
         hp.setFill(Color.WHITE);
         statusPane.getChildren().add(hp);
     }
 
+
     //TURN MENU
     private void openMenu(){
         menuPane.getChildren().clear();
-        setMenuPos();
+        setPlayerMenuPos();
         menuPane.getChildren().add(playerMenu);
         addButtons();
         currentPane.getChildren().add(menuPane);
@@ -163,25 +187,19 @@ public class GameLogic {
         currentPane.getChildren().remove(menuPane);
     }
 
-    private void setMenuPos(){
+    private void setPlayerMenuPos(){
         int x = GameLogic.player.getTokenX();
         int y = GameLogic.player.getTokenY();
 
         playerMenu.setFill(Color.BLUE);
         playerMenu.setOpacity(0.3);
-        playerStatus.setFill(Color.BLUE);
-        playerStatus.setOpacity(0.3);
 
-        if(x > 256){
-            menuPane.setLayoutX(x - 128);
-            menuPane.setLayoutY(y);
-            statusPane.setLayoutX(x + 64);
-            statusPane.setLayoutY(y);
-        } else {
+        if(x <= 512){
             menuPane.setLayoutX(x + 64);
             menuPane.setLayoutY(y);
-            statusPane.setLayoutX(x - 64);
-            statusPane.setLayoutY(y);
+        } else {
+            menuPane.setLayoutX(x - 128);
+            menuPane.setLayoutY(y);
         }
 
         if(y < 192 && x >= 256){
@@ -191,7 +209,16 @@ public class GameLogic {
             menuPane.setLayoutX(x - 128);
             menuPane.setLayoutY(512);
         }
+    }
 
+    private void setStatusMenu(int x, int y){
+        if(x < 480){
+            statusPane.setLayoutX(x + 64);
+            statusPane.setLayoutY(y);
+        } else {
+            statusPane.setLayoutX(x - 64);
+            statusPane.setLayoutY(y);
+        }
     }
 
     private void addButtons(){
@@ -339,19 +366,18 @@ public class GameLogic {
 
         for(int l = 0; l < 4; l++){
             if(goblinsXPos.containsKey((int) recList.get(l).getLayoutX()) && goblinsYPos.containsKey((int) recList.get(l).getLayoutY())){
-                setAttackListeners(recList.get(l), getCurrentGoblin( (int) recList.get(l).getLayoutX(), (int) recList.get(l).getLayoutY()), back);
+                setAttackListeners(recList.get(l), getCurrentGoblin( (int) recList.get(l).getLayoutX(), (int) recList.get(l).getLayoutY()));
             }
             currentPane.getChildren().add(recList.get(l));
         }
     }
 
-    private void setAttackListeners(Rectangle r, Goblin goblin, ActionButton back){
+    private void setAttackListeners(Rectangle r, Goblin goblin){
         Timer timer = new Timer();
 
         r.setOnMouseClicked(mouseEvent -> {
             msg = player.toHit(goblin);
             hasAttacked = true;
-            System.out.println(goblin.getTokenX() + " " + goblin.getTokenY());
             if(goblin.getHealth() < 0) removeDeadGoblin(goblin);
             clearAttackGrid();
 
