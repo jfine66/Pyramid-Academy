@@ -1,32 +1,23 @@
 package model;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
 
 import java.nio.file.Paths;
 
-public class Goblin extends Circle {
+public class Goblin extends ImageView {
     private int health = 10;
     private int strength = 5;
     private int ac = 3;
     private final ImageView token = new ImageView("pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png");
-    Circle testCircle = new Circle(250,250,120);
+//    Circle testCircle = new Circle(250,250,120);
     MediaPlayer mediaPlayer;
 
     public Goblin(){
-        makeSprite();
+
     }
 
-    private void makeSprite(){
-        testCircle.setStroke(Color.SEAGREEN);
-        Image im = new Image("pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png");
-        testCircle.setFill(new ImagePattern(im));
-    }
 
     public ImageView getToken() {
         token.setFitWidth(64);

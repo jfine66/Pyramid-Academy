@@ -55,14 +55,14 @@ public class GameLogic {
 
     ArrayList<Rectangle> recList = new ArrayList<>();
     ArrayList<Rectangle> moveGrid = new ArrayList<>();
-    HashMap<Integer, Integer> gridPositions = new HashMap<>();
+    HashMap<ArrayList<Integer>, Object> gridPos = new HashMap<>();
     HashMap<Integer, String> goblinsXPos = new HashMap<>();
     HashMap<Integer, String> goblinsYPos = new HashMap<>();
 
     public GameLogic(AnchorPane pane){
         this.currentPane = pane;
         listOfGoblins.add(testGoblin);
-        listOfGoblins.add(goblinTwo);
+        //listOfGoblins.add(goblinTwo);
         numberOfGoblins = listOfGoblins.size();
 
         gameStart();
@@ -71,10 +71,13 @@ public class GameLogic {
 
     public void gameStart(){
         currentPane.getChildren().add(player.getToken());
-        player.setTokenPos(128,128);
-        setGoblinPos();
+        player.setTokenPos(512,0);
+        testGoblin.setTokenPos(512, 512);
+        currentPane.getChildren().add(testGoblin.getToken());
+        //setGoblinPos();
         player.setHealth(5);
         testGoblin.setHealth(10);
+        fillAxis();
         playerTurn();
     }
 
@@ -264,14 +267,13 @@ public class GameLogic {
 
     // EVERYTHING GRID RELATED
     private void fillAxis(){
-        gridPositions = new HashMap<>();
+        gridPos = new HashMap<>();
 
-        gridPositions.put(player.getTokenX(), player.getTokenY());
+        gridPos.put(new ArrayList<>(Arrays.asList(player.getTokenX(),player.getTokenY())), player);
 
         for(Goblin goblin : listOfGoblins){
-            gridPositions.put(goblin.getTokenX(), goblin.getTokenY());
+            gridPos.put(new ArrayList<>(Arrays.asList(goblin.getTokenX(), goblin.getTokenY())), goblin);
         }
-
     }
 
     private void getGoblinsPos(){
@@ -452,7 +454,7 @@ public class GameLogic {
         for(Goblin goblin : listOfGoblins){
             int x = goblin.getTokenX();
             int y = goblin.getTokenY();
-            if(gridPositions.containsKey(x) && gridPositions.get(x) == y) return goblin;
+            return (Goblin) gridPos.get(new ArrayList<>(Arrays.asList(x,y)));
         }
 
         return null;
@@ -466,54 +468,31 @@ public class GameLogic {
         int playerX = player.getTokenX();
         int playerY = player.getTokenY();
 
-        int shortestX = playerX - goblinX;
-        int shortestY = playerY - goblinY;
         int closetX = goblinX;
         int closetY = goblinY;
 
-        if(shortestX < 0){
+        if(goblinX > playerX){
             closetX = goblinX - 64;
-        } else if(shortestX > 0){
+        } else if(goblinX < playerX){
             closetX = goblinX + 64;
         }
 
-        if(shortestY < 0){
+        if(goblinY > playerY){
             closetY = goblinY - 64;
-        } else if(shortestY > 0){
+        } else if(goblinY < playerY){
             closetY = goblinY + 64;
         }
 
-        int startX = goblinX - 64;
-        int startY = goblinY - 64;
-        int maxRight = goblinX + 128;
-        int maxDown = goblinY + 128;
-
-        for(int i = startX; i < maxRight; i += 64){
-            for(int j = startY; j < maxDown; j += 64){
-                if(isSpaceTaken(i,j)) continue;
-                Rectangle r = new Rectangle(i, j, 64,64);
-                r.setOpacity(0.2);
-                r.setFill(Color.BLUE);
-                r.setStroke(Color.RED);
-                moveGrid.add(r);
-            }
+        if(!isSpaceTaken(closetX, closetY)){
+            goblin.setTokenPos(closetX, closetY);
         }
 
-        for(Rectangle r : moveGrid){
-            currentPane.getChildren().add(r);
-        }
-
-        if(!isSpaceTaken(closetX,closetY)){
-            goblin.setTokenPos(closetX,closetY);
-        } else if(isSpaceTaken(closetX, closetY)){
-            goblin.setTokenPos(goblinX, goblinY);
-        }
-
-        clearMovementGrid();
+        fillAxis();
+        System.out.println("Goblin grid" + gridPos);
     }
 
     private boolean isSpaceTaken(int x, int y){
-        return gridPositions.containsKey(x) && gridPositions.get(x) == y;
+        return gridPos.containsKey(new ArrayList<>(Arrays.asList(x,y)));
     }
 
     private void goblinAttack(Goblin goblin){
@@ -635,6 +614,5 @@ public class GameLogic {
         mediaPlayer = new MediaPlayer(h);
         mediaPlayer.play();
     }
-
 
 }
