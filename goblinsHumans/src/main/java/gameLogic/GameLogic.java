@@ -250,7 +250,7 @@ public class GameLogic {
             } else{
                 closeMenu();
                 getPossibleMoves();
-                back.setLayoutX(player.getTokenX() - 64);
+                back.setLayoutX(player.getTokenX() - 128);
                 back.setLayoutY(player.getTokenY() + 128);
                 currentPane.getChildren().add(back);
             }
@@ -408,23 +408,61 @@ public class GameLogic {
         int x = player.getTokenX();
         int y = player.getTokenY();
 
-        int startX = x - 64;
-        int startY = y - 64;
-        int maxRight = x + 128;
-        int maxDown = y + 128;
-
-        for(int i = startX; i < maxRight; i += 64){
-            for(int j = startY; j < maxDown; j += 64){
-                if(isSpaceTaken(i,j)) continue;
-                Rectangle r = new Rectangle(i, j, 64,64);
-                r.setOpacity(0.2);
-                r.setFill(Color.BLUE);
-                r.setStroke(Color.WHITE);
-                r.setStrokeWidth(1);
-                moveGrid.add(r);
-            }
+        for(int i = y - 128; i < y + 129; i += 64){
+            if(isSpaceTaken(x,i)) continue;
+            Rectangle r = new Rectangle(x, i, 64,64);
+            r.setOpacity(0.2);
+            r.setFill(Color.BLUE);
+            r.setStroke(Color.WHITE);
+            r.setStrokeWidth(1);
+            moveGrid.add(r);
         }
 
+        for(int i = x - 128; i < x + 129; i += 64){
+            if(isSpaceTaken(i,y)) continue;
+            Rectangle r = new Rectangle(i, y, 64,64);
+            r.setOpacity(0.2);
+            r.setFill(Color.BLUE);
+            r.setStroke(Color.WHITE);
+            r.setStrokeWidth(1);
+            moveGrid.add(r);
+        }
+
+        y -= 64;
+
+        for(int i = x - 64; i < x + 128; i += 64){
+            if(isSpaceTaken(i,y)) {
+                y += 64;
+                continue;
+            }
+            Rectangle r = new Rectangle(i, y, 64,64);
+            r.setOpacity(0.2);
+            r.setFill(Color.BLUE);
+            r.setStroke(Color.WHITE);
+            r.setStrokeWidth(1);
+            moveGrid.add(r);
+            y += 64;
+        }
+
+        y = player.getTokenY();
+
+        y += 64;
+
+        for(int i = x - 64; i < x + 128; i += 64){
+            if(isSpaceTaken(i,y)) {
+                y -= 64;
+                continue;
+            }
+            Rectangle r = new Rectangle(i, y, 64,64);
+            r.setOpacity(0.2);
+            r.setFill(Color.BLUE);
+            r.setStroke(Color.WHITE);
+            r.setStrokeWidth(1);
+            moveGrid.add(r);
+            y -= 64;
+        }
+
+        // PUT LISTENERS IN ANOTHER METHOD FOOL!!!!!
         for(Rectangle r : moveGrid){
             r.setOnMouseEntered(mouseEvent -> r.setStroke(Color.WHITE));
             r.setOnMouseExited(mouseEvent -> r.setStroke(Color.RED));
