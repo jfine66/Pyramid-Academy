@@ -22,6 +22,7 @@ public class SceneController {
     //PATH FOR ICON
     private String ICON_PATH = "pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png";
     //SET UP GAME
+    private static GameLogic game;
     private static final Human player = new Human();
     //GET OTHER SCENES
     private static final MainMenu menu = new MainMenu();
@@ -31,7 +32,6 @@ public class SceneController {
     private static final RestScene camp = new RestScene();
     private static final Scene campScene = camp.getCampScene();
     private static FirstLevel levelOne = new FirstLevel(new AnchorPane());
-    private static final AnchorPane levelOnePane = levelOne.getLevelOnePane();
     private static Scene levelOneScene = levelOne.getScene();
     private static MediaPlayer mediaPlayer;
 
@@ -68,8 +68,9 @@ public class SceneController {
     }
 
     public static void toLevelOne(){
-        levelOne = new FirstLevel(new AnchorPane());
+//        levelOne = new FirstLevel(new AnchorPane());
         levelOneScene = levelOne.getScene();
+        game = new GameLogic(levelOne.getLevelOnePane());
         mainStage.setScene(levelOneScene);
     }
 

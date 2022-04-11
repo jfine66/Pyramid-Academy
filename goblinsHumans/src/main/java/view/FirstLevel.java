@@ -20,8 +20,6 @@ public class FirstLevel implements Level {
         Image backgroundImage = new Image("test - Unnamed Level.png", 1024, 768, false, true);
         createBattleMap(backgroundImage, levelOnePane);
         createGrid(levelOnePane);
-        GameLogic game = new GameLogic(levelOnePane);
-
     }
 
     public Scene getScene() {

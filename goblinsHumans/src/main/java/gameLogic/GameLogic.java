@@ -39,7 +39,7 @@ public class GameLogic {
     private final DialogueBox dialogueBox = new DialogueBox();
 
 
-    private final AnchorPane currentPane;
+    private AnchorPane currentPane;
 
     Rectangle playerMenu = new Rectangle(0,0, 128, 256);
     StackPane menuPane = new StackPane();
@@ -63,10 +63,16 @@ public class GameLogic {
         this.currentPane = pane;
         listOfGoblins.add(testGoblin);
         listOfGoblins.add(goblinTwo);
-
         gameStart();
     }
 
+    public AnchorPane getCurrentPane() {
+        return currentPane;
+    }
+
+    public void setCurrentPane(AnchorPane pane){
+        this.currentPane = pane;
+    }
 
     public void gameStart(){
         currentPane.getChildren().add(player.getToken());
