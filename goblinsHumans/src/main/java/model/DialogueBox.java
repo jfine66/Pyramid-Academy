@@ -9,7 +9,7 @@ import javafx.scene.text.Text;
 public class DialogueBox {
     private final Rectangle r = new Rectangle(320,256,448, 192);
     private final Text text = new Text();
-    private final StackPane stack = new StackPane();
+    private StackPane stack = new StackPane();
 
     public DialogueBox(){
         setFont();
@@ -35,6 +35,10 @@ public class DialogueBox {
         text.setText(msg);
         stack.getChildren().addAll(r, text);
         return stack;
+    }
+
+    public void clear(){
+        stack = new StackPane();
     }
 
     private void setFont(){

@@ -23,16 +23,19 @@ public class Human extends ImageView{
     private int magic = 5;
     private int dex = 10;
     private int strength = 10;
-    private final int ac;
+    private int ac;
     private final ImageView token = new ImageView("test_player_token.png");
     private final HashMap<ITEMS, Integer> inventory;
+    private final HashMap<String, ITEMS> equipment = new HashMap<>();
     MediaPlayer mediaPlayer;
 
 
     public Human(){
         inventory = new HashMap<>();
-        inventory.put(ITEMS.HEALTH_POTION, 1);
+        inventory.put(ITEMS.HEALTH_POTION, 10);
         inventory.put(ITEMS.MAGIC_POTION, 10);
+        inventory.put(ITEMS.BROKEN_ARMOR, 2);
+
         this.conMod = (int) (Math.floor(Math.random() * 6) + 1);
         this.intMod = (int) (Math.floor(Math.random() * 6) + 1);
         this.strengthMod = (int) (Math.floor(Math.random() * 6) + 1);
@@ -42,6 +45,7 @@ public class Human extends ImageView{
         this.maxMP = intel + intMod;
         magic = maxMP;
         this.ac = dex + dexMod;
+        equipment.put("ARMOR", ITEMS.HEALTH_POTION);
         System.out.println("Max HP : " + maxHP + " Max MP: " + maxMP + " current health " + health + " current AC " + ac);
         System.out.println("con : " + conMod + " dex: " + dexMod + " str : " + strengthMod + " int : " + intMod);
     }
@@ -105,6 +109,22 @@ public class Human extends ImageView{
     public void setTokenPos(int x, int y){
         token.setLayoutX(x);
         token.setLayoutY(y);
+    }
+
+    public String equipArmor(ITEMS item){
+        if(equipment.get("ARMOR") != ITEMS.HEALTH_POTION){
+            return "Already equipped";
+        } else {
+            equipment.put("ARMOR", item);
+            checkArmor();
+            return "Armor equipped";
+        }
+    }
+
+    private void checkArmor(){
+        if(equipment.get("ARMOR") == ITEMS.BROKEN_ARMOR){
+            ac += 1;
+        }
     }
 
     public void setConMod(int conMod) {

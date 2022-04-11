@@ -3,6 +3,7 @@ package model;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import view.SceneController;
@@ -18,6 +19,7 @@ public class ItemButton extends Button {
     private final StackPane inventoryDisplay;
     private final AnchorPane currentPane;
     private final DialogueBox playerMsg = new DialogueBox();
+    private final DialogueBox itemDesc = new DialogueBox();
     private String msg = "";
 
 
@@ -35,7 +37,14 @@ public class ItemButton extends Button {
     private void initializeButtonListeners(ITEMS item){
         setOnMouseEntered(mouseEvent -> setEffect(new DropShadow()));
 
-        setOnMouseClicked(mouseEvent -> useItem(item));
+        setOnMouseClicked(mouseEvent -> {
+            MouseButton button = mouseEvent.getButton();
+            if(button == MouseButton.PRIMARY){
+                useItem(item);
+            } else if(button == MouseButton.SECONDARY){
+                itemDescription(item);
+            }
+        });
 
         setOnMouseExited(mouseEvent -> setEffect(null));
     }
@@ -43,8 +52,6 @@ public class ItemButton extends Button {
     private void useItem(ITEMS item){
         Timer timer = new Timer();
 
-        playerMsg.getPlayerDialogue(msg).setLayoutX(320);
-        playerMsg.getPlayerDialogue(msg).setLayoutY(256);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -55,12 +62,58 @@ public class ItemButton extends Button {
 
         switch (item){
             case HEALTH_POTION:
+                playerMsg.clear();
                 useHealthPot();
+                playerMsg.getPlayerDialogue(msg).setLayoutX(320);
+                playerMsg.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case MAGIC_POTION:
+                playerMsg.clear();
                 useMagicPot();
+                playerMsg.getPlayerDialogue(msg).setLayoutX(320);
+                playerMsg.getPlayerDialogue(msg).setLayoutY(256);
                 break;
+            case BROKEN_ARMOR:
+                playerMsg.clear();
+                equipBrokenArmor();
+                playerMsg.getPlayerDialogue(msg).setLayoutX(320);
+                playerMsg.getPlayerDialogue(msg).setLayoutY(256);
             default:
+        }
+    }
+
+    private void itemDescription(ITEMS item){
+        Timer timer = new Timer();
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> currentPane.getChildren().remove(itemDesc.getPlayerDialogue(msg)));
+            }
+        }, 3000);
+
+        switch (item){
+            case HEALTH_POTION:
+                itemDesc.clear();
+                msg = "A vibrant red liquid radiating warmth\nrestores 1-10 points of health";
+                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
+                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
+                break;
+            case MAGIC_POTION:
+                itemDesc.clear();
+                msg = "A memorizing dark blue liquid\nrestores 1-10 points of magic power";
+                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
+                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
+                break;
+            case BROKEN_ARMOR:
+                itemDesc.clear();
+                msg = "Rusted and in disrepair\nit offers little in the way of protection\nplus one to your AC\nLeft click to equip";
+                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
+                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
+                break;
         }
     }
 
@@ -117,6 +170,22 @@ public class ItemButton extends Button {
                 inventory.remove(MAGIC_POTION);
                 inventoryDisplay.getChildren().remove(this);
             }
+        }
+    }
+
+    private void equipBrokenArmor(){
+        if(player.equipArmor(BROKEN_ARMOR).equals("Armor equipped")){
+            inventory.put(BROKEN_ARMOR, inventory.get(BROKEN_ARMOR) - 1);
+            msg = "You put on the armor";
+            currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+        } else if(player.equipArmor(BROKEN_ARMOR).equals("Already equipped")){
+            msg = "Already equipped";
+            currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+        }
+
+        if(inventory.get(BROKEN_ARMOR) < 1) {
+            inventory.remove(BROKEN_ARMOR);
+            inventoryDisplay.getChildren().remove(this);
         }
     }
 
