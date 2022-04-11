@@ -36,8 +36,8 @@ public class GameLogic {
     private final StackPane victoryBanner = victoryDisplay.getVictoryBanner();
     private final Banner defeatDisplay = new Banner();
     private final StackPane defeatBanner = defeatDisplay.getDefeatBanner(mainMenuButton());
-    private final DialogueBox dialogueBox = new DialogueBox();
-
+    private final DialogueBox playerDialogueBox = new DialogueBox();
+    private final DialogueBox goblinDialogueBox = new DialogueBox();
 
     private AnchorPane currentPane;
 
@@ -75,11 +75,8 @@ public class GameLogic {
     }
 
     public void gameStart(){
-        currentPane.getChildren().add(player.getToken());
-        player.setTokenPos(512,448);
+        player.playerStartPos(currentPane);
         setGoblinPos();
-        player.setHealth(5);
-        testGoblin.setHealth(10);
         fillAxis();
         playerTurn();
     }
@@ -136,9 +133,9 @@ public class GameLogic {
     private void showMenu(){
         statusPane.getChildren().clear();
         goblinStatus.setFill(Color.RED);
-        goblinStatus.setOpacity(0.3);
+        goblinStatus.setOpacity(0.8);
         playerStatus.setFill(Color.BLUE);
-        playerStatus.setOpacity(0.3);
+        playerStatus.setOpacity(0.8);
 
         setPlayerMenuPos();
 
@@ -167,7 +164,6 @@ public class GameLogic {
                 currentPane.getChildren().remove(statusPane);
             });
         }
-
     }
 
     private void statusText(int hitPoints, int magicPoints){
@@ -182,7 +178,6 @@ public class GameLogic {
         mp.setTranslateY(30);
         mp.setFont(Font.font("Verdana", 20));
         mp.setFill(Color.WHITE);
-
 
         statusPane.getChildren().addAll(hp, mp);
     }
@@ -203,11 +198,11 @@ public class GameLogic {
     }
 
     private void setPlayerMenuPos(){
-        int x = GameLogic.player.getTokenX();
-        int y = GameLogic.player.getTokenY();
+        int x = player.getTokenX();
+        int y = player.getTokenY();
 
         playerMenu.setFill(Color.BLUE);
-        playerMenu.setOpacity(0.3);
+        playerMenu.setOpacity(0.8);
 
         if(x <= 512){
             menuPane.setLayoutX(x + 64);
@@ -238,14 +233,13 @@ public class GameLogic {
 
     private void itemMenu(){
         menuPane.getChildren().clear();
-        int testPos = 0;
+        int testPos = -64;
 
         for(ITEMS item : player.getInventory().keySet()){
-            ItemButton itemButton = new ItemButton(item);
+            ItemButton itemButton = new ItemButton(item, menuPane);
             itemButton.setTranslateX(testPos += 64);
             menuPane.getChildren().add(itemButton);
         }
-
 
         menuPane.setLayoutX(player.getTokenX());
         menuPane.setLayoutY(player.getTokenY());
@@ -258,8 +252,16 @@ public class GameLogic {
         ActionButton item = new ActionButton("ITEMS");
         ActionButton endTurn = new ActionButton("END");
 
+        playerDialogueBox.getPlayerDialogue(msg).setLayoutX(320);
+        playerDialogueBox.getPlayerDialogue(msg).setLayoutY(256);
+
+        playerDialogueBox.getPlayerDialogue(msg).setOnMouseClicked(event -> {
+            currentPane.getChildren().remove(playerDialogueBox.getPlayerDialogue(msg));
+            openMenu();
+        });
 
         back.setOnMouseClicked(mouseEvent -> {
+            closeMenu();
             clearMovementGrid();
             clearAttackGrid();
             openMenu();
@@ -268,7 +270,9 @@ public class GameLogic {
 
         attack.setOnMouseClicked(mouseEvent -> {
             if(hasAttacked){
-                System.out.println("You have already attacked this turn!!!");
+                closeMenu();
+                msg = "YOU HAVE ALREADY ATTACKED";
+                currentPane.getChildren().add(playerDialogueBox.getPlayerDialogue(msg));
             } else{
                 attackGrid();
                 closeMenu();
@@ -277,7 +281,9 @@ public class GameLogic {
 
         move.setOnMouseClicked(mouseEvent -> {
             if(hasMoved){
-                System.out.println("You have already moved this turn!!!");
+                closeMenu();
+                msg = "YOU HAVE ALREADY MOVED";
+                currentPane.getChildren().add(playerDialogueBox.getPlayerDialogue(msg));
             } else{
                 closeMenu();
                 getPossibleMoves();
@@ -290,6 +296,10 @@ public class GameLogic {
         item.setOnMouseClicked(mouseEvent -> {
             closeMenu();
             itemMenu();
+            showMenu();
+            back.setLayoutX(player.getTokenX() - 64);
+            back.setLayoutY(player.getTokenY() + 64);
+            currentPane.getChildren().add(back);
         });
 
         endTurn.setOnMouseClicked(mouseEvent -> endTurnPhase());
@@ -309,7 +319,7 @@ public class GameLogic {
         Timer timer = new Timer();
 
         currentPane.getChildren().remove(menuPane);
-        currentPane.getChildren().remove(dialogueBox.getPlayerDialogue(msg));
+        currentPane.getChildren().remove(playerDialogueBox.getPlayerDialogue(msg));
         currentPane.getChildren().remove(playerBanner);
         hasAttacked = false;
         hasMoved = false;
@@ -321,12 +331,13 @@ public class GameLogic {
                 goblinTurn(goblin, time);
                 time += 1000;
             }
+
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     Platform.runLater(() -> playerTurn());
                 }
-            }, time);
+            }, time + 800);
         } else {
             playerClearLevelSound();
             outComeBanner(victoryBanner);
@@ -375,7 +386,7 @@ public class GameLogic {
 
         for(int i = 0; i < 4; i++){
             Rectangle r = new Rectangle(0,0, 64,64);
-            r.setOpacity(0.2);
+            r.setOpacity(0.4);
             r.setFill(Color.RED);
             r.setStroke(Color.WHITE);
             recList.add(r);
@@ -409,30 +420,26 @@ public class GameLogic {
     }
 
     private void setAttackListeners(Rectangle r, Goblin goblin){
-        Timer timer = new Timer();
-
         r.setOnMouseClicked(mouseEvent -> {
             msg = player.toHit(goblin);
             hasAttacked = true;
             if(goblin.getHealth() < 0) removeDeadGoblin(goblin);
             clearAttackGrid();
 
-            dialogueBox.getPlayerDialogue(msg).setLayoutX(player.getTokenX() - 64);
-            dialogueBox.getPlayerDialogue(msg).setLayoutY(player.getTokenY() - 64);
-            currentPane.getChildren().add(dialogueBox.getPlayerDialogue(msg));
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    Platform.runLater(() -> currentPane.getChildren().remove(dialogueBox.getPlayerDialogue(msg)));
-                }
-            }, 1000);
             currentPane.getChildren().remove(back);
-            openMenu();
+
+            currentPane.getChildren().add(playerDialogueBox.getPlayerDialogue(msg));
+
         });
+
     }
 
     private  void removeDeadGoblin(Goblin goblin){
-       // player.addToInventory(goblin.didDrop());
+        ITEMS drop = goblin.didDrop();
+        if(drop != null){
+            msg += "\nGoblin dropped " + drop + " \nit has been added to your inventory";
+            player.addToInventory(drop);
+        }
         currentPane.getChildren().remove(goblin.getToken());
         goblin.setTokenPos(0,0);
         listOfGoblins.remove(goblin);
@@ -448,7 +455,7 @@ public class GameLogic {
         for(int i = y - 128; i < y + 129; i += 64){
             if(isSpaceTaken(x,i)) continue;
             Rectangle r = new Rectangle(x, i, 64,64);
-            r.setOpacity(0.2);
+            r.setOpacity(0.6);
             r.setFill(Color.BLUE);
             r.setStroke(Color.WHITE);
             r.setStrokeWidth(1);
@@ -458,7 +465,7 @@ public class GameLogic {
         for(int i = x - 128; i < x + 129; i += 64){
             if(isSpaceTaken(i,y)) continue;
             Rectangle r = new Rectangle(i, y, 64,64);
-            r.setOpacity(0.2);
+            r.setOpacity(0.6);
             r.setFill(Color.BLUE);
             r.setStroke(Color.WHITE);
             r.setStrokeWidth(1);
@@ -473,7 +480,7 @@ public class GameLogic {
                 continue;
             }
             Rectangle r = new Rectangle(i, y, 64,64);
-            r.setOpacity(0.2);
+            r.setOpacity(0.6);
             r.setFill(Color.BLUE);
             r.setStroke(Color.WHITE);
             r.setStrokeWidth(1);
@@ -491,7 +498,7 @@ public class GameLogic {
                 continue;
             }
             Rectangle r = new Rectangle(i, y, 64,64);
-            r.setOpacity(0.2);
+            r.setOpacity(0.6);
             r.setFill(Color.BLUE);
             r.setStroke(Color.WHITE);
             r.setStrokeWidth(1);
@@ -532,7 +539,6 @@ public class GameLogic {
     // EVERYTHING RELATED TO GOBLINS
     private void goblinTurn(Goblin goblin, int time){
         Timer timer = new Timer();
-
         //ACTION GOBLINS TAKE ON THEIR TURN
         timer.schedule(new TimerTask() {
             @Override
@@ -593,6 +599,10 @@ public class GameLogic {
     }
 
     private void setGoblinAttackGrid(Goblin goblin){
+        goblinDialogueBox.getPlayerDialogue(msg).setLayoutX(320);
+        goblinDialogueBox.getPlayerDialogue(msg).setLayoutY(256);
+
+        Timer timer = new Timer();
         int x = player.getTokenX();
         int y = player.getTokenY();
 
@@ -613,10 +623,30 @@ public class GameLogic {
 
         for (Rectangle rectangle : recList) {
             if (x == rectangle.getLayoutX() && y == rectangle.getLayoutY()) {
-                goblin.toHit(player);
+                String temp = goblin.toHit(player);
+
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Platform.runLater(() -> {
+                            msg = temp;
+                            currentPane.getChildren().add(goblinDialogueBox.getGoblinDialogue(msg));
+                        });
+                    }
+                }, 1000);
+
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Platform.runLater(() -> currentPane.getChildren().remove(goblinDialogueBox.getPlayerDialogue(msg)));
+                    }
+                }, 1800);
+
                 if (player.getHealth() < 0) gameOver();
             }
         }
+
+
 
     }
 

@@ -2,6 +2,8 @@ package model;
 
 
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -10,21 +12,19 @@ import java.util.HashMap;
 
 
 public class Human extends ImageView{
-    private int health = 5;
+    private int health = 500;
     private int magic = 5;
     private int strength = 200;
-    private  int ac = 100;
+    private  int ac = 0;
     private final ImageView token = new ImageView("test_player_token.png");
     private HashMap<ITEMS, Integer> inventory;
     MediaPlayer mediaPlayer;
 
 
-
     public Human(){
         inventory = new HashMap<>();
-        inventory.put(ITEMS.HEALTH_POTION, 2);
-       inventory.put(ITEMS.MAGIC_POTION, 1);
-
+        inventory.put(ITEMS.HEALTH_POTION, 1);
+        inventory.put(ITEMS.MAGIC_POTION, 2);
     }
 
    public String toHit(Goblin goblin){
@@ -99,7 +99,6 @@ public class Human extends ImageView{
 //    }
 
     private void addItemToInventory(ITEMS item){
-        //if(text.equals("Gold")) return;
         if(inventory.containsKey(item)){
             inventory.put(item, inventory.get(item) + 1);
         } else {
@@ -116,6 +115,11 @@ public class Human extends ImageView{
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public void playerStartPos(AnchorPane currentPane){
+        currentPane.getChildren().add(token);
+        setTokenPos(512,448);
     }
 
     private void humanAttackSound(){

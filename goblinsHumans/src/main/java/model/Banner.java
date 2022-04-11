@@ -21,7 +21,7 @@ public class Banner {
     public StackPane getPlayerBanner(){
         stack.getChildren().clear();
         r.setFill(Color.BLUE);
-        r.setOpacity(0.5);
+        r.setOpacity(0.8);
         text.setText("YOUR TURN");
         stack.getChildren().addAll(r, text);
         return stack;
@@ -30,7 +30,7 @@ public class Banner {
     public StackPane getGoblinsBanner(){
         stack.getChildren().clear();
         r.setFill(Color.RED);
-        r.setOpacity(0.5);
+        r.setOpacity(0.8);
         text.setText("ENEMY TURN");
         stack.getChildren().addAll(r, text);
         return stack;
@@ -39,7 +39,7 @@ public class Banner {
     public StackPane getVictoryBanner(){
         stack.getChildren().clear();
         r.setFill(Color.GREEN);
-        r.setOpacity(0.5);
+        r.setOpacity(0.8);
         r.setHeight(192);
         text.setText("YOU HAVE SLAIN ALL THE GOBLINS\nPROCEED TO CAMP?");
         text.setTranslateY(-50);
@@ -54,7 +54,7 @@ public class Banner {
     public StackPane getDefeatBanner(ActionButton button){
         stack.getChildren().clear();
         r.setFill(Color.RED);
-        r.setOpacity(0.5);
+        r.setOpacity(0.8);
         r.setHeight(192);
         text.setText("YOU HAVE BEEN SLAIN");
         text.setTranslateY(-50);

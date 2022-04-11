@@ -2,6 +2,8 @@ package model;
 
 import javafx.scene.image.ImageView;
 
+import java.util.Random;
+
 public enum ITEMS {
     HEALTH_POTION("health_pot_small.png"),
     MAGIC_POTION("magic_pot_small.png");
@@ -15,5 +17,10 @@ public enum ITEMS {
 
     public String getUrl() {
         return url;
+    }
+
+    public static ITEMS getRandomItem(){
+        Random random = new Random();
+        return values()[random.nextInt(values().length)];
     }
 }

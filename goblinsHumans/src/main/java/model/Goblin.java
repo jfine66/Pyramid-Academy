@@ -9,14 +9,14 @@ import java.util.ArrayList;
 
 public class Goblin extends ImageView {
     private int health = 1;
-    private int strength = 1;
+    private int strength = 20;
     private int ac = 0;
     private final ImageView token = new ImageView("pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png");
     MediaPlayer mediaPlayer;
-    private final ArrayList<String> drops = new ArrayList<>();
+    private final ArrayList<ITEMS> drops = new ArrayList<>();
 
     public Goblin(){
-        drops.add("Health Potion");
+        drops.add(ITEMS.getRandomItem());
     }
 
 
@@ -51,31 +51,31 @@ public class Goblin extends ImageView {
         this.health = health;
     }
 
-    public void toHit(Human player){
+    public String toHit(Human player){
         int toHit = (int) Math.floor(Math.random() * 10);
         if(toHit > player.getAc()){
-            damage(player);
+            return damage(player);
         } else {
-            System.out.println("Goblin attacked missed");
+            return "Goblin attacked missed";
         }
 
     }
 
-    public String didDrop(){
+    public ITEMS didDrop(){
         boolean anyDrop;
 
-        int dropChance = (int) Math.floor(Math.random() * 1);
+        int dropChance = (int) Math.floor(Math.random() * 10);
         anyDrop = dropChance <= drops.size() && dropChance != drops.size();
 
-        return anyDrop ? drops.get(dropChance) : "no drop";
+        return anyDrop ? drops.get(dropChance) : null;
     }
 
 
-    private void damage(Human player){
+    private String damage(Human player){
         goblinAttackSound();
         int attack = (int) Math.floor(Math.random() * strength);
-        System.out.println("Goblin hit you for " + attack + " damage.");
         player.setHealth(player.getHealth() - attack);
+        return "Goblin hit you for " + attack + " damage.";
     }
 
     private void goblinAttackSound(){
