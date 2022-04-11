@@ -67,7 +67,6 @@ public class GameLogic {
         listOfGoblins.add(goblinTwo);
         listOfGoblins.add(goblinThree);
         listOfGoblins.add(goblinFour);
-        currentPane.getChildren().addAll(testGoblin.getToken(), goblinTwo.getToken(), goblinThree.getToken(), goblinFour.getToken());
         gameStart();
     }
 
@@ -81,13 +80,13 @@ public class GameLogic {
 
     public void gameStart(){
         player.playerStartPos(currentPane);
-        testGoblin.setTokenPos(512, 384);
-        goblinTwo.setTokenPos(512,512);
-        goblinThree.setTokenPos(448,448);
-        goblinFour.setTokenPos(576,448);
+//        testGoblin.setTokenPos(512, 384);
+//        goblinTwo.setTokenPos(512,512);
+//        goblinThree.setTokenPos(448,448);
+//        goblinFour.setTokenPos(576,448);
 
 
-        //setGoblinPos();
+        setGoblinPos();
         fillAxis();
         playerTurn();
     }

@@ -69,7 +69,7 @@ public class Goblin extends ImageView {
     public ITEMS didDrop(){
         boolean anyDrop;
 
-        int dropChance = (int) Math.floor(Math.random() * 1);
+        int dropChance = (int) Math.floor(Math.random() * 9);
         anyDrop = dropChance <= drops.size() && dropChance != drops.size();
 
         return anyDrop ? drops.get(dropChance) : null;

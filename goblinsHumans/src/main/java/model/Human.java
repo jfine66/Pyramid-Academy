@@ -32,9 +32,8 @@ public class Human extends ImageView{
 
     public Human(){
         inventory = new HashMap<>();
-        inventory.put(ITEMS.HEALTH_POTION, 10);
-        inventory.put(ITEMS.MAGIC_POTION, 10);
-        inventory.put(ITEMS.BROKEN_ARMOR, 2);
+        inventory.put(ITEMS.HEALTH_POTION, 3);
+        inventory.put(ITEMS.MAGIC_POTION, 3);
 
         this.conMod = (int) (Math.floor(Math.random() * 6) + 1);
         this.intMod = (int) (Math.floor(Math.random() * 6) + 1);
@@ -112,9 +111,10 @@ public class Human extends ImageView{
     }
 
     public String equipArmor(ITEMS item){
-        if(equipment.get("ARMOR") != ITEMS.HEALTH_POTION){
+        if(equipment.get("ARMOR") == item){
             return "Already equipped";
         } else {
+            inventory.put(equipment.get("ARMOR"), 1);
             equipment.put("ARMOR", item);
             checkArmor();
             return "Armor equipped";
@@ -122,8 +122,23 @@ public class Human extends ImageView{
     }
 
     private void checkArmor(){
-        if(equipment.get("ARMOR") == ITEMS.BROKEN_ARMOR){
-            ac += 1;
+        switch (equipment.get("ARMOR")){
+            case BROKEN_ARMOR:
+                ac += 1;
+                break;
+            case LIGHT_ARMOR:
+                ac += 2;
+                break;
+            case MEDIUM_ARMOR:
+                ac += 3;
+                break;
+            case HEAVY_ARMOR:
+                ac += 4;
+                break;
+            case LEGENDARY_ARMOR:
+                ac += 5;
+                break;
+            default:
         }
     }
 

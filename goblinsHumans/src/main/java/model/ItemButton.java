@@ -59,7 +59,6 @@ public class ItemButton extends Button {
             }
         }, 1000);
 
-
         switch (item){
             case HEALTH_POTION:
                 playerMsg.clear();
@@ -75,9 +74,34 @@ public class ItemButton extends Button {
                 break;
             case BROKEN_ARMOR:
                 playerMsg.clear();
-                equipBrokenArmor();
+                equipArmor(BROKEN_ARMOR);
                 playerMsg.getPlayerDialogue(msg).setLayoutX(320);
                 playerMsg.getPlayerDialogue(msg).setLayoutY(256);
+                break;
+            case LIGHT_ARMOR:
+                playerMsg.clear();
+                equipArmor(LIGHT_ARMOR);
+                playerMsg.getPlayerDialogue(msg).setLayoutX(320);
+                playerMsg.getPlayerDialogue(msg).setLayoutY(256);
+                break;
+            case MEDIUM_ARMOR:
+                playerMsg.clear();
+                equipArmor(MEDIUM_ARMOR);
+                playerMsg.getPlayerDialogue(msg).setLayoutX(320);
+                playerMsg.getPlayerDialogue(msg).setLayoutY(256);
+                break;
+            case HEAVY_ARMOR:
+                playerMsg.clear();
+                equipArmor(HEAVY_ARMOR);
+                playerMsg.getPlayerDialogue(msg).setLayoutX(320);
+                playerMsg.getPlayerDialogue(msg).setLayoutY(256);
+                break;
+            case LEGENDARY_ARMOR:
+                playerMsg.clear();
+                equipArmor(LEGENDARY_ARMOR);
+                playerMsg.getPlayerDialogue(msg).setLayoutX(320);
+                playerMsg.getPlayerDialogue(msg).setLayoutY(256);
+                break;
             default:
         }
     }
@@ -114,6 +138,35 @@ public class ItemButton extends Button {
                 itemDesc.getPlayerDialogue(msg).setLayoutX(320);
                 itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
+            case LIGHT_ARMOR:
+                itemDesc.clear();
+                msg = "Well kept chain-mail\nThe interwoven links provide protection\nplus two to your AC\nLeft click to equip";
+                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
+                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
+                break;
+            case MEDIUM_ARMOR:
+                itemDesc.clear();
+                msg = "Well kept breastplate\nplus three to your AC\nLeft click to equip";
+                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
+                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
+                break;
+            case HEAVY_ARMOR:
+                itemDesc.clear();
+                msg = "Heavy and thick splint mail\nplus four to your AC\nLeft click to equip";
+                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
+                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
+                break;
+            case LEGENDARY_ARMOR:
+                itemDesc.clear();
+                msg = "Offers full protection\ndespite being as light as a feather\nplus five to your AC\nLeft click to equip";
+                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
+                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
+                break;
+            default:
         }
     }
 
@@ -173,18 +226,18 @@ public class ItemButton extends Button {
         }
     }
 
-    private void equipBrokenArmor(){
-        if(player.equipArmor(BROKEN_ARMOR).equals("Armor equipped")){
-            inventory.put(BROKEN_ARMOR, inventory.get(BROKEN_ARMOR) - 1);
+    private void equipArmor(ITEMS item){
+        if(player.equipArmor(item).equals("Armor equipped")){
+            inventory.put(item, inventory.get(item) - 1);
             msg = "You put on the armor";
             currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
-        } else if(player.equipArmor(BROKEN_ARMOR).equals("Already equipped")){
+        } else if(player.equipArmor(item).equals("Already equipped")){
             msg = "Already equipped";
             currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
         }
 
-        if(inventory.get(BROKEN_ARMOR) < 1) {
-            inventory.remove(BROKEN_ARMOR);
+        if(inventory.get(item) < 1) {
+            inventory.remove(item);
             inventoryDisplay.getChildren().remove(this);
         }
     }
