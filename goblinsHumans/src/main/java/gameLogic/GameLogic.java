@@ -26,6 +26,8 @@ public class GameLogic {
     public static final Human player = SceneController.getPlayer();
     protected final Goblin testGoblin = new Goblin();
     protected final Goblin goblinTwo = new Goblin();
+    protected final Goblin goblinThree = new Goblin();
+    protected final Goblin goblinFour = new Goblin();
     private final ArrayList<Goblin> listOfGoblins = new ArrayList<>();
 
     private final Banner banner = new Banner();
@@ -63,6 +65,9 @@ public class GameLogic {
         this.currentPane = pane;
         listOfGoblins.add(testGoblin);
         listOfGoblins.add(goblinTwo);
+        listOfGoblins.add(goblinThree);
+        listOfGoblins.add(goblinFour);
+        currentPane.getChildren().addAll(testGoblin.getToken(), goblinTwo.getToken(), goblinThree.getToken(), goblinFour.getToken());
         gameStart();
     }
 
@@ -76,7 +81,13 @@ public class GameLogic {
 
     public void gameStart(){
         player.playerStartPos(currentPane);
-        setGoblinPos();
+        testGoblin.setTokenPos(512, 384);
+        goblinTwo.setTokenPos(512,512);
+        goblinThree.setTokenPos(448,448);
+        goblinFour.setTokenPos(576,448);
+
+
+        //setGoblinPos();
         fillAxis();
         playerTurn();
     }
@@ -143,7 +154,7 @@ public class GameLogic {
             System.out.println(player.getInventory());
             setStatusMenu(player.getTokenX(),player.getTokenY());
             statusPane.getChildren().add(playerStatus);
-            statusText(player.getHealth(), player.getMagic());
+            statusText(player.getAc(), player.getHealth(), player.getMagic());
             currentPane.getChildren().add(statusPane);
         });
         player.getToken().setOnMouseExited(mouseEvent -> {
@@ -155,7 +166,7 @@ public class GameLogic {
             goblin.getToken().setOnMouseEntered(mouseEvent -> {
                 setStatusMenu(goblin.getTokenX(), goblin.getTokenY());
                 statusPane.getChildren().add(goblinStatus);
-                statusText(goblin.getHealth(), 5);
+                statusText(goblin.getAC(), goblin.getHealth(), goblin.getMagic());
                 currentPane.getChildren().add(statusPane);
             });
 
@@ -166,20 +177,26 @@ public class GameLogic {
         }
     }
 
-    private void statusText(int hitPoints, int magicPoints){
+    private void statusText(int ac, int hitPoints, int magicPoints){
+        Text armor = new Text();
+        armor.setText("AC: " + ac);
+        armor.setTranslateY(-50);
+        armor.setFont(Font.font("Verdana", 15));
+        armor.setFill(Color.WHITE);
+
         Text hp = new Text();
         hp.setText("HP: " + hitPoints);
-        hp.setTranslateY(-30);
-        hp.setFont(Font.font("Verdana", 20));
+        hp.setTranslateY(-25);
+        hp.setFont(Font.font("Verdana", 15));
         hp.setFill(Color.WHITE);
 
         Text mp = new Text();
         mp.setText("MP: " + magicPoints);
-        mp.setTranslateY(30);
-        mp.setFont(Font.font("Verdana", 20));
+        mp.setTranslateY(0);
+        mp.setFont(Font.font("Verdana", 15));
         mp.setFill(Color.WHITE);
 
-        statusPane.getChildren().addAll(hp, mp);
+        statusPane.getChildren().addAll(armor, hp, mp);
     }
 
 
@@ -236,7 +253,7 @@ public class GameLogic {
         int testPos = -64;
 
         for(ITEMS item : player.getInventory().keySet()){
-            ItemButton itemButton = new ItemButton(item, menuPane);
+            ItemButton itemButton = new ItemButton(item, menuPane, currentPane);
             itemButton.setTranslateX(testPos += 64);
             menuPane.getChildren().add(itemButton);
         }

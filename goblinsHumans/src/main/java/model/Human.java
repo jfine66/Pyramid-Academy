@@ -3,7 +3,6 @@ package model;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -12,23 +11,43 @@ import java.util.HashMap;
 
 
 public class Human extends ImageView{
-    private int health = 500;
+    private int conMod;
+    private int intMod;
+    private int strengthMod;
+    private int dexMod;
+
+    private int health = 10;
+    private final int maxHP;
+    private final int maxMP;
+    private int intel = 10;
     private int magic = 5;
-    private int strength = 200;
-    private  int ac = 0;
+    private int dex = 10;
+    private int strength = 10;
+    private final int ac;
     private final ImageView token = new ImageView("test_player_token.png");
-    private HashMap<ITEMS, Integer> inventory;
+    private final HashMap<ITEMS, Integer> inventory;
     MediaPlayer mediaPlayer;
 
 
     public Human(){
         inventory = new HashMap<>();
         inventory.put(ITEMS.HEALTH_POTION, 1);
-        inventory.put(ITEMS.MAGIC_POTION, 2);
+        inventory.put(ITEMS.MAGIC_POTION, 10);
+        this.conMod = (int) (Math.floor(Math.random() * 6) + 1);
+        this.intMod = (int) (Math.floor(Math.random() * 6) + 1);
+        this.strengthMod = (int) (Math.floor(Math.random() * 6) + 1);
+        this.dexMod = (int) (Math.floor(Math.random() * 6) + 1);
+        this.maxHP = health + conMod;
+        health = maxHP;
+        this.maxMP = intel + intMod;
+        magic = maxMP;
+        this.ac = dex + dexMod;
+        System.out.println("Max HP : " + maxHP + " Max MP: " + maxMP + " current health " + health + " current AC " + ac);
+        System.out.println("con : " + conMod + " dex: " + dexMod + " str : " + strengthMod + " int : " + intMod);
     }
 
    public String toHit(Goblin goblin){
-        int toHit = (int) Math.floor(Math.random() * 10);
+        int toHit = (int) Math.floor(Math.random() * (20 + dexMod));
         int ac = goblin.getAC();
         if(toHit > ac){
             return damage(goblin);
@@ -39,7 +58,7 @@ public class Human extends ImageView{
 
    private String damage(Goblin goblin){
         humanAttackSound();
-        int attack =  (int) Math.floor(Math.random() * strength);
+        int attack =  (int) Math.floor(Math.random() * (strength + strengthMod));
         goblin.setHealth(goblin.getHealth() - attack);
        System.out.println("Hit Goblin for " + attack + " damage");
         return "Hit Goblin for " + attack + " damage";
@@ -63,6 +82,14 @@ public class Human extends ImageView{
         return health;
     }
 
+    public int getMaxHP() {
+        return maxHP;
+    }
+
+    public int getMaxMP() {
+        return maxMP;
+    }
+
     public int getAc() {
         return ac;
     }
@@ -78,6 +105,22 @@ public class Human extends ImageView{
     public void setTokenPos(int x, int y){
         token.setLayoutX(x);
         token.setLayoutY(y);
+    }
+
+    public void setConMod(int conMod) {
+        this.conMod = conMod;
+    }
+
+    public void setStrengthMod(int strengthMod) {
+        this.strengthMod = strengthMod;
+    }
+
+    public void setDexMod(int dexMod) {
+        this.dexMod = dexMod;
+    }
+
+    public void setIntMod(int intMod) {
+        this.intMod = intMod;
     }
 
     public void addToInventory(ITEMS item){

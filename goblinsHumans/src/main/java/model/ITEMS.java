@@ -1,12 +1,11 @@
 package model;
 
-import javafx.scene.image.ImageView;
-
 import java.util.Random;
 
 public enum ITEMS {
-    HEALTH_POTION("health_pot_small.png"),
-    MAGIC_POTION("magic_pot_small.png");
+    HEALTH_POTION("health_potion_small.png"),
+    MAGIC_POTION("magic_potion__small.png"),
+    BROKEN_ARMOR("broken_armor_.png");
 
 
     private String url;
@@ -21,6 +20,12 @@ public enum ITEMS {
 
     public static ITEMS getRandomItem(){
         Random random = new Random();
-        return values()[random.nextInt(values().length)];
+        return BROKEN_ARMOR;
+        //return values()[random.nextInt(values().length)];
+    }
+
+    @Override
+    public String toString() {
+        return url.substring(0, 13).replace("_", " ");
     }
 }

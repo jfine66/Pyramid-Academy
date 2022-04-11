@@ -9,8 +9,9 @@ import java.util.ArrayList;
 
 public class Goblin extends ImageView {
     private int health = 1;
-    private int strength = 20;
-    private int ac = 0;
+    private int strength = 10;
+    private int ac = 10;
+    private int magic = 5;
     private final ImageView token = new ImageView("pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png");
     MediaPlayer mediaPlayer;
     private final ArrayList<ITEMS> drops = new ArrayList<>();
@@ -47,12 +48,16 @@ public class Goblin extends ImageView {
         return health;
     }
 
+    public int getMagic() {
+        return magic;
+    }
+
     public void setHealth(int health) {
         this.health = health;
     }
 
     public String toHit(Human player){
-        int toHit = (int) Math.floor(Math.random() * 10);
+        int toHit = (int) Math.floor(Math.random() * 20);
         if(toHit > player.getAc()){
             return damage(player);
         } else {
@@ -64,7 +69,7 @@ public class Goblin extends ImageView {
     public ITEMS didDrop(){
         boolean anyDrop;
 
-        int dropChance = (int) Math.floor(Math.random() * 10);
+        int dropChance = (int) Math.floor(Math.random() * 1);
         anyDrop = dropChance <= drops.size() && dropChance != drops.size();
 
         return anyDrop ? drops.get(dropChance) : null;
