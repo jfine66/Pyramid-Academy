@@ -80,13 +80,13 @@ public class GameLogic {
 
     public void gameStart(){
         player.playerStartPos(currentPane);
-//        testGoblin.setTokenPos(512, 384);
+//       testGoblin.setTokenPos(512, 0);
 //        goblinTwo.setTokenPos(512,512);
 //        goblinThree.setTokenPos(448,448);
 //        goblinFour.setTokenPos(576,448);
 
 
-        setGoblinPos();
+        //setGoblinPos();
         fillAxis();
         playerTurn();
     }
@@ -468,8 +468,10 @@ public class GameLogic {
         int x = player.getTokenX();
         int y = player.getTokenY();
 
-        for(int i = y - 128; i < y + 129; i += 64){
-            if(isSpaceTaken(x,i)) continue;
+
+        //MOVES ABOVE THE PLAYER
+        for(int i = y - 64; i > y - 192; i -= 64){
+            if(isSpaceTaken(x,i)) break;
             Rectangle r = new Rectangle(x, i, 64,64);
             r.setOpacity(0.6);
             r.setFill(Color.BLUE);
@@ -478,8 +480,30 @@ public class GameLogic {
             moveGrid.add(r);
         }
 
-        for(int i = x - 128; i < x + 129; i += 64){
-            if(isSpaceTaken(i,y)) continue;
+        //MOVES BELOW PLAYER
+        for(int i = y + 64; i < y + 192; i += 64){
+            if(isSpaceTaken(x,i)) break;
+            Rectangle r = new Rectangle(x, i, 64,64);
+            r.setOpacity(0.6);
+            r.setFill(Color.BLUE);
+            r.setStroke(Color.WHITE);
+            r.setStrokeWidth(1);
+            moveGrid.add(r);
+        }
+
+        //MOVES TO LEFT OF PLAYER
+        for(int i = x - 64; i > x - 192; i -= 64){
+            if(isSpaceTaken(i,y)) break;
+            Rectangle r = new Rectangle(i, y, 64,64);
+            r.setOpacity(0.6);
+            r.setFill(Color.BLUE);
+            r.setStroke(Color.WHITE);
+            r.setStrokeWidth(1);
+            moveGrid.add(r);
+        }
+
+        //MOVES TO RIGHT OF PLAYER
+        for(int i = x + 64; i < x + 192; i += 64){
             Rectangle r = new Rectangle(i, y, 64,64);
             r.setOpacity(0.6);
             r.setFill(Color.BLUE);
@@ -525,7 +549,7 @@ public class GameLogic {
         // PUT LISTENERS IN ANOTHER METHOD FOOL!!!!!
         for(Rectangle r : moveGrid){
             r.setOnMouseEntered(mouseEvent -> r.setStroke(Color.WHITE));
-            r.setOnMouseExited(mouseEvent -> r.setStroke(Color.RED));
+            r.setOnMouseExited(mouseEvent -> r.setStroke(Color.WHITESMOKE));
 
             r.setOnMouseClicked(mouseEvent -> {
                 player.setTokenPos((int) r.getX(), (int) r.getY());

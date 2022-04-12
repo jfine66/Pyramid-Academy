@@ -8,15 +8,16 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class Goblin extends ImageView {
-    private int health = 1;
-    private int strength = 10;
-    private int ac = 10;
+    private int health;
+    private int strength = 8;
+    private int ac = 12;
     private int magic = 5;
     private final ImageView token = new ImageView("pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png");
     MediaPlayer mediaPlayer;
     private final ArrayList<ITEMS> drops = new ArrayList<>();
 
     public Goblin(){
+        this.health = (int)Math.floor(Math.random() * 12) + 1;
         drops.add(ITEMS.getRandomItem());
     }
 
@@ -57,7 +58,7 @@ public class Goblin extends ImageView {
     }
 
     public String toHit(Human player){
-        int toHit = (int) Math.floor(Math.random() * 20);
+        int toHit = (int) Math.floor(Math.random() * 20) + 1;
         if(toHit > player.getAc()){
             return damage(player);
         } else {

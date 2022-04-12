@@ -34,6 +34,8 @@ public class Human extends ImageView{
         inventory = new HashMap<>();
         inventory.put(ITEMS.HEALTH_POTION, 3);
         inventory.put(ITEMS.MAGIC_POTION, 3);
+        inventory.put(ITEMS.LIGHT_ARMOR, 1);
+        inventory.put(ITEMS.MEDIUM_ARMOR, 1);
 
         this.conMod = (int) (Math.floor(Math.random() * 6) + 1);
         this.intMod = (int) (Math.floor(Math.random() * 6) + 1);
@@ -50,7 +52,7 @@ public class Human extends ImageView{
     }
 
    public String toHit(Goblin goblin){
-        int toHit = (int) Math.floor(Math.random() * (20 + dexMod));
+        int toHit = (int) Math.floor(Math.random() * (20 + dexMod)) + 1;
         int ac = goblin.getAC();
         if(toHit > ac){
             return damage(goblin);
@@ -61,7 +63,7 @@ public class Human extends ImageView{
 
    private String damage(Goblin goblin){
         humanAttackSound();
-        int attack =  (int) Math.floor(Math.random() * (strength + strengthMod));
+        int attack =  (int) Math.floor(Math.random() * (strength + strengthMod) + 1);
         goblin.setHealth(goblin.getHealth() - attack);
        System.out.println("Hit Goblin for " + attack + " damage");
         return "Hit Goblin for " + attack + " damage";
@@ -114,6 +116,7 @@ public class Human extends ImageView{
         if(equipment.get("ARMOR") == item){
             return "Already equipped";
         } else {
+            removeArmor();
             inventory.put(equipment.get("ARMOR"), 1);
             equipment.put("ARMOR", item);
             checkArmor();
@@ -137,6 +140,27 @@ public class Human extends ImageView{
                 break;
             case LEGENDARY_ARMOR:
                 ac += 5;
+                break;
+            default:
+        }
+    }
+
+    private void removeArmor(){
+        switch (equipment.get("ARMOR")){
+            case BROKEN_ARMOR:
+                ac -= 1;
+                break;
+            case LIGHT_ARMOR:
+                ac -= 2;
+                break;
+            case MEDIUM_ARMOR:
+                ac -= 3;
+                break;
+            case HEAVY_ARMOR:
+                ac -= 4;
+                break;
+            case LEGENDARY_ARMOR:
+                ac -= 5;
                 break;
             default:
         }
