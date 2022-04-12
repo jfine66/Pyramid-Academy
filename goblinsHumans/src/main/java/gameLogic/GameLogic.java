@@ -5,6 +5,10 @@ import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
@@ -49,6 +53,12 @@ public class GameLogic {
     Rectangle goblinStatus = new Rectangle(0,0,64,128);
     StackPane statusPane = new StackPane();
 
+    Rectangle spellTest = new Rectangle(0,0,128, 256);
+    StackPane spellPane = new StackPane();
+    boolean isSpellsOpen = false;
+    private Scene currentScene;
+
+
     private String msg = "";
     private MediaPlayer mediaPlayer;
     private boolean hasAttacked = false;
@@ -61,7 +71,8 @@ public class GameLogic {
     HashMap<Integer, String> goblinsXPos = new HashMap<>();
     HashMap<Integer, String> goblinsYPos = new HashMap<>();
 
-    public GameLogic(AnchorPane pane){
+    public GameLogic(AnchorPane pane, Scene currentScene){
+        this.currentScene = currentScene;
         this.currentPane = pane;
         listOfGoblins.add(testGoblin);
         listOfGoblins.add(goblinTwo);
@@ -97,6 +108,33 @@ public class GameLogic {
             currentPane.getChildren().add(goblin.getToken());
         }
     }
+
+    private void createKeyListener(){
+        currentScene.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.E) {
+                if(isSpellsOpen){
+                    isSpellsOpen = false;
+                    spellPane.getChildren().remove(spellTest);
+                    currentPane.getChildren().remove(spellPane);
+                    openMenu();
+                } else {
+                    isSpellsOpen = true;
+                    setSpellsPos();
+                    spellPane.getChildren().add(spellTest);
+                    currentPane.getChildren().add(spellPane);
+                    closeMenu();
+                }
+            }
+        });
+    }
+
+    private void setSpellsPos(){
+        spellTest.setFill(Color.BLUE);
+        spellTest.setOpacity(0.5);
+        spellPane.setLayoutX(player.getTokenX() - 128);
+        spellPane.setLayoutY(player.getTokenY());
+    }
+
 
     private int getRandomX(){
         Random rand = new Random();
@@ -137,6 +175,8 @@ public class GameLogic {
                 }
             }, 1450);
         }
+
+        createKeyListener();
     }
 
     //SEE PLAYER STATUS
@@ -249,11 +289,20 @@ public class GameLogic {
 
     private void itemMenu(){
         menuPane.getChildren().clear();
+        int counter = 0;
         int testPos = -64;
+        int yPos = 0;
 
         for(ITEMS item : player.getInventory().keySet()){
             ItemButton itemButton = new ItemButton(item, menuPane, currentPane);
             itemButton.setTranslateX(testPos += 64);
+            itemButton.setTranslateY(yPos);
+            counter++;
+            if(counter > 2){
+                testPos = -64;
+                yPos += 64;
+                counter = 0;
+            }
             menuPane.getChildren().add(itemButton);
         }
 

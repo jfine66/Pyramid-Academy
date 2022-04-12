@@ -9,7 +9,11 @@ public enum ITEMS {
     LIGHT_ARMOR("light_armor__.png"),
     MEDIUM_ARMOR("medium_armor_.png"),
     HEAVY_ARMOR("heavy_armor__.png"),
-    LEGENDARY_ARMOR("legend_armor_.png");
+    LEGENDARY_ARMOR("legend_armor_.png"),
+    GOLD("gold_piece___.png"),
+    HEALTH_SPELL("health_book__.png"),
+    FIRE_SPELL("fire_spell___.png"),
+    LIFE_STEAL("life_steal___.png");
 
 
     private String url;

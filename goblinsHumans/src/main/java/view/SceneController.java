@@ -70,7 +70,7 @@ public class SceneController {
     public static void toLevelOne(){
 //        levelOne = new FirstLevel(new AnchorPane());
         levelOneScene = levelOne.getScene();
-        game = new GameLogic(levelOne.getLevelOnePane());
+        game = new GameLogic(levelOne.getLevelOnePane(), levelOneScene);
         mainStage.setScene(levelOneScene);
     }
 

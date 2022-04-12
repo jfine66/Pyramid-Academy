@@ -102,6 +102,11 @@ public class ItemButton extends Button {
                 playerMsg.getPlayerDialogue(msg).setLayoutX(320);
                 playerMsg.getPlayerDialogue(msg).setLayoutY(256);
                 break;
+            case HEALTH_SPELL:
+                playerMsg.clear();
+                useHealthSpell();
+                playerMsg.getPlayerDialogue(msg).setLayoutX(320);
+                playerMsg.getPlayerDialogue(msg).setLayoutY(256);
             default:
         }
     }
@@ -119,53 +124,59 @@ public class ItemButton extends Button {
         switch (item){
             case HEALTH_POTION:
                 itemDesc.clear();
-                msg = "A vibrant red liquid radiating warmth\nrestores 1-10 points of health";
+                msg = "A vibrant red liquid radiating warmth\nrestores 1-10 points of health\nYou have x" + inventory.get(HEALTH_POTION) +" of this item";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
                 itemDesc.getPlayerDialogue(msg).setLayoutX(320);
                 itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case MAGIC_POTION:
                 itemDesc.clear();
-                msg = "A memorizing dark blue liquid\nrestores 1-10 points of magic power";
+                msg = "A memorizing dark blue liquid\nrestores 1-10 points of magic power\nYou have x" + inventory.get(MAGIC_POTION) +" of this item";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
                 itemDesc.getPlayerDialogue(msg).setLayoutX(320);
                 itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case BROKEN_ARMOR:
                 itemDesc.clear();
-                msg = "Rusted and in disrepair\nit offers little in the way of protection\nplus one to your AC\nLeft click to equip";
+                msg = "Rusted and in disrepair\nit offers little in the way of protection\nplus one to your AC\nLeft click to equip\nYou have x" + inventory.get(BROKEN_ARMOR) + " of this item";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
                 itemDesc.getPlayerDialogue(msg).setLayoutX(320);
                 itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case LIGHT_ARMOR:
                 itemDesc.clear();
-                msg = "Well kept chain-mail\nThe interwoven links provide protection\nplus two to your AC\nLeft click to equip";
+                msg = "Well kept chain-mail\nThe interwoven links provide protection\nplus two to your AC\nLeft click to equip\nYou have x" + inventory.get(LIGHT_ARMOR) + " of this item";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
                 itemDesc.getPlayerDialogue(msg).setLayoutX(320);
                 itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case MEDIUM_ARMOR:
                 itemDesc.clear();
-                msg = "Well kept breastplate\nplus three to your AC\nLeft click to equip";
+                msg = "Well kept breastplate\nplus three to your AC\nLeft click to equip\nYou have x" + inventory.get(MEDIUM_ARMOR) + " of this item";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
                 itemDesc.getPlayerDialogue(msg).setLayoutX(320);
                 itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case HEAVY_ARMOR:
                 itemDesc.clear();
-                msg = "Heavy and thick splint mail\nplus four to your AC\nLeft click to equip";
+                msg = "Heavy and thick splint mail\nplus four to your AC\nLeft click to equip\nYou have x" + inventory.get(HEAVY_ARMOR) + " of this item";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
                 itemDesc.getPlayerDialogue(msg).setLayoutX(320);
                 itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case LEGENDARY_ARMOR:
                 itemDesc.clear();
-                msg = "Offers full protection\ndespite being as light as a feather\nplus five to your AC\nLeft click to equip";
+                msg = "Offers full protection\ndespite being as light as a feather\nplus five to your AC\nLeft click to equip\nYou have x" + inventory.get(LEGENDARY_ARMOR) + " of this item";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
                 itemDesc.getPlayerDialogue(msg).setLayoutX(320);
                 itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
+            case HEALTH_SPELL:
+                itemDesc.clear();
+                msg = "A vibrant red leather bound book\nPluses with life energy\nLeft click to cast.\nRestores 10HP, Cost 5MP";
+                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
+                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
             default:
         }
     }
@@ -181,6 +192,7 @@ public class ItemButton extends Button {
             msg = "You have regained " + health + " health";
             player.setHealth(player.getMaxHP());
             currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+
             inventory.put(HEALTH_POTION, inventory.get(HEALTH_POTION) - 1);
             if(inventory.get(HEALTH_POTION) < 1) {
                 inventory.remove(HEALTH_POTION);
@@ -209,6 +221,7 @@ public class ItemButton extends Button {
             msg = "You have regained " + magic + " magic power";
             player.setMagic(player.getMaxMP());
             currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+
             inventory.put(MAGIC_POTION, inventory.get(MAGIC_POTION) - 1);
             if(inventory.get(MAGIC_POTION) < 1) {
                 inventory.remove(MAGIC_POTION);
@@ -239,6 +252,36 @@ public class ItemButton extends Button {
         if(inventory.get(item) < 1) {
             inventory.remove(item);
             inventoryDisplay.getChildren().remove(this);
+        }
+    }
+
+    private void useHealthSpell(){
+        int health = 10;
+
+        if(player.getMagic() < 5){
+            msg = "You don't have enough magic";
+            currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+        } else if(player.getHealth() == player.getMaxHP()){
+            msg = "You already have full health";
+            currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+        } else {
+            player.setMagic(player.getMagic() - 5);
+
+            if(player.getHealth() + health > player.getMaxHP()){
+                health = player.getMaxHP() - player.getHealth();
+                msg = "You have regained " + health + "HP";
+                player.setHealth(player.getMaxHP());
+            } else {
+                player.setHealth(player.getHealth() + 10);
+                msg = "You have regained 10HP";
+            }
+            currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+
+            inventory.put(HEALTH_SPELL, inventory.get(HEALTH_SPELL) - 1);
+            if(inventory.get(HEALTH_SPELL) < 1) {
+                inventory.remove(HEALTH_SPELL);
+                inventoryDisplay.getChildren().remove(this);
+            }
         }
     }
 

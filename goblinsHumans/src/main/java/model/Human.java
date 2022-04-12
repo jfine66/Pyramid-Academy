@@ -18,7 +18,7 @@ public class Human extends ImageView{
 
     private int health = 10;
     private final int maxHP;
-    private final int maxMP;
+    private int maxMP;
     private int intel = 10;
     private int magic = 5;
     private int dex = 10;
@@ -26,16 +26,23 @@ public class Human extends ImageView{
     private int ac;
     private final ImageView token = new ImageView("test_player_token.png");
     private final HashMap<ITEMS, Integer> inventory;
+    private final HashMap<ITEMS, Integer> goldBag;
     private final HashMap<String, ITEMS> equipment = new HashMap<>();
     MediaPlayer mediaPlayer;
 
 
     public Human(){
         inventory = new HashMap<>();
+        goldBag = new HashMap<>();
+
         inventory.put(ITEMS.HEALTH_POTION, 3);
         inventory.put(ITEMS.MAGIC_POTION, 3);
-        inventory.put(ITEMS.LIGHT_ARMOR, 1);
-        inventory.put(ITEMS.MEDIUM_ARMOR, 1);
+        inventory.put(ITEMS.LIFE_STEAL, 1);
+//        inventory.put(ITEMS.BROKEN_ARMOR, 1);
+//        inventory.put(ITEMS.MEDIUM_ARMOR, 1);
+////        inventory.put(ITEMS.HEAVY_ARMOR, 1);
+////        inventory.put(ITEMS.LEGENDARY_ARMOR, 1);
+
 
         this.conMod = (int) (Math.floor(Math.random() * 6) + 1);
         this.intMod = (int) (Math.floor(Math.random() * 6) + 1);
@@ -131,15 +138,20 @@ public class Human extends ImageView{
                 break;
             case LIGHT_ARMOR:
                 ac += 2;
+                maxMP -= 1;
                 break;
             case MEDIUM_ARMOR:
                 ac += 3;
+                maxMP -= 2;
                 break;
             case HEAVY_ARMOR:
                 ac += 4;
+                maxMP -= 3;
                 break;
             case LEGENDARY_ARMOR:
                 ac += 5;
+                strength -= 2;
+                maxMP -= 2;
                 break;
             default:
         }
@@ -152,15 +164,20 @@ public class Human extends ImageView{
                 break;
             case LIGHT_ARMOR:
                 ac -= 2;
+                maxMP += 1;
                 break;
             case MEDIUM_ARMOR:
                 ac -= 3;
+                maxMP += 2;
                 break;
             case HEAVY_ARMOR:
                 ac -= 4;
+                maxMP += 3;
                 break;
             case LEGENDARY_ARMOR:
                 ac -= 5;
+                strength += 2;
+                maxMP += 2;
                 break;
             default:
         }
@@ -183,22 +200,13 @@ public class Human extends ImageView{
     }
 
     public void addToInventory(ITEMS item){
-        //if(text.equals("no drop")) return;
-        //addGoldToInventory(text);
-        addItemToInventory(item);
+        if(item == ITEMS.GOLD) {
+            int numPieces = (int) Math.floor(Math.random() * 10) + 1;
+            goldBag.put(ITEMS.GOLD, goldBag.get(ITEMS.GOLD) + numPieces);
+        } else {
+            addItemToInventory(item);
+        }
     }
-
-//    private void addGoldToInventory(String text){
-//        int numPieces = (int) Math.floor((Math.random()) * 10) + 1;
-//
-//        if(text.equals("Gold") && inventory.containsKey("Gold")){
-//            inventory.put("Gold", inventory.get("Gold") + numPieces);
-//            System.out.println(numPieces + " pieces of Gold have been added to your inventory");
-//        } else if(text.equals("Gold")){
-//            inventory.put("Gold", numPieces);
-//            System.out.println(numPieces + " pieces of Gold have been added to your inventory");
-//        }
-//    }
 
     private void addItemToInventory(ITEMS item){
         if(inventory.containsKey(item)){
