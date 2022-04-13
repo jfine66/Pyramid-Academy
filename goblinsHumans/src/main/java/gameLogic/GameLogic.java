@@ -5,10 +5,6 @@ import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
@@ -24,6 +20,8 @@ import view.SceneController;
 
 import java.nio.file.Paths;
 import java.util.*;
+
+import static model.ITEMS.LIFE_STEAL;
 
 
 public class GameLogic {
@@ -53,12 +51,6 @@ public class GameLogic {
     Rectangle goblinStatus = new Rectangle(0,0,64,128);
     StackPane statusPane = new StackPane();
 
-    Rectangle spellTest = new Rectangle(0,0,128, 256);
-    StackPane spellPane = new StackPane();
-    boolean isSpellsOpen = false;
-    private Scene currentScene;
-
-
     private String msg = "";
     private MediaPlayer mediaPlayer;
     private boolean hasAttacked = false;
@@ -68,17 +60,30 @@ public class GameLogic {
     ArrayList<Rectangle> recList = new ArrayList<>();
     ArrayList<Rectangle> moveGrid = new ArrayList<>();
     HashMap<ArrayList<Integer>, Object> gridPos = new HashMap<>();
-    HashMap<Integer, String> goblinsXPos = new HashMap<>();
-    HashMap<Integer, String> goblinsYPos = new HashMap<>();
+    HashMap<ArrayList<Integer>, Goblin> goblinPos = new HashMap<>();
+    ArrayList<Goblin> deadGoblins = new ArrayList<>();
 
-    public GameLogic(AnchorPane pane, Scene currentScene){
-        this.currentScene = currentScene;
+    public GameLogic(AnchorPane pane){
         this.currentPane = pane;
         listOfGoblins.add(testGoblin);
         listOfGoblins.add(goblinTwo);
         listOfGoblins.add(goblinThree);
         listOfGoblins.add(goblinFour);
         gameStart();
+    }
+
+    public HashMap<ArrayList<Integer>, Goblin> getGoblins() {
+        goblinPos = new HashMap<>();
+        getGoblinsPos();
+        return goblinPos;
+    }
+
+    public ActionButton getBack() {
+        return back;
+    }
+
+    public ArrayList<Rectangle> getRecList() {
+        return recList;
     }
 
     public AnchorPane getCurrentPane() {
@@ -91,11 +96,12 @@ public class GameLogic {
 
     public void gameStart(){
         player.playerStartPos(currentPane);
-//       testGoblin.setTokenPos(512, 0);
-//        goblinTwo.setTokenPos(512,512);
-//        goblinThree.setTokenPos(448,448);
-//        goblinFour.setTokenPos(576,448);
+       testGoblin.setTokenPos(512, 192);
+        goblinTwo.setTokenPos(512,256);
+        goblinThree.setTokenPos(512,320);
+        goblinFour.setTokenPos(512,384);
 
+        currentPane.getChildren().addAll(testGoblin.getToken(),goblinTwo.getToken(),goblinThree.getToken(),goblinFour.getToken());
 
         //setGoblinPos();
         fillAxis();
@@ -108,33 +114,6 @@ public class GameLogic {
             currentPane.getChildren().add(goblin.getToken());
         }
     }
-
-    private void createKeyListener(){
-        currentScene.setOnKeyPressed(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.E) {
-                if(isSpellsOpen){
-                    isSpellsOpen = false;
-                    spellPane.getChildren().remove(spellTest);
-                    currentPane.getChildren().remove(spellPane);
-                    openMenu();
-                } else {
-                    isSpellsOpen = true;
-                    setSpellsPos();
-                    spellPane.getChildren().add(spellTest);
-                    currentPane.getChildren().add(spellPane);
-                    closeMenu();
-                }
-            }
-        });
-    }
-
-    private void setSpellsPos(){
-        spellTest.setFill(Color.BLUE);
-        spellTest.setOpacity(0.5);
-        spellPane.setLayoutX(player.getTokenX() - 128);
-        spellPane.setLayoutY(player.getTokenY());
-    }
-
 
     private int getRandomX(){
         Random rand = new Random();
@@ -176,7 +155,6 @@ public class GameLogic {
             }, 1450);
         }
 
-        createKeyListener();
     }
 
     //SEE PLAYER STATUS
@@ -241,6 +219,7 @@ public class GameLogic {
 
     //TURN MENU
     private void openMenu(){
+        getDead();
         menuPane.getChildren().clear();
         setPlayerMenuPos();
         menuPane.getChildren().add(playerMenu);
@@ -248,7 +227,7 @@ public class GameLogic {
         currentPane.getChildren().add(menuPane);
     }
 
-    private void closeMenu(){
+    public void closeMenu(){
         menuPane.getChildren().clear();
         currentPane.getChildren().remove(menuPane);
     }
@@ -362,7 +341,7 @@ public class GameLogic {
             closeMenu();
             itemMenu();
             showMenu();
-            back.setLayoutX(player.getTokenX() - 64);
+            back.setLayoutX(player.getTokenX() - 128);
             back.setLayoutY(player.getTokenY() + 64);
             currentPane.getChildren().add(back);
         });
@@ -433,11 +412,7 @@ public class GameLogic {
 
     private void getGoblinsPos(){
         for(Goblin goblin : listOfGoblins){
-            goblinsXPos.put(goblin.getTokenX(), "filled");
-        }
-
-        for(Goblin goblin : listOfGoblins){
-            goblinsYPos.put(goblin.getTokenY(), "filled");
+            goblinPos.put(new ArrayList<>(Arrays.asList(goblin.getTokenX(), goblin.getTokenY())), goblin);
         }
     }
 
@@ -446,7 +421,7 @@ public class GameLogic {
         setAttackGrid();
     }
 
-    private void createAttackGrid(){
+    public void createAttackGrid(){
         recList = new ArrayList<>();
 
         for(int i = 0; i < 4; i++){
@@ -464,6 +439,33 @@ public class GameLogic {
         int y = player.getTokenY();
         back.setLayoutX(x - 128);
         back.setLayoutY(y + 64);
+       currentPane.getChildren().add(back);
+
+        recList.get(0).setLayoutX(x - 64);
+        recList.get(0).setLayoutY(y);
+        recList.get(1).setLayoutX(x + 64);
+        recList.get(1).setLayoutY(y);
+
+        recList.get(2).setLayoutX(x);
+        recList.get(2).setLayoutY(y + 64);
+        recList.get(3).setLayoutX(x);
+        recList.get(3).setLayoutY(y - 64);
+        for(int l = 0; l < 4; l++){
+            if(goblinPos.containsKey(new ArrayList<>(Arrays.asList((int) recList.get(l).getLayoutX(),(int) recList.get(l).getLayoutY())))){
+                setAttackListeners(recList.get(l), getCurrentGoblin((int) recList.get(l).getLayoutX(), (int) recList.get(l).getLayoutY()));
+            }
+            currentPane.getChildren().add(recList.get(l));
+        }
+    }
+
+    public void createAttackOptions(){
+        createAttackGrid();
+        int x = player.getTokenX();
+        int y = player.getTokenY();
+
+
+        back.setLayoutX(x - 128);
+        back.setLayoutY(y + 64);
         currentPane.getChildren().add(back);
 
         recList.get(0).setLayoutX(x - 64);
@@ -476,19 +478,413 @@ public class GameLogic {
         recList.get(3).setLayoutX(x);
         recList.get(3).setLayoutY(y - 64);
 
+
         for(int l = 0; l < 4; l++){
-            if(goblinsXPos.containsKey((int) recList.get(l).getLayoutX()) && goblinsYPos.containsKey((int) recList.get(l).getLayoutY())){
-                setAttackListeners(recList.get(l), getCurrentGoblin( (int) recList.get(l).getLayoutX(), (int) recList.get(l).getLayoutY()));
-            }
             currentPane.getChildren().add(recList.get(l));
         }
     }
+
+    public void setLifeStealListeners(){
+        getGoblins();
+        for(Rectangle r : recList){
+            if(goblinPos.containsKey(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY())))){
+                r.setOnMouseClicked(mouseEvent -> {
+                    msg = "You casted Life Steal";
+                    currentPane.getChildren().remove(back);
+                    currentPane.getChildren().add(playerDialogueBox.getPlayerDialogue(msg));
+                    player.setHealth(player.getHealth() + 5);
+                    goblinPos.get(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY())))
+                            .setHealth(goblinPos.get(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY()))).getHealth() - 5);
+                    clearAttackGrid();
+                });
+            }
+        }
+    }
+
+    public void directionMenu(){
+        menuPane.getChildren().clear();
+        currentPane.getChildren().remove(menuPane);
+
+        ActionButton up = new ActionButton("UP");
+        ActionButton left = new ActionButton("LEFT");
+        ActionButton right = new ActionButton("RIGHT");
+        ActionButton down = new ActionButton("DOWN");
+
+        up.setOnMouseClicked(mouseEvent -> {
+            createUpAttack();
+            currentPane.getChildren().remove(menuPane);
+        });
+
+        left.setOnMouseClicked(mouseEvent -> {
+            createLeftAttack();
+            currentPane.getChildren().remove(menuPane);
+        });
+
+        right.setOnMouseClicked(mouseEvent -> {
+            createRightAttack();
+            currentPane.getChildren().remove(menuPane);
+        });
+
+        down.setOnMouseClicked(mouseEvent -> {
+            createDownAttack();
+            currentPane.getChildren().remove(menuPane);
+        });
+
+        up.setTranslateY(-128);
+        left.setTranslateY(-64);
+        right.setTranslateY(0);
+        down.setTranslateY(64);
+
+        menuPane.getChildren().addAll(up,left,right,down);
+        currentPane.getChildren().add(menuPane);
+    }
+
+    public void fireDirection(){
+        menuPane.getChildren().clear();
+        currentPane.getChildren().remove(menuPane);
+
+        ActionButton up = new ActionButton("UP");
+        ActionButton left = new ActionButton("LEFT");
+        ActionButton right = new ActionButton("RIGHT");
+        ActionButton down = new ActionButton("DOWN");
+
+        up.setOnMouseClicked(mouseEvent -> {
+            createUpCone();
+            currentPane.getChildren().remove(menuPane);
+        });
+
+        left.setOnMouseClicked(mouseEvent -> {
+            createLeftCone();
+            currentPane.getChildren().remove(menuPane);
+        });
+
+        right.setOnMouseClicked(mouseEvent -> {
+            createRightCone();
+            currentPane.getChildren().remove(menuPane);
+        });
+
+        down.setOnMouseClicked(mouseEvent -> {
+            createDownCone();
+            currentPane.getChildren().remove(menuPane);
+        });
+
+        up.setTranslateY(-128);
+        left.setTranslateY(-64);
+        right.setTranslateY(0);
+        down.setTranslateY(64);
+
+        menuPane.getChildren().addAll(up,left,right,down);
+        currentPane.getChildren().add(menuPane);
+    }
+
+
+
+    private void createUpAttack(){
+        recList = new ArrayList<>();
+        int x = player.getTokenX();
+        int y = player.getTokenY() - 64;
+
+        for(int i = 0; i < 4; i++){
+            Rectangle r = new Rectangle(0,0, 64,64);
+            r.setOpacity(0.4);
+            r.setFill(Color.RED);
+            r.setStroke(Color.WHITE);
+
+            recList.add(r);
+        }
+
+        for(Rectangle r : recList){
+            r.setLayoutX(x);
+            r.setLayoutY(y);
+            y -= 64;
+            setLightingListeners(r);
+            currentPane.getChildren().add(r);
+        }
+    }
+
+    private void createLeftAttack(){
+        recList = new ArrayList<>();
+        int x = player.getTokenX()-64;
+        int y = player.getTokenY();
+
+        for(int i = 0; i < 4; i++){
+            Rectangle r = new Rectangle(0,0, 64,64);
+            r.setOpacity(0.4);
+            r.setFill(Color.RED);
+            r.setStroke(Color.WHITE);
+
+            recList.add(r);
+        }
+
+        for(Rectangle r : recList){
+            r.setLayoutX(x);
+            r.setLayoutY(y);
+            x -= 64;
+            setLightingListeners(r);
+            currentPane.getChildren().add(r);
+        }
+    }
+
+    private void createRightAttack(){
+        recList = new ArrayList<>();
+        int x = player.getTokenX() + 64;
+        int y = player.getTokenY();
+
+        for(int i = 0; i < 4; i++){
+            Rectangle r = new Rectangle(0,0, 64,64);
+            r.setOpacity(0.4);
+            r.setFill(Color.RED);
+            r.setStroke(Color.WHITE);
+
+            recList.add(r);
+        }
+
+        for(Rectangle r : recList){
+            r.setLayoutX(x);
+            r.setLayoutY(y);
+            x += 64;
+            setLightingListeners(r);
+            currentPane.getChildren().add(r);
+        }
+    }
+
+    private void createDownAttack(){
+        recList = new ArrayList<>();
+        int x = player.getTokenX();
+        int y = player.getTokenY() + 64;
+
+        for(int i = 0; i < 4; i++){
+            Rectangle r = new Rectangle(0,0, 64,64);
+            r.setOpacity(0.4);
+            r.setFill(Color.RED);
+            r.setStroke(Color.WHITE);
+
+            recList.add(r);
+        }
+
+        for(Rectangle r : recList){
+            r.setLayoutX(x);
+            r.setLayoutY(y);
+            y += 64;
+            setLightingListeners(r);
+            currentPane.getChildren().add(r);
+        }
+    }
+
+    private void createUpCone(){
+        recList = new ArrayList<>();
+        int x = player.getTokenX() - 128;
+        int y = player.getTokenY() - 128;
+
+        for(int i = 0; i < 8; i++){
+            Rectangle r = new Rectangle(0,0, 64,64);
+            r.setOpacity(0.4);
+            r.setFill(Color.RED);
+            r.setStroke(Color.WHITE);
+
+            recList.add(r);
+        }
+
+        for(int i = 0; i < 5; i++){
+            recList.get(i).setLayoutX(x);
+            recList.get(i).setLayoutY(y);
+            x += 64;
+            setFireListeners(recList.get(i));
+            currentPane.getChildren().add(recList.get(i));
+        }
+
+        x = player.getTokenX() - 64;
+        y = player.getTokenY() -64;
+
+        for(int j = 5; j < recList.size(); j++){
+            recList.get(j).setLayoutX(x);
+            recList.get(j).setLayoutY(y);
+            x += 64;
+            setFireListeners(recList.get(j));
+            currentPane.getChildren().add(recList.get(j));
+        }
+    }
+
+    private void createLeftCone(){
+        recList = new ArrayList<>();
+        int x = player.getTokenX() - 128;
+        int y = player.getTokenY() - 128;
+
+        for(int i = 0; i < 8; i++){
+            Rectangle r = new Rectangle(0,0, 64,64);
+            r.setOpacity(0.4);
+            r.setFill(Color.RED);
+            r.setStroke(Color.WHITE);
+
+            recList.add(r);
+        }
+
+        for(int i = 0; i < 5; i++){
+            recList.get(i).setLayoutX(x);
+            recList.get(i).setLayoutY(y);
+            y += 64;
+            setFireListeners(recList.get(i));
+            currentPane.getChildren().add(recList.get(i));
+        }
+
+        x = player.getTokenX() - 64;
+        y = player.getTokenY() -64;
+
+        for(int j = 5; j < recList.size(); j++){
+            recList.get(j).setLayoutX(x);
+            recList.get(j).setLayoutY(y);
+            y += 64;
+            setFireListeners(recList.get(j));
+            currentPane.getChildren().add(recList.get(j));
+        }
+
+        back.setLayoutX(player.getTokenX() + 64);
+        back.setLayoutY(player.getTokenY() - 64);
+    }
+
+    private void createRightCone(){
+        recList = new ArrayList<>();
+        int x = player.getTokenX() + 128;
+        int y = player.getTokenY() + 128;
+
+        for(int i = 0; i < 8; i++){
+            Rectangle r = new Rectangle(0,0, 64,64);
+            r.setOpacity(0.4);
+            r.setFill(Color.RED);
+            r.setStroke(Color.WHITE);
+
+            recList.add(r);
+        }
+
+        for(int i = 0; i < 5; i++){
+            recList.get(i).setLayoutX(x);
+            recList.get(i).setLayoutY(y);
+            y -= 64;
+            setFireListeners(recList.get(i));
+            currentPane.getChildren().add(recList.get(i));
+        }
+
+        x = player.getTokenX() + 64;
+        y = player.getTokenY() + 64;
+
+        for(int j = 5; j < recList.size(); j++){
+            recList.get(j).setLayoutX(x);
+            recList.get(j).setLayoutY(y);
+            y -= 64;
+            setFireListeners(recList.get(j));
+            currentPane.getChildren().add(recList.get(j));
+        }
+    }
+
+    private void createDownCone(){
+        recList = new ArrayList<>();
+        int x = player.getTokenX() - 128;
+        int y = player.getTokenY() + 128;
+
+        for(int i = 0; i < 8; i++){
+            Rectangle r = new Rectangle(0,0, 64,64);
+            r.setOpacity(0.4);
+            r.setFill(Color.RED);
+            r.setStroke(Color.WHITE);
+
+            recList.add(r);
+        }
+
+        for(int i = 0; i < 5; i++){
+            recList.get(i).setLayoutX(x);
+            recList.get(i).setLayoutY(y);
+            x += 64;
+            setFireListeners(recList.get(i));
+            currentPane.getChildren().add(recList.get(i));
+        }
+
+        x = player.getTokenX() - 64;
+        y = player.getTokenY() + 64;
+
+        for(int j = 5; j < recList.size(); j++){
+            recList.get(j).setLayoutX(x);
+            recList.get(j).setLayoutY(y);
+            x += 64;
+            setFireListeners(recList.get(j));
+            currentPane.getChildren().add(recList.get(j));
+        }
+
+        back.setLayoutY(player.getTokenY());
+    }
+
+    private void setFireListeners(Rectangle r){
+        r.setOnMouseClicked(mouseEvent -> {
+            msg = "You casted Dragon's Breath";
+            currentPane.getChildren().remove(back);
+            currentPane.getChildren().add(playerDialogueBox.getPlayerDialogue(msg));
+            player.setMagic(player.getMagic() - 10);
+            fireAttack();
+            clearAttackGrid();
+        });
+    }
+
+    private void setLightingListeners(Rectangle r){
+        r.setOnMouseClicked(mouseEvent -> {
+            msg = "You casted Lighting bolt";
+            currentPane.getChildren().remove(back);
+            currentPane.getChildren().add(playerDialogueBox.getPlayerDialogue(msg));
+            lightingAttack();
+            clearAttackGrid();
+        });
+    }
+
+    private void fireAttack(){
+        getGoblins();
+        for(Rectangle r : recList){
+            if(goblinPos.containsKey(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY())))){
+                goblinPos.get(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY())))
+                        .setHealth(goblinPos.get(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY()))).getHealth() - 4);
+            }
+        }
+
+        player.getInventory().put(ITEMS.FIRE_SPELL, player.getInventory().get(ITEMS.FIRE_SPELL) - 1);
+        if(player.getInventory().get(ITEMS.FIRE_SPELL) <= 0){
+            player.getInventory().remove(ITEMS.FIRE_SPELL);
+        }
+    }
+
+    private void lightingAttack(){
+        getGoblins();
+        for(Rectangle r : recList){
+            if(goblinPos.containsKey(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY())))){
+                goblinPos.get(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY())))
+                        .setHealth(goblinPos.get(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY()))).getHealth() - 7);
+            }
+        }
+
+        player.getInventory().put(ITEMS.LIGHTING_SPELL, player.getInventory().get(ITEMS.LIGHTING_SPELL) - 1);
+        if(player.getInventory().get(ITEMS.LIGHTING_SPELL) <= 0){
+            player.getInventory().remove(ITEMS.LIGHTING_SPELL);
+        }
+    }
+
+    private void getDead(){
+        for(Goblin goblin : listOfGoblins){
+            if(goblin.getHealth() <= 0){
+                deadGoblins.add(goblin);
+            }
+        }
+        removeDead();
+    }
+
+    private void removeDead(){
+        for(Goblin goblin : deadGoblins){
+            listOfGoblins.remove(goblin);
+            currentPane.getChildren().remove(goblin.getToken());
+        }
+    }
+
 
     private void setAttackListeners(Rectangle r, Goblin goblin){
         r.setOnMouseClicked(mouseEvent -> {
             msg = player.toHit(goblin);
             hasAttacked = true;
-            if(goblin.getHealth() < 0) removeDeadGoblin(goblin);
+            if(goblin.getHealth() <= 0) removeDeadGoblin(goblin);
             clearAttackGrid();
 
             currentPane.getChildren().remove(back);
@@ -496,7 +892,6 @@ public class GameLogic {
             currentPane.getChildren().add(playerDialogueBox.getPlayerDialogue(msg));
 
         });
-
     }
 
     private  void removeDeadGoblin(Goblin goblin){
@@ -612,10 +1007,11 @@ public class GameLogic {
         }
     }
 
-    private void clearAttackGrid(){
+    public void clearAttackGrid(){
         for (Rectangle rectangle : recList) {
             currentPane.getChildren().remove(rectangle);
         }
+        recList = new ArrayList<>();
     }
 
     private void clearMovementGrid(){

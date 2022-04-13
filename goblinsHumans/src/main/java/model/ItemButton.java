@@ -1,20 +1,23 @@
 package model;
 
+import gameLogic.GameLogic;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import view.SceneController;
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
+
+import java.util.*;
 
 import static model.ITEMS.*;
 
 public class ItemButton extends Button {
     private static final Human player = SceneController.getPlayer();
+    private static final GameLogic game = SceneController.getGame();
     private final HashMap<ITEMS, Integer> inventory = player.getInventory();
     private final StackPane inventoryDisplay;
     private final AnchorPane currentPane;
@@ -62,6 +65,7 @@ public class ItemButton extends Button {
         switch (item){
             case HEALTH_POTION:
                 playerMsg.clear();
+                System.out.println(game.getGoblins());
                 useHealthPot();
                 playerMsg.getPlayerDialogue(msg).setLayoutX(320);
                 playerMsg.getPlayerDialogue(msg).setLayoutY(256);
@@ -107,6 +111,39 @@ public class ItemButton extends Button {
                 useHealthSpell();
                 playerMsg.getPlayerDialogue(msg).setLayoutX(320);
                 playerMsg.getPlayerDialogue(msg).setLayoutY(256);
+                break;
+            case LIFE_STEAL:
+                if(player.getMagic() < 10){
+                    msg = "You don't have enough magic";
+                    currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+                    playerMsg.getPlayerDialogue(msg).setLayoutX(320);
+                    playerMsg.getPlayerDialogue(msg).setLayoutY(256);
+                } else {
+                    useLifeSteal();
+                }
+                break;
+            case LIGHTING_SPELL:
+                if(player.getMagic() < 10){
+                    msg = "You don't have enough magic";
+                    currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+                    playerMsg.getPlayerDialogue(msg).setLayoutX(320);
+                    playerMsg.getPlayerDialogue(msg).setLayoutY(256);
+                } else {
+                    game.closeMenu();
+                    game.directionMenu();
+                }
+                break;
+            case FIRE_SPELL:
+                if(player.getMagic() < 10){
+                    msg = "You don't have enough magic";
+                    currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+                    playerMsg.getPlayerDialogue(msg).setLayoutX(320);
+                    playerMsg.getPlayerDialogue(msg).setLayoutY(256);
+                } else {
+                    game.closeMenu();
+                    game.fireDirection();
+                }
+                break;
             default:
         }
     }
@@ -177,6 +214,21 @@ public class ItemButton extends Button {
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
                 itemDesc.getPlayerDialogue(msg).setLayoutX(320);
                 itemDesc.getPlayerDialogue(msg).setLayoutY(256);
+                break;
+            case LIFE_STEAL:
+                itemDesc.clear();
+                msg = "A dark purple bound book\nIt feels has like it hungers for life itself.\nSteal the life of your enemies\nRestores 5HP, Cost 5MP";
+                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
+                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
+                break;
+            case LIGHTING_SPELL:
+                itemDesc.clear();
+                msg = "The tips of your fingers tingle\nThe magic can barely be contained\nShoot out a lighting bolt\nCost 10MP";
+                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
+                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
+                break;
             default:
         }
     }
@@ -284,5 +336,22 @@ public class ItemButton extends Button {
             }
         }
     }
+
+    private void useLifeSteal(){
+        currentPane.getChildren().remove(game.getBack());
+        game.closeMenu();
+        game.createAttackOptions();
+        game.setLifeStealListeners();
+        player.setMagic(player.getMagic() - 5);
+        inventory.put(LIFE_STEAL, inventory.get(LIFE_STEAL) - 1);
+        if(inventory.get(LIFE_STEAL) < 1) {
+            inventory.remove(LIFE_STEAL);
+            inventoryDisplay.getChildren().remove(this);
+        }
+    }
+
+
+
+
 
 }

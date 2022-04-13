@@ -13,7 +13,8 @@ public enum ITEMS {
     GOLD("gold_piece___.png"),
     HEALTH_SPELL("health_book__.png"),
     FIRE_SPELL("fire_spell___.png"),
-    LIFE_STEAL("life_steal___.png");
+    LIFE_STEAL("life_steal___.png"),
+    LIGHTING_SPELL("lighting_book.png");
 
 
     private String url;

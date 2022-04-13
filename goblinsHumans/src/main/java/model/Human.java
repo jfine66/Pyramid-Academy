@@ -35,23 +35,29 @@ public class Human extends ImageView{
         inventory = new HashMap<>();
         goldBag = new HashMap<>();
 
+
+        inventory.put(ITEMS.FIRE_SPELL, 10);
+        inventory.put(ITEMS.LIGHTING_SPELL, 10);
+        inventory.put(ITEMS.HEALTH_SPELL, 1);
+
+
         inventory.put(ITEMS.HEALTH_POTION, 3);
         inventory.put(ITEMS.MAGIC_POTION, 3);
         inventory.put(ITEMS.LIFE_STEAL, 1);
-//        inventory.put(ITEMS.BROKEN_ARMOR, 1);
-//        inventory.put(ITEMS.MEDIUM_ARMOR, 1);
-////        inventory.put(ITEMS.HEAVY_ARMOR, 1);
-////        inventory.put(ITEMS.LEGENDARY_ARMOR, 1);
+        inventory.put(ITEMS.BROKEN_ARMOR, 1);
+        inventory.put(ITEMS.MEDIUM_ARMOR, 1);
+        inventory.put(ITEMS.HEAVY_ARMOR, 1);
+        inventory.put(ITEMS.LEGENDARY_ARMOR, 1);
 
 
         this.conMod = (int) (Math.floor(Math.random() * 6) + 1);
         this.intMod = (int) (Math.floor(Math.random() * 6) + 1);
         this.strengthMod = (int) (Math.floor(Math.random() * 6) + 1);
         this.dexMod = (int) (Math.floor(Math.random() * 6) + 1);
-        this.maxHP = health + conMod;
-        health = maxHP;
+        this.maxHP = 500;//health + conMod;
+        health = 50;//maxHP;
         this.maxMP = intel + intMod;
-        magic = maxMP;
+        magic = 50;//maxMP;
         this.ac = dex + dexMod;
         equipment.put("ARMOR", ITEMS.HEALTH_POTION);
         System.out.println("Max HP : " + maxHP + " Max MP: " + maxMP + " current health " + health + " current AC " + ac);
@@ -108,6 +114,10 @@ public class Human extends ImageView{
 
     public int getMagic() {
         return magic;
+    }
+
+    public HashMap<ITEMS, Integer> getInventory(){
+        return inventory;
     }
 
     public void setMagic(int magic) {
@@ -218,10 +228,6 @@ public class Human extends ImageView{
         System.out.println(item + " has been added to your inventory.");
     }
 
-
-    public HashMap<ITEMS, Integer> getInventory(){
-        return inventory;
-    }
 
     public void setHealth(int health) {
         this.health = health;

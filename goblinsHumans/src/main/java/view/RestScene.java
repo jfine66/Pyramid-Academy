@@ -62,6 +62,11 @@ public class RestScene {
 
     private void createItemsButton(){
         MenuButtons itemsButton = new MenuButtons("ITEMS");
+        itemsButton.setOnMouseClicked(mouseEvent -> {
+            SceneController.toArmory();
+        });
         addButton(itemsButton);
     }
+
+
 }

@@ -33,6 +33,11 @@ public class SceneController {
     private static final Scene campScene = camp.getCampScene();
     private static FirstLevel levelOne = new FirstLevel(new AnchorPane());
     private static Scene levelOneScene = levelOne.getScene();
+    private static ArmoryScene armory = new ArmoryScene();
+    private static Scene armoryScene = armory.getArmoryScene();
+
+
+
     private static MediaPlayer mediaPlayer;
 
 
@@ -68,15 +73,22 @@ public class SceneController {
     }
 
     public static void toLevelOne(){
-//        levelOne = new FirstLevel(new AnchorPane());
         levelOneScene = levelOne.getScene();
-        game = new GameLogic(levelOne.getLevelOnePane(), levelOneScene);
+        game = new GameLogic(levelOne.getLevelOnePane());
         mainStage.setScene(levelOneScene);
+    }
+
+    public static void toArmory(){
+        armory.displayItems();
+        mainStage.setScene(armoryScene);
     }
 
     public static Human getPlayer() {
         return player;
     }
+
+    public static GameLogic getGame(){return game;}
+
 
     //SCENE MUSIC
     private static void menuMusic(){
