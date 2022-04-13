@@ -37,6 +37,19 @@ public class DialogueBox {
         return stack;
     }
 
+    public StackPane armoryDesc(String msg){
+        stack.getChildren().clear();
+        r.setStrokeWidth(5);
+        r.setStroke(Color.WHITE);
+        r.setFill(Color.BLUE);
+        text.setText(msg);
+        r.setWidth(320);
+        r.setHeight(448);
+        text.setTranslateY(-128);
+        stack.getChildren().addAll(r, text);
+        return stack;
+    }
+
     public void clear(){
         stack = new StackPane();
     }

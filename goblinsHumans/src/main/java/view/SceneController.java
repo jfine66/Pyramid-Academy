@@ -31,10 +31,12 @@ public class SceneController {
     private static final Scene rulesScene = rules.getRuleScene();
     private static final RestScene camp = new RestScene();
     private static final Scene campScene = camp.getCampScene();
-    private static FirstLevel levelOne = new FirstLevel(new AnchorPane());
+    public static FirstLevel levelOne = new FirstLevel(new AnchorPane());
     private static Scene levelOneScene = levelOne.getScene();
     private static ArmoryScene armory = new ArmoryScene();
     private static Scene armoryScene = armory.getArmoryScene();
+    private static ShopScene shop = new ShopScene();
+    private static Scene shopScene = shop.getShopScene();
 
 
 
@@ -81,6 +83,11 @@ public class SceneController {
     public static void toArmory(){
         armory.displayItems();
         mainStage.setScene(armoryScene);
+    }
+
+    public static void toShop(){
+        shop.createStock();
+        mainStage.setScene(shopScene);
     }
 
     public static Human getPlayer() {

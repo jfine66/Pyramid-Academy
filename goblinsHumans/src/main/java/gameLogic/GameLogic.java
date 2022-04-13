@@ -21,7 +21,7 @@ import view.SceneController;
 import java.nio.file.Paths;
 import java.util.*;
 
-import static model.ITEMS.LIFE_STEAL;
+import static view.SceneController.levelOne;
 
 
 public class GameLogic {
@@ -59,7 +59,8 @@ public class GameLogic {
 
     ArrayList<Rectangle> recList = new ArrayList<>();
     ArrayList<Rectangle> moveGrid = new ArrayList<>();
-    HashMap<ArrayList<Integer>, Object> gridPos = new HashMap<>();
+    HashMap<ArrayList<Integer>, Object> currentMap = new HashMap<>(levelOne.getGridPos());
+    HashMap<ArrayList<Integer>, Object> gridPos = new HashMap<>(currentMap);
     HashMap<ArrayList<Integer>, Goblin> goblinPos = new HashMap<>();
     ArrayList<Goblin> deadGoblins = new ArrayList<>();
 
@@ -94,15 +95,18 @@ public class GameLogic {
         this.currentPane = pane;
     }
 
+    public void setCurrentMap(HashMap<ArrayList<Integer>, Object> map){
+        this.currentMap = map;
+    }
+
     public void gameStart(){
         player.playerStartPos(currentPane);
        testGoblin.setTokenPos(512, 192);
-        goblinTwo.setTokenPos(512,256);
-        goblinThree.setTokenPos(512,320);
-        goblinFour.setTokenPos(512,384);
+//        goblinTwo.setTokenPos(512,256);
+//        goblinThree.setTokenPos(512,320);
+//        goblinFour.setTokenPos(512,384);
 
-        currentPane.getChildren().addAll(testGoblin.getToken(),goblinTwo.getToken(),goblinThree.getToken(),goblinFour.getToken());
-
+        currentPane.getChildren().add(testGoblin.getToken());
         //setGoblinPos();
         fillAxis();
         playerTurn();
@@ -391,7 +395,7 @@ public class GameLogic {
 
     // EVERYTHING GRID RELATED
     private void fillAxis(){
-        gridPos = new HashMap<>();
+        gridPos = new HashMap<>(currentMap);
 
         gridPos.put(new ArrayList<>(Arrays.asList(player.getTokenX(),player.getTokenY())), player);
 

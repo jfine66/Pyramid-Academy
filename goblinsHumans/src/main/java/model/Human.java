@@ -36,18 +36,20 @@ public class Human extends ImageView{
         goldBag = new HashMap<>();
 
 
-        inventory.put(ITEMS.FIRE_SPELL, 10);
+//        inventory.put(ITEMS.FIRE_SPELL, 1);
         inventory.put(ITEMS.LIGHTING_SPELL, 10);
-        inventory.put(ITEMS.HEALTH_SPELL, 1);
+//        inventory.put(ITEMS.HEALTH_SPELL, 1);
 
 
-        inventory.put(ITEMS.HEALTH_POTION, 3);
-        inventory.put(ITEMS.MAGIC_POTION, 3);
-        inventory.put(ITEMS.LIFE_STEAL, 1);
-        inventory.put(ITEMS.BROKEN_ARMOR, 1);
-        inventory.put(ITEMS.MEDIUM_ARMOR, 1);
-        inventory.put(ITEMS.HEAVY_ARMOR, 1);
-        inventory.put(ITEMS.LEGENDARY_ARMOR, 1);
+//        inventory.put(ITEMS.HEALTH_POTION, 1);
+//        inventory.put(ITEMS.MAGIC_POTION, 1);
+//        inventory.put(ITEMS.LIFE_STEAL, 1);
+//        inventory.put(ITEMS.BROKEN_ARMOR, 1);
+//        inventory.put(ITEMS.MEDIUM_ARMOR, 1);
+//        inventory.put(ITEMS.HEAVY_ARMOR, 1);
+//        inventory.put(ITEMS.LEGENDARY_ARMOR, 1);
+
+        goldBag.put(ITEMS.GOLD, 30);
 
 
         this.conMod = (int) (Math.floor(Math.random() * 6) + 1);
@@ -118,6 +120,10 @@ public class Human extends ImageView{
 
     public HashMap<ITEMS, Integer> getInventory(){
         return inventory;
+    }
+
+    public HashMap<ITEMS, Integer> getGoldBag() {
+        return goldBag;
     }
 
     public void setMagic(int magic) {
@@ -235,7 +241,7 @@ public class Human extends ImageView{
 
     public void playerStartPos(AnchorPane currentPane){
         currentPane.getChildren().add(token);
-        setTokenPos(512,448);
+        setTokenPos(448,320);
     }
 
     private void humanAttackSound(){

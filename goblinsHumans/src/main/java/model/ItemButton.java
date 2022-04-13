@@ -229,6 +229,13 @@ public class ItemButton extends Button {
                 itemDesc.getPlayerDialogue(msg).setLayoutX(320);
                 itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
+            case FIRE_SPELL:
+                itemDesc.clear();
+                msg = "Hot to the touch\nThe magic is waiting to burst forward\nCast a cone of fire in front you\nCost 10MP";
+                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
+                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
+                break;
             default:
         }
     }

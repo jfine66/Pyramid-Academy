@@ -58,6 +58,7 @@ public class RestScene {
     private void createShopButton(){
         MenuButtons shopButton = new MenuButtons("SHOP");
         addButton(shopButton);
+        shopButton.setOnMouseClicked(mouseEvent -> SceneController.toShop());
     }
 
     private void createItemsButton(){
