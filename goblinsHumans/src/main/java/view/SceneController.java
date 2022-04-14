@@ -13,14 +13,10 @@ import java.nio.file.Paths;
 
 public class SceneController {
     //WIDTH AND HEIGHT FOR STAGE
-    private static final int WIDTH = 1024;
-    private static final int HEIGHT = 768;
+    public static final int WIDTH = 1024;
+    public static final int HEIGHT = 768;
     //SETTING UP WINDOW
-    private final AnchorPane mainWindow;
-    private Scene mainScene;
     private static Stage mainStage;
-    //PATH FOR ICON
-    private String ICON_PATH = "pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png";
     //SET UP GAME
     private static GameLogic game;
     private static final Human player = new Human();
@@ -32,22 +28,16 @@ public class SceneController {
     private static final RestScene camp = new RestScene();
     private static final Scene campScene = camp.getCampScene();
     public static FirstLevel levelOne = new FirstLevel(new AnchorPane());
-    private static Scene levelOneScene = levelOne.getScene();
-    private static ArmoryScene armory = new ArmoryScene();
-    private static Scene armoryScene = armory.getArmoryScene();
-    private static ShopScene shop = new ShopScene();
-    private static Scene shopScene = shop.getShopScene();
-
-
-
-    private static MediaPlayer mediaPlayer;
+    private static final ArmoryScene armory = new ArmoryScene();
+    private static final Scene armoryScene = armory.getArmoryScene();
+    private static final ShopScene shop = new ShopScene();
+    private static final Scene shopScene = shop.getShopScene();
 
 
     public SceneController(){
-        mainWindow = new AnchorPane();
-        mainScene = new Scene(mainWindow, WIDTH, HEIGHT);
         mainStage = new Stage();
 
+        String ICON_PATH = "pixel-goblin-studio-pixel-goblin-rug-minecraft-transparent-png-2764172.png";
         Image icon = new Image(ICON_PATH);
         mainStage.setTitle("Humans vs Goblins");
         mainStage.getIcons().add(icon);
@@ -55,6 +45,7 @@ public class SceneController {
 
         mainStage.setScene(menuScene);
     }
+
 
     public Stage getMainStage(){
         return mainStage;
@@ -75,7 +66,7 @@ public class SceneController {
     }
 
     public static void toLevelOne(){
-        levelOneScene = levelOne.getScene();
+        Scene levelOneScene = levelOne.getScene();
         game = new GameLogic(levelOne.getLevelOnePane());
         mainStage.setScene(levelOneScene);
     }
@@ -101,7 +92,7 @@ public class SceneController {
     private static void menuMusic(){
         String url = "src/main/resources/2019-07-29_-_Elven_Forest_-_FesliyanStudios.com_-_David_Renda.mp3";
         Media h = new Media(Paths.get(url).toUri().toString());
-        mediaPlayer = new MediaPlayer(h);
+        MediaPlayer mediaPlayer = new MediaPlayer(h);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         System.out.println("Scene Player is playing");
         mediaPlayer.play();

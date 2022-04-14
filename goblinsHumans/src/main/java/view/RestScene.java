@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RestScene {
-    private static final int WIDTH = 1024;
-    private static final int HEIGHT = 768;
     //setting up window panes
     private final AnchorPane campPane;
     private final Scene campScene;
@@ -21,7 +19,7 @@ public class RestScene {
 
     public RestScene(){
         campPane = new AnchorPane();
-        campScene = new Scene(campPane, WIDTH, HEIGHT);
+        campScene = new Scene(campPane, SceneController.WIDTH, SceneController.HEIGHT);
         buttonList = new ArrayList<>();
         createBackground();
         createButtons();

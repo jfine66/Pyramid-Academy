@@ -7,8 +7,6 @@ import javafx.scene.text.Text;
 import model.MenuButtons;
 
 public class RulesMenu{
-    private static final int WIDTH = 1024;
-    private static final int HEIGHT = 768;
     //setting up window panes
     private final AnchorPane rulesPane;
     private final Scene ruleScene;
@@ -19,7 +17,7 @@ public class RulesMenu{
 
     public RulesMenu(){
         rulesPane = new AnchorPane();
-        ruleScene = new Scene(rulesPane, WIDTH,HEIGHT);
+        ruleScene = new Scene(rulesPane, SceneController.WIDTH, SceneController.HEIGHT);
         createBackground();
         createBackButton();
         createRulesText();

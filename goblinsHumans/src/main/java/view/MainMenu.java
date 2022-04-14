@@ -1,40 +1,31 @@
 package view;
 
-
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import model.MenuButtons;
-
-
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainMenu {
-    private static final int WIDTH = 1024;
-    private static final int HEIGHT = 768;
     //setting up window panes
     private final AnchorPane menuPane;
     private final Scene menuScene;
     //Create buttons
-    private final static int MENU_BUTTON_START_X = 300;
-    private final static int MENU_BUTTON_START_Y = 150;
     List<MenuButtons> menuButtons;
     MediaPlayer mediaPlayer;
 
-
     public MainMenu(){
         menuPane = new AnchorPane();
-        menuScene = new Scene(menuPane, WIDTH, HEIGHT);
+        menuScene = new Scene(menuPane, SceneController.WIDTH, SceneController.HEIGHT);
         menuButtons = new ArrayList<>();
         mainBackgroundMusic();
         createButtons();
         createBackground();
     }
-
 
     public Scene getMenuScene(){
         return menuScene;
@@ -42,8 +33,8 @@ public class MainMenu {
 
     //Create Buttons Methods
     private void addButton(MenuButtons button){
-        button.setLayoutX(MENU_BUTTON_START_X);
-        button.setLayoutY(MENU_BUTTON_START_Y + menuButtons.size() * 150);
+        button.setLayoutX(300);
+        button.setLayoutY(150 + menuButtons.size() * 150);
         menuButtons.add(button);
         menuPane.getChildren().add(button);
     }
@@ -57,7 +48,6 @@ public class MainMenu {
     private void createStartButton(){
         MenuButtons startButton = new MenuButtons("PLAY");
         addButton(startButton);
-
 
         startButton.setOnAction(actionEvent -> {
             mediaPlayer.stop();
@@ -93,7 +83,4 @@ public class MainMenu {
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
     }
-
-
-
 }

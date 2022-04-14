@@ -73,6 +73,4 @@ public class Banner {
             text.setFont(Font.font("Verdana", 40));
         }
     }
-
-
 }

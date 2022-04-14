@@ -21,7 +21,6 @@ public class Goblin extends ImageView {
         drops.add(ITEMS.getRandomItem());
     }
 
-
     public ImageView getToken() {
         token.setFitWidth(64);
         token.setFitHeight(64);
@@ -64,7 +63,6 @@ public class Goblin extends ImageView {
         } else {
             return "Goblin attacked missed";
         }
-
     }
 
     public ITEMS didDrop(){
@@ -75,7 +73,6 @@ public class Goblin extends ImageView {
 
         return anyDrop ? drops.get(dropChance) : null;
     }
-
 
     private String damage(Human player){
         goblinAttackSound();

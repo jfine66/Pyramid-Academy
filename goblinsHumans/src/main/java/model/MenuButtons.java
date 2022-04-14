@@ -6,7 +6,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class MenuButtons extends Button {
-
     public MenuButtons(String text){
         setText(text);
         setTextFill(Color.WHITE);
@@ -22,7 +21,6 @@ public class MenuButtons extends Button {
         try{
             String FONT_PATH = "file:src/main/resources/IMMORTAL.ttf";
             setFont(Font.loadFont(FONT_PATH, 40));
-
         } catch(Exception e){
             setFont(Font.font("Verdana", 40));
         }

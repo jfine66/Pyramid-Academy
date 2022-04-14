@@ -35,19 +35,16 @@ public class Human extends ImageView{
         inventory = new HashMap<>();
         goldBag = new HashMap<>();
 
-
-//        inventory.put(ITEMS.FIRE_SPELL, 1);
+        inventory.put(ITEMS.FIRE_SPELL, 1);
         inventory.put(ITEMS.LIGHTING_SPELL, 10);
-//        inventory.put(ITEMS.HEALTH_SPELL, 1);
-
-
-//        inventory.put(ITEMS.HEALTH_POTION, 1);
-//        inventory.put(ITEMS.MAGIC_POTION, 1);
-//        inventory.put(ITEMS.LIFE_STEAL, 1);
-//        inventory.put(ITEMS.BROKEN_ARMOR, 1);
-//        inventory.put(ITEMS.MEDIUM_ARMOR, 1);
-//        inventory.put(ITEMS.HEAVY_ARMOR, 1);
-//        inventory.put(ITEMS.LEGENDARY_ARMOR, 1);
+        inventory.put(ITEMS.HEALTH_SPELL, 1);
+        inventory.put(ITEMS.HEALTH_POTION, 1);
+        inventory.put(ITEMS.MAGIC_POTION, 1);
+        inventory.put(ITEMS.LIFE_STEAL, 1);
+        inventory.put(ITEMS.BROKEN_ARMOR, 1);
+        inventory.put(ITEMS.MEDIUM_ARMOR, 1);
+        inventory.put(ITEMS.HEAVY_ARMOR, 1);
+        inventory.put(ITEMS.LEGENDARY_ARMOR, 1);
 
         goldBag.put(ITEMS.GOLD, 30);
 
@@ -62,8 +59,6 @@ public class Human extends ImageView{
         magic = 50;//maxMP;
         this.ac = dex + dexMod;
         equipment.put("ARMOR", ITEMS.HEALTH_POTION);
-        System.out.println("Max HP : " + maxHP + " Max MP: " + maxMP + " current health " + health + " current AC " + ac);
-        System.out.println("con : " + conMod + " dex: " + dexMod + " str : " + strengthMod + " int : " + intMod);
     }
 
    public String toHit(Goblin goblin){
@@ -80,7 +75,6 @@ public class Human extends ImageView{
         humanAttackSound();
         int attack =  (int) Math.floor(Math.random() * (strength + strengthMod) + 1);
         goblin.setHealth(goblin.getHealth() - attack);
-       System.out.println("Hit Goblin for " + attack + " damage");
         return "Hit Goblin for " + attack + " damage";
    }
 
@@ -230,10 +224,7 @@ public class Human extends ImageView{
         } else {
             inventory.put(item, 1);
         }
-
-        System.out.println(item + " has been added to your inventory.");
     }
-
 
     public void setHealth(int health) {
         this.health = health;

@@ -1,6 +1,5 @@
 package gameLogic;
 
-
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
@@ -16,7 +15,6 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import model.*;
 import view.SceneController;
-
 
 import java.nio.file.Paths;
 import java.util.*;
@@ -125,7 +123,6 @@ public class GameLogic {
         while(x % 64 != 0){
             x = rand.nextInt(961);
         }
-
         return x;
     }
 
@@ -135,7 +132,6 @@ public class GameLogic {
         while(y % 64 != 0){
             y = rand.nextInt(705);
         }
-
         return y;
     }
 
@@ -158,7 +154,6 @@ public class GameLogic {
                 }
             }, 1450);
         }
-
     }
 
     //SEE PLAYER STATUS
@@ -466,7 +461,6 @@ public class GameLogic {
         createAttackGrid();
         int x = player.getTokenX();
         int y = player.getTokenY();
-
 
         back.setLayoutX(x - 128);
         back.setLayoutY(y + 64);
@@ -883,7 +877,6 @@ public class GameLogic {
         }
     }
 
-
     private void setAttackListeners(Rectangle r, Goblin goblin){
         r.setOnMouseClicked(mouseEvent -> {
             msg = player.toHit(goblin);
@@ -894,7 +887,6 @@ public class GameLogic {
             currentPane.getChildren().remove(back);
 
             currentPane.getChildren().add(playerDialogueBox.getPlayerDialogue(msg));
-
         });
     }
 
@@ -915,7 +907,6 @@ public class GameLogic {
         fillAxis();
         int x = player.getTokenX();
         int y = player.getTokenY();
-
 
         //MOVES ABOVE THE PLAYER
         for(int i = y - 64; i > y - 192; i -= 64){
@@ -961,7 +952,6 @@ public class GameLogic {
         }
 
         y -= 64;
-
         for(int i = x - 64; i < x + 128; i += 64){
             if(isSpaceTaken(i,y)) {
                 y += 64;
@@ -977,7 +967,6 @@ public class GameLogic {
         }
 
         y = player.getTokenY();
-
         y += 64;
 
         for(int i = x - 64; i < x + 128; i += 64){
@@ -993,8 +982,10 @@ public class GameLogic {
             moveGrid.add(r);
             y -= 64;
         }
+        createMovementListeners();
+    }
 
-        // PUT LISTENERS IN ANOTHER METHOD FOOL!!!!!
+    private void createMovementListeners(){
         for(Rectangle r : moveGrid){
             r.setOnMouseEntered(mouseEvent -> r.setStroke(Color.WHITE));
             r.setOnMouseExited(mouseEvent -> r.setStroke(Color.WHITESMOKE));
@@ -1056,22 +1047,9 @@ public class GameLogic {
         int goblinY = goblin.getTokenY();
         int playerX = player.getTokenX();
         int playerY = player.getTokenY();
-
-        int closetX = goblinX;
-        int closetY = goblinY;
-
         //NEED TO ADD A WAY TO MOVE UP-LEFT, UP-RIGHT
-        if(goblinX > playerX){
-            closetX = goblinX - 64;
-        } else if(goblinX < playerX){
-            closetX = goblinX + 64;
-        }
-
-        if(goblinY > playerY){
-            closetY = goblinY - 64;
-        } else if(goblinY < playerY){
-            closetY = goblinY + 64;
-        }
+        int closetX = goblinX > playerX ? goblinX - 64 : goblinX + 64;
+        int closetY = goblinY > playerY ? goblinY - 64 : goblinY + 64;
 
         if(!isSpaceTaken(closetX, closetY)) goblin.setTokenPos(closetX, closetY);
 
@@ -1134,9 +1112,6 @@ public class GameLogic {
                 if (player.getHealth() < 0) gameOver();
             }
         }
-
-
-
     }
 
     private void gameOver(){
@@ -1144,7 +1119,6 @@ public class GameLogic {
         outComeBanner(defeatBanner);
         currentPane.getChildren().add(defeatBanner);
     }
-
 
     //BANNER RELATED
     private void moveBanner(StackPane banner){
@@ -1170,8 +1144,6 @@ public class GameLogic {
         banner.setLayoutX(0);
         banner.setLayoutY(192);
     }
-
-
 
     private ActionButton mainMenuButton(){
         ActionButton toCamp = new ActionButton("MAIN MENU");
@@ -1199,5 +1171,4 @@ public class GameLogic {
         mediaPlayer = new MediaPlayer(h);
         mediaPlayer.play();
     }
-
 }

@@ -7,8 +7,6 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import view.SceneController;
 
 import java.util.*;
@@ -24,7 +22,6 @@ public class ItemButton extends Button {
     private final DialogueBox playerMsg = new DialogueBox();
     private final DialogueBox itemDesc = new DialogueBox();
     private String msg = "";
-
 
     public ItemButton(ITEMS item, StackPane stackPane, AnchorPane levelPane){
         this.inventoryDisplay = stackPane;
@@ -53,6 +50,9 @@ public class ItemButton extends Button {
     }
 
     private void useItem(ITEMS item){
+        playerMsg.getPlayerDialogue(msg).setLayoutX(320);
+        playerMsg.getPlayerDialogue(msg).setLayoutY(256);
+
         Timer timer = new Timer();
 
         timer.schedule(new TimerTask() {
@@ -65,69 +65,46 @@ public class ItemButton extends Button {
         switch (item){
             case HEALTH_POTION:
                 playerMsg.clear();
-                System.out.println(game.getGoblins());
                 useHealthPot();
-                playerMsg.getPlayerDialogue(msg).setLayoutX(320);
-                playerMsg.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case MAGIC_POTION:
                 playerMsg.clear();
                 useMagicPot();
-                playerMsg.getPlayerDialogue(msg).setLayoutX(320);
-                playerMsg.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case BROKEN_ARMOR:
                 playerMsg.clear();
                 equipArmor(BROKEN_ARMOR);
-                playerMsg.getPlayerDialogue(msg).setLayoutX(320);
-                playerMsg.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case LIGHT_ARMOR:
                 playerMsg.clear();
                 equipArmor(LIGHT_ARMOR);
-                playerMsg.getPlayerDialogue(msg).setLayoutX(320);
-                playerMsg.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case MEDIUM_ARMOR:
                 playerMsg.clear();
                 equipArmor(MEDIUM_ARMOR);
-                playerMsg.getPlayerDialogue(msg).setLayoutX(320);
-                playerMsg.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case HEAVY_ARMOR:
                 playerMsg.clear();
                 equipArmor(HEAVY_ARMOR);
-                playerMsg.getPlayerDialogue(msg).setLayoutX(320);
-                playerMsg.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case LEGENDARY_ARMOR:
                 playerMsg.clear();
                 equipArmor(LEGENDARY_ARMOR);
-                playerMsg.getPlayerDialogue(msg).setLayoutX(320);
-                playerMsg.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case HEALTH_SPELL:
                 playerMsg.clear();
                 useHealthSpell();
-                playerMsg.getPlayerDialogue(msg).setLayoutX(320);
-                playerMsg.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case LIFE_STEAL:
                 if(player.getMagic() < 10){
-                    msg = "You don't have enough magic";
-                    currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
-                    playerMsg.getPlayerDialogue(msg).setLayoutX(320);
-                    playerMsg.getPlayerDialogue(msg).setLayoutY(256);
+                    lackMagic();
                 } else {
                     useLifeSteal();
                 }
                 break;
             case LIGHTING_SPELL:
                 if(player.getMagic() < 10){
-                    msg = "You don't have enough magic";
-                    currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
-                    playerMsg.getPlayerDialogue(msg).setLayoutX(320);
-                    playerMsg.getPlayerDialogue(msg).setLayoutY(256);
+                   lackMagic();
                 } else {
                     game.closeMenu();
                     game.directionMenu();
@@ -135,10 +112,7 @@ public class ItemButton extends Button {
                 break;
             case FIRE_SPELL:
                 if(player.getMagic() < 10){
-                    msg = "You don't have enough magic";
-                    currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
-                    playerMsg.getPlayerDialogue(msg).setLayoutX(320);
-                    playerMsg.getPlayerDialogue(msg).setLayoutY(256);
+                    lackMagic();
                 } else {
                     game.closeMenu();
                     game.fireDirection();
@@ -149,6 +123,9 @@ public class ItemButton extends Button {
     }
 
     private void itemDescription(ITEMS item){
+        itemDesc.getPlayerDialogue(msg).setLayoutX(320);
+        itemDesc.getPlayerDialogue(msg).setLayoutY(256);
+
         Timer timer = new Timer();
 
         timer.schedule(new TimerTask() {
@@ -163,78 +140,56 @@ public class ItemButton extends Button {
                 itemDesc.clear();
                 msg = "A vibrant red liquid radiating warmth\nrestores 1-10 points of health\nYou have x" + inventory.get(HEALTH_POTION) +" of this item";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
-                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
-                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case MAGIC_POTION:
                 itemDesc.clear();
                 msg = "A memorizing dark blue liquid\nrestores 1-10 points of magic power\nYou have x" + inventory.get(MAGIC_POTION) +" of this item";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
-                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
-                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case BROKEN_ARMOR:
                 itemDesc.clear();
                 msg = "Rusted and in disrepair\nit offers little in the way of protection\nplus one to your AC\nLeft click to equip\nYou have x" + inventory.get(BROKEN_ARMOR) + " of this item";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
-                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
-                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case LIGHT_ARMOR:
                 itemDesc.clear();
                 msg = "Well kept chain-mail\nThe interwoven links provide protection\nplus two to your AC\nLeft click to equip\nYou have x" + inventory.get(LIGHT_ARMOR) + " of this item";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
-                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
-                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case MEDIUM_ARMOR:
                 itemDesc.clear();
                 msg = "Well kept breastplate\nplus three to your AC\nLeft click to equip\nYou have x" + inventory.get(MEDIUM_ARMOR) + " of this item";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
-                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
-                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case HEAVY_ARMOR:
                 itemDesc.clear();
                 msg = "Heavy and thick splint mail\nplus four to your AC\nLeft click to equip\nYou have x" + inventory.get(HEAVY_ARMOR) + " of this item";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
-                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
-                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case LEGENDARY_ARMOR:
                 itemDesc.clear();
                 msg = "Offers full protection\ndespite being as light as a feather\nplus five to your AC\nLeft click to equip\nYou have x" + inventory.get(LEGENDARY_ARMOR) + " of this item";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
-                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
-                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case HEALTH_SPELL:
                 itemDesc.clear();
                 msg = "A vibrant red leather bound book\nPluses with life energy\nLeft click to cast.\nRestores 10HP, Cost 5MP";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
-                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
-                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case LIFE_STEAL:
                 itemDesc.clear();
                 msg = "A dark purple bound book\nIt feels has like it hungers for life itself.\nSteal the life of your enemies\nRestores 5HP, Cost 5MP";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
-                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
-                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case LIGHTING_SPELL:
                 itemDesc.clear();
                 msg = "The tips of your fingers tingle\nThe magic can barely be contained\nShoot out a lighting bolt\nCost 10MP";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
-                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
-                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             case FIRE_SPELL:
                 itemDesc.clear();
                 msg = "Hot to the touch\nThe magic is waiting to burst forward\nCast a cone of fire in front you\nCost 10MP";
                 currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
-                itemDesc.getPlayerDialogue(msg).setLayoutX(320);
-                itemDesc.getPlayerDialogue(msg).setLayoutY(256);
                 break;
             default:
         }
@@ -251,21 +206,14 @@ public class ItemButton extends Button {
             msg = "You have regained " + health + " health";
             player.setHealth(player.getMaxHP());
             currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
-
             inventory.put(HEALTH_POTION, inventory.get(HEALTH_POTION) - 1);
-            if(inventory.get(HEALTH_POTION) < 1) {
-                inventory.remove(HEALTH_POTION);
-                inventoryDisplay.getChildren().remove(this);
-            }
+            removeEmpty(HEALTH_POTION,this);
         } else{
             msg = "You have regained " + health + " health";
             currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
             player.setHealth(player.getHealth() + health);
             inventory.put(HEALTH_POTION, inventory.get(HEALTH_POTION) - 1);
-            if(inventory.get(HEALTH_POTION) < 1) {
-                inventory.remove(HEALTH_POTION);
-                inventoryDisplay.getChildren().remove(this);
-            }
+            removeEmpty(HEALTH_POTION, this);
         }
     }
 
@@ -280,21 +228,14 @@ public class ItemButton extends Button {
             msg = "You have regained " + magic + " magic power";
             player.setMagic(player.getMaxMP());
             currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
-
             inventory.put(MAGIC_POTION, inventory.get(MAGIC_POTION) - 1);
-            if(inventory.get(MAGIC_POTION) < 1) {
-                inventory.remove(MAGIC_POTION);
-                inventoryDisplay.getChildren().remove(this);
-            }
+            removeEmpty(MAGIC_POTION, this);
         } else{
             msg = "You have regained " + magic + " magic power";
             currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
             player.setMagic(player.getMagic() + magic);
             inventory.put(MAGIC_POTION, inventory.get(MAGIC_POTION) - 1);
-            if(inventory.get(MAGIC_POTION) < 1) {
-                inventory.remove(MAGIC_POTION);
-                inventoryDisplay.getChildren().remove(this);
-            }
+            removeEmpty(MAGIC_POTION, this);
         }
     }
 
@@ -308,18 +249,14 @@ public class ItemButton extends Button {
             currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
         }
 
-        if(inventory.get(item) < 1) {
-            inventory.remove(item);
-            inventoryDisplay.getChildren().remove(this);
-        }
+        removeEmpty(item, this);
     }
 
     private void useHealthSpell(){
         int health = 10;
 
         if(player.getMagic() < 5){
-            msg = "You don't have enough magic";
-            currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+            lackMagic();
         } else if(player.getHealth() == player.getMaxHP()){
             msg = "You already have full health";
             currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
@@ -335,12 +272,8 @@ public class ItemButton extends Button {
                 msg = "You have regained 10HP";
             }
             currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
-
             inventory.put(HEALTH_SPELL, inventory.get(HEALTH_SPELL) - 1);
-            if(inventory.get(HEALTH_SPELL) < 1) {
-                inventory.remove(HEALTH_SPELL);
-                inventoryDisplay.getChildren().remove(this);
-            }
+            removeEmpty(HEALTH_SPELL, this);
         }
     }
 
@@ -351,14 +284,18 @@ public class ItemButton extends Button {
         game.setLifeStealListeners();
         player.setMagic(player.getMagic() - 5);
         inventory.put(LIFE_STEAL, inventory.get(LIFE_STEAL) - 1);
-        if(inventory.get(LIFE_STEAL) < 1) {
-            inventory.remove(LIFE_STEAL);
-            inventoryDisplay.getChildren().remove(this);
-        }
+        removeEmpty(LIFE_STEAL, this);
     }
 
+    private void lackMagic(){
+        msg = "You don't have enough magic";
+        currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+    }
 
-
-
-
+    private void removeEmpty(ITEMS item, ItemButton btn){
+        if(inventory.get(item) < 1) {
+            inventory.remove(item);
+            inventoryDisplay.getChildren().remove(btn);
+        }
+    }
 }

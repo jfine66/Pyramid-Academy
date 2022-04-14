@@ -51,7 +51,7 @@ public class DialogueBox {
     }
 
     public void clear(){
-        stack = new StackPane();
+        stack.getChildren().clear();
     }
 
     private void setFont(){
@@ -65,8 +65,4 @@ public class DialogueBox {
             text.setFont(Font.font("Verdana", 23));
         }
     }
-
-
-
-
 }
