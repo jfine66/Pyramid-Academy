@@ -36,29 +36,22 @@ public class Human extends ImageView{
         goldBag = new HashMap<>();
 
         inventory.put(ITEMS.FIRE_SPELL, 1);
-        inventory.put(ITEMS.LIGHTING_SPELL, 10);
         inventory.put(ITEMS.HEALTH_SPELL, 1);
-        inventory.put(ITEMS.HEALTH_POTION, 1);
-        inventory.put(ITEMS.MAGIC_POTION, 1);
-        inventory.put(ITEMS.LIFE_STEAL, 1);
-        inventory.put(ITEMS.BROKEN_ARMOR, 1);
-        inventory.put(ITEMS.MEDIUM_ARMOR, 1);
-        inventory.put(ITEMS.HEAVY_ARMOR, 1);
-        inventory.put(ITEMS.LEGENDARY_ARMOR, 1);
+        inventory.put(ITEMS.HEALTH_POTION, 3);
+        inventory.put(ITEMS.MAGIC_POTION, 3);
 
         goldBag.put(ITEMS.GOLD, 30);
-
 
         this.conMod = (int) (Math.floor(Math.random() * 6) + 1);
         this.intMod = (int) (Math.floor(Math.random() * 6) + 1);
         this.strengthMod = (int) (Math.floor(Math.random() * 6) + 1);
         this.dexMod = (int) (Math.floor(Math.random() * 6) + 1);
-        this.maxHP = 500;//health + conMod;
-        health = 50;//maxHP;
+        this.maxHP = health + conMod;
+        health = maxHP;
         this.maxMP = intel + intMod;
-        magic = 50;//maxMP;
+        magic = maxMP;
         this.ac = dex + dexMod;
-        equipment.put("ARMOR", ITEMS.HEALTH_POTION);
+        equipment.put("ARMOR", ITEMS.BROKEN_ARMOR);
     }
 
    public String toHit(Goblin goblin){
@@ -110,6 +103,22 @@ public class Human extends ImageView{
 
     public int getMagic() {
         return magic;
+    }
+
+    public int getConMod() {
+        return conMod;
+    }
+
+    public int getStrengthMod() {
+        return strengthMod;
+    }
+
+    public int getDexMod() {
+        return dexMod;
+    }
+
+    public int getIntMod() {
+        return intMod;
     }
 
     public HashMap<ITEMS, Integer> getInventory(){
@@ -231,6 +240,7 @@ public class Human extends ImageView{
     }
 
     public void playerStartPos(AnchorPane currentPane){
+        currentPane.getChildren().remove(token);
         currentPane.getChildren().add(token);
         setTokenPos(448,320);
     }

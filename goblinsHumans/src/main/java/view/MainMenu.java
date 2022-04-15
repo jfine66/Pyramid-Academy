@@ -25,6 +25,7 @@ public class MainMenu {
         mainBackgroundMusic();
         createButtons();
         createBackground();
+        mediaPlayer.play();
     }
 
     public Scene getMenuScene(){
@@ -49,7 +50,7 @@ public class MainMenu {
         MenuButtons startButton = new MenuButtons("PLAY");
         addButton(startButton);
 
-        startButton.setOnAction(actionEvent -> {
+        startButton.setOnMouseClicked(mouseEvent -> {
             mediaPlayer.stop();
             SceneController.toLevelOne();
         });
@@ -70,17 +71,16 @@ public class MainMenu {
     }
 
     //Set Main Menu Background
-    private void createBackground(){
+    protected void createBackground(){
         Image backgroundImage = new Image("fantasy_art-digital_art-mountains-castle.jpg", 1024,768,false,true);
         BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
         menuPane.setBackground(new Background(background));
     }
 
-    private void mainBackgroundMusic(){
+    protected void mainBackgroundMusic(){
         String url = "src/main/resources/2019-07-29_-_Elven_Forest_-_FesliyanStudios.com_-_David_Renda.mp3";
         Media h = new Media(Paths.get(url).toUri().toString());
         mediaPlayer = new MediaPlayer(h);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        mediaPlayer.play();
     }
 }

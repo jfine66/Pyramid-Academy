@@ -50,6 +50,19 @@ public class DialogueBox {
         return stack;
     }
 
+    public StackPane rules(String msg){
+        stack.getChildren().clear();
+        r.setStrokeWidth(5);
+        r.setStroke(Color.WHITE);
+        r.setFill(Color.BLUE);
+        text.setText(msg);
+        r.setWidth(840);
+        r.setHeight(600);
+        text.setTranslateY(0);
+        stack.getChildren().addAll(r, text);
+        return stack;
+    }
+
     public void clear(){
         stack.getChildren().clear();
     }

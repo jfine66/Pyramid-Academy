@@ -7,9 +7,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import model.Goblin;
 import model.Human;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SceneController {
     //WIDTH AND HEIGHT FOR STAGE
@@ -19,7 +22,7 @@ public class SceneController {
     private static Stage mainStage;
     //SET UP GAME
     private static GameLogic game;
-    private static final Human player = new Human();
+    private static Human player = new Human();
     //GET OTHER SCENES
     private static final MainMenu menu = new MainMenu();
     private static final Scene menuScene = menu.getMenuScene();
@@ -28,10 +31,20 @@ public class SceneController {
     private static final RestScene camp = new RestScene();
     private static final Scene campScene = camp.getCampScene();
     public static FirstLevel levelOne = new FirstLevel(new AnchorPane());
+    public static SecondLevel levelTwo = new SecondLevel(new AnchorPane());
+    public static ThirdLevel levelThree = new ThirdLevel(new AnchorPane());
+    public static FourthLevel levelFour = new FourthLevel(new AnchorPane());
+    public static FifthLevel levelFive = new FifthLevel(new AnchorPane());
+    public static EndGame end = new EndGame();
+
+
+
     private static final ArmoryScene armory = new ArmoryScene();
     private static final Scene armoryScene = armory.getArmoryScene();
     private static final ShopScene shop = new ShopScene();
     private static final Scene shopScene = shop.getShopScene();
+
+    public static MediaPlayer mediaPlayer;
 
 
     public SceneController(){
@@ -52,6 +65,11 @@ public class SceneController {
     }
 
     public static void toMainMenu(){
+        levelOne.getMediaPlayer().stop();
+        levelTwo.getMediaPlayer().stop();
+        levelThree.getMediaPlayer().stop();
+        levelFour.getMediaPlayer().stop();
+        levelFive.getMediaPlayer().stop();
         menuMusic();
         mainStage.setScene(menuScene);
     }
@@ -61,14 +79,82 @@ public class SceneController {
     }
 
     public static void toCamp(){
+        levelOne.getMediaPlayer().stop();
+        levelTwo.getMediaPlayer().stop();
+        levelThree.getMediaPlayer().stop();
+        levelFour.getMediaPlayer().stop();
+        levelFive.getMediaPlayer().stop();
         menuMusic();
         mainStage.setScene(campScene);
     }
 
     public static void toLevelOne(){
-        Scene levelOneScene = levelOne.getScene();
         game = new GameLogic(levelOne.getLevelOnePane());
+//        player = new Human();
+        Scene levelOneScene = levelOne.getScene();
+        ArrayList<Goblin> list = new ArrayList<>();
+        for(int i = 0; i < 5;i++){
+            list.add(new Goblin());
+        }
+        game.setListOfGoblins(list);
+        game.removePlayer();
+        game.gameStart();
+        levelOne.getMediaPlayer().play();
         mainStage.setScene(levelOneScene);
+    }
+
+    public static void toLevelTwo(){
+        Scene levelTwoScene = levelTwo.getScene();
+        game.setCurrentPane(levelTwo.getLevelTwoPane());
+        ArrayList<Goblin> list = new ArrayList<>();
+        for(int i = 0; i < 10;i++){
+            list.add(new Goblin());
+        }
+        game.setListOfGoblins(list);
+        game.removePlayer();
+        game.gameStart();
+        levelTwo.getMediaPlayer().play();
+        mainStage.setScene(levelTwoScene);
+    }
+
+    public static void toLevelThree(){
+        Scene levelThreeScene = levelThree.getScene();
+        game.setCurrentPane(levelThree.getLevelThreePane());
+        ArrayList<Goblin> list = new ArrayList<>();
+        for(int i = 0; i < 15;i++){
+            list.add(new Goblin());
+        }
+        game.setListOfGoblins(list);
+        game.removePlayer();
+        game.gameStart();
+        levelThree.getMediaPlayer().play();
+        mainStage.setScene(levelThreeScene);
+    }
+
+    public static void toLevelFour(){
+        Scene levelFourScene = levelFour.getScene();
+        game.setCurrentPane(levelFour.getLevelFourPane());
+        ArrayList<Goblin> list = new ArrayList<>();
+        for(int i = 0; i < 20;i++){
+            list.add(new Goblin());
+        }
+        game.setListOfGoblins(list);
+        game.removePlayer();
+        game.gameStart();
+        mainStage.setScene(levelFourScene);
+    }
+
+    public static void toLevelFive(){
+        Scene levelFiveScene = levelFive.getScene();
+        game.setCurrentPane(levelFive.getLevelFivePane());
+        ArrayList<Goblin> list = new ArrayList<>();
+        for(int i = 0; i < 25;i++){
+            list.add(new Goblin());
+        }
+        game.setListOfGoblins(list);
+        game.removePlayer();
+        game.gameStart();
+        mainStage.setScene(levelFiveScene);
     }
 
     public static void toArmory(){
@@ -79,6 +165,10 @@ public class SceneController {
     public static void toShop(){
         shop.createStock();
         mainStage.setScene(shopScene);
+    }
+
+    public static void toEnd(){
+        mainStage.setScene(end.getEndScene());
     }
 
     public static Human getPlayer() {

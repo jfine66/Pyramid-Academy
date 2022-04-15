@@ -24,11 +24,7 @@ import static view.SceneController.levelOne;
 
 public class GameLogic {
     public static final Human player = SceneController.getPlayer();
-    protected final Goblin testGoblin = new Goblin();
-    protected final Goblin goblinTwo = new Goblin();
-    protected final Goblin goblinThree = new Goblin();
-    protected final Goblin goblinFour = new Goblin();
-    private final ArrayList<Goblin> listOfGoblins = new ArrayList<>();
+    private ArrayList<Goblin> listOfGoblins = new ArrayList<>();
 
     private final Banner banner = new Banner();
     private final StackPane playerBanner = banner.getPlayerBanner();
@@ -64,11 +60,6 @@ public class GameLogic {
 
     public GameLogic(AnchorPane pane){
         this.currentPane = pane;
-        listOfGoblins.add(testGoblin);
-        listOfGoblins.add(goblinTwo);
-        listOfGoblins.add(goblinThree);
-        listOfGoblins.add(goblinFour);
-        gameStart();
     }
 
     public HashMap<ArrayList<Integer>, Goblin> getGoblins() {
@@ -81,33 +72,23 @@ public class GameLogic {
         return back;
     }
 
-    public ArrayList<Rectangle> getRecList() {
-        return recList;
-    }
-
-    public AnchorPane getCurrentPane() {
-        return currentPane;
-    }
-
     public void setCurrentPane(AnchorPane pane){
         this.currentPane = pane;
     }
 
-    public void setCurrentMap(HashMap<ArrayList<Integer>, Object> map){
-        this.currentMap = map;
+    public void setListOfGoblins(ArrayList<Goblin> list){
+        listOfGoblins = list;
     }
 
     public void gameStart(){
         player.playerStartPos(currentPane);
-       testGoblin.setTokenPos(512, 192);
-//        goblinTwo.setTokenPos(512,256);
-//        goblinThree.setTokenPos(512,320);
-//        goblinFour.setTokenPos(512,384);
-
-        currentPane.getChildren().add(testGoblin.getToken());
-        //setGoblinPos();
+        setGoblinPos();
         fillAxis();
         playerTurn();
+    }
+
+    public void removePlayer(){
+        currentPane.getChildren().remove(player);
     }
 
     private void setGoblinPos(){
@@ -167,7 +148,6 @@ public class GameLogic {
         setPlayerMenuPos();
 
         player.getToken().setOnMouseEntered(mouseEvent -> {
-            System.out.println(player.getInventory());
             setStatusMenu(player.getTokenX(),player.getTokenY());
             statusPane.getChildren().add(playerStatus);
             statusText(player.getAc(), player.getHealth(), player.getMagic());
@@ -340,8 +320,8 @@ public class GameLogic {
             closeMenu();
             itemMenu();
             showMenu();
-            back.setLayoutX(player.getTokenX() - 128);
-            back.setLayoutY(player.getTokenY() + 64);
+            back.setLayoutX(player.getTokenX() - 64);
+            back.setLayoutY(player.getTokenY() - 64);
             currentPane.getChildren().add(back);
         });
 
@@ -872,8 +852,7 @@ public class GameLogic {
 
     private void removeDead(){
         for(Goblin goblin : deadGoblins){
-            listOfGoblins.remove(goblin);
-            currentPane.getChildren().remove(goblin.getToken());
+            removeDeadGoblin(goblin);
         }
     }
 
@@ -1048,8 +1027,21 @@ public class GameLogic {
         int playerX = player.getTokenX();
         int playerY = player.getTokenY();
         //NEED TO ADD A WAY TO MOVE UP-LEFT, UP-RIGHT
-        int closetX = goblinX > playerX ? goblinX - 64 : goblinX + 64;
-        int closetY = goblinY > playerY ? goblinY - 64 : goblinY + 64;
+        int closetX = goblinX;
+        int closetY = goblinY;
+
+        if(goblinX > playerX){
+            closetX = goblinX - 64;
+        } else if(goblinX < playerX){
+            closetX = goblinX + 64;
+        }
+
+        if(goblinY > playerY){
+            closetY = goblinY - 64;
+        } else if(goblinY < playerY){
+            closetY = goblinY + 64;
+        }
+
 
         if(!isSpaceTaken(closetX, closetY)) goblin.setTokenPos(closetX, closetY);
 
@@ -1105,11 +1097,14 @@ public class GameLogic {
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        Platform.runLater(() -> currentPane.getChildren().remove(goblinDialogueBox.getPlayerDialogue(msg)));
+                        Platform.runLater(() -> currentPane.getChildren().remove(goblinDialogueBox.getGoblinDialogue(msg)));
                     }
                 }, 1800);
 
-                if (player.getHealth() < 0) gameOver();
+                if (player.getHealth() <= 0) {
+                    gameOver();
+                    break;
+                };
             }
         }
     }
