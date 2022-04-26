@@ -1,5 +1,8 @@
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
+@Component
 public class Student {
 
     private int id;
@@ -7,6 +10,7 @@ public class Student {
     private List<Phone> ph;
     private Address add;
 
+    @Autowired
     public Student(int id, String name, List<Phone> ph, Address add) {
         this.id = id;
         this.name = name;

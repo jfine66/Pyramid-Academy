@@ -1,41 +1,41 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"> <!-- bean definitions here -->
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<beans xmlns="http://www.springframework.org/schema/beans"-->
+<!--       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--       xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="-->
+<!--        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd-->
+<!--        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"> &lt;!&ndash; bean definitions here &ndash;&gt;-->
 
 
 
 
-    <bean id="Student" class="Student">
-        <constructor-arg index="0" type="int" value="011"/>
-        <constructor-arg index="1" value="Jimbo"/>
-        <constructor-arg index="2">
-            <list>
-                <ref bean="TimPhone"/>
-                <ref bean="JimPhone"/>
-                <ref bean="SallyPhone"/>
-            </list>
-        </constructor-arg>
-        <constructor-arg index="3" ref="Address"/>
-    </bean>
+<!--    <bean id="Student" class="Student">-->
+<!--        <constructor-arg index="0" type="int" value="011"/>-->
+<!--        <constructor-arg index="1" value="Jimbo"/>-->
+<!--        <constructor-arg index="2">-->
+<!--            <list>-->
+<!--                <ref bean="TimPhone"/>-->
+<!--                <ref bean="JimPhone"/>-->
+<!--                <ref bean="SallyPhone"/>-->
+<!--            </list>-->
+<!--        </constructor-arg>-->
+<!--        <constructor-arg index="3" ref="Address"/>-->
+<!--    </bean>-->
 
-    <bean id="TimPhone" class="Phone">
-        <property name="mob" value="1800555444"/>
-    </bean>
-    <bean id="JimPhone" class="Phone">
-        <property name="mob" value="1800666477"/>
-    </bean>
-    <bean id="SallyPhone" class="Phone">
-        <property name="mob" value="19187412589"/>
-    </bean>
+<!--    <bean id="TimPhone" class="Phone">-->
+<!--        <property name="mob" value="1800555444"/>-->
+<!--    </bean>-->
+<!--    <bean id="JimPhone" class="Phone">-->
+<!--        <property name="mob" value="1800666477"/>-->
+<!--    </bean>-->
+<!--    <bean id="SallyPhone" class="Phone">-->
+<!--        <property name="mob" value="19187412589"/>-->
+<!--    </bean>-->
 
 
-    <bean id="Address" class="Address">
-        <property name="city" value="Vinita"/>
-        <property name="state" value="OK"/>
-        <property name="country" value="USA"/>
-        <property name="zipcode" value="74301"/>
-    </bean>
-</beans>
+<!--    <bean id="Address" class="Address">-->
+<!--        <property name="city" value="Vinita"/>-->
+<!--        <property name="state" value="OK"/>-->
+<!--        <property name="country" value="USA"/>-->
+<!--        <property name="zipcode" value="74301"/>-->
+<!--    </bean>-->
+<!--</beans>-->

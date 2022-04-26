@@ -4,6 +4,13 @@ public class Address {
     private String country;
     private String zipcode;
 
+    public Address(String city, String state, String country, String zipcode) {
+        this.city = city;
+        this.state = state;
+        this.country = country;
+        this.zipcode = zipcode;
+    }
+
     public void setCity(String city) {
         this.city = city;
     }
