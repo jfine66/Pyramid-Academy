@@ -1,0 +1,40 @@
+.content{
+   position: absolute;
+   left: 50%;
+   top: 50%;
+   transform: translate(-50%,-50%);
+}
+
+h1{
+    text-align: center;
+}
+
+.main_form{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: 400px;
+    border-radius: 15px;
+    background-color: #CDCDCD;
+}
+
+.main_form > * {
+    margin: 0.7em;
+}
+
+.main_form > input, select, button{
+    height: 2em;
+}
+
+.main_form > button{
+    color: white;
+    background-color: green;
+    height: 50px;
+    border-radius: 5px;
+    border: none;
+}
+
+.main_form > button:hover{
+    background-color: darkgreen;
+    border: solid 1px black;
+}
