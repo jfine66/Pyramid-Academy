@@ -12,13 +12,13 @@
         <h1>HTML Form Demo</h1>
         <form action="" class="main_form">
             <label for="name">First Name</label>
-            <input type="text" placeholder="Type your name...">
+            <input type="text" id="first-name" placeholder="Type your name...">
 
             <label for="last_name">Last Name</label>
-            <input type="text" placeholder="Type your last name">
+            <input type="text" id="last-name" placeholder="Type your last name">
           
             <label for="occupation">Occupation</label>
-            <input type="text" placeholder="Type your occupation">
+            <input type="text" id="job" placeholder="Type your occupation">
         
             <label for="country">Country</label>
             <select name="country" id="country_drop_down">
@@ -28,8 +28,10 @@
                 <option value="">Germany</option>
                 <option value="">Sweden</option>
             </select>
-            <button type="submit">Submit</button>
+            <button type="button" onclick="displayInfo()">Submit</button>
         </form>
     </div>
+    <p id="info-display">Info will be displayed here.</p>
+    <script src="index.js"></script>
 </body>
 </html>

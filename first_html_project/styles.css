@@ -38,3 +38,9 @@ h1{
     background-color: darkgreen;
     border: solid 1px black;
 }
+
+#info-display{
+    position: relative;
+    top: 12rem;
+    text-align: center;
+}
