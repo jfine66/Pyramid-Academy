@@ -1,0 +1,46 @@
+body {
+    background-image: linear-gradient(155deg,
+                rgba(0, 0, 0, 0.8),
+                rgba(0, 0, 0, 0.7)),
+            url(https://k48b9e9840-flywheel.netdna-ssl.com/wp-content/uploads/2021/07/alfons-morales-YLSwjSy7stw-unsplash.jpg);
+    text-align: center;
+}
+
+h1{
+    color: white;
+}
+
+p{
+    color: white;
+    font-size: 2rem;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+    background-color: #111;
+}
+
+.textbox{
+    width: 500px;
+    margin: 0 auto;
+}

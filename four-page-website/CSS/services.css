@@ -1,0 +1,96 @@
+body{
+    background-color: #2F2FA2;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #242582;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+    background-color: #111;
+}
+
+h1, h2 {
+    color: white;
+    text-align: center;
+}
+
+p {
+    color: white;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+button{
+    display: block;
+    margin: 0 auto;
+    width: 300px;
+    height: 50px;
+    border: none;
+    border-radius: 5px;
+    background-color: #F64C72;
+}
+
+button:hover{
+    border: solid 2px black;
+    background-color: #DD4466;
+    color: white;
+}
+
+.outer-container{
+    width: 90vw;
+    height: 80vh;
+    margin: 0 auto;
+    background-image: linear-gradient(155deg,
+                rgba(0, 0, 0, 0.8),
+                rgba(0, 0, 0, 0.7)),
+            url(https://k48b9e9840-flywheel.netdna-ssl.com/wp-content/uploads/2021/07/alfons-morales-YLSwjSy7stw-unsplash.jpg);
+}
+
+.options{
+    display: flex;
+    height: 20rem;
+}
+
+.maintenance, .library, .publishing{
+    margin: 150px 30px 0 30px;
+    height: 350px;
+    background-color: #553D67;
+    border-radius: 10px;
+}
+
+.maintenance:hover, .library:hover, .publishing:hover{
+    border: solid 3px white;
+    background-color: #412e4e;
+}
+
+@media only screen and (max-width: 800px) {
+    .options{
+        flex-direction: column;
+    }
+
+    .outer-container{
+        background-image: none;
+    }
+
+    button{
+        margin-bottom: 10px;
+    }
+}
