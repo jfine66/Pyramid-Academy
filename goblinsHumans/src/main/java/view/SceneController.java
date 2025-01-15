@@ -12,7 +12,6 @@ import model.Human;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class SceneController {
     //WIDTH AND HEIGHT FOR STAGE
@@ -22,7 +21,7 @@ public class SceneController {
     private static Stage mainStage;
     //SET UP GAME
     private static GameLogic game;
-    private static Human player = new Human();
+    private static final Human player = new Human();
     //GET OTHER SCENES
     private static final MainMenu menu = new MainMenu();
     private static final Scene menuScene = menu.getMenuScene();
@@ -30,11 +29,14 @@ public class SceneController {
     private static final Scene rulesScene = rules.getRuleScene();
     private static final RestScene camp = new RestScene();
     private static final Scene campScene = camp.getCampScene();
-    public static FirstLevel levelOne = new FirstLevel(new AnchorPane());
-    public static SecondLevel levelTwo = new SecondLevel(new AnchorPane());
-    public static ThirdLevel levelThree = new ThirdLevel(new AnchorPane());
-    public static FourthLevel levelFour = new FourthLevel(new AnchorPane());
-    public static FifthLevel levelFive = new FifthLevel(new AnchorPane());
+
+    public static GameLevel levelOne = new GameLevel(new AnchorPane(), "Cave_level.jpg", "src/main/resources/my-first-walk-13852.mp3");
+    public static GameLevel levelTwo = new GameLevel(new AnchorPane(),"level_two_sized.png", "src/main/resources/modern-rnb-all-your-base-15484.mp3");
+    public static GameLevel levelThree = new GameLevel(new AnchorPane(), "level_three_sized.jpg", "src/main/resources/man-is-he-mega-glbml-22045.mp3");
+    public static GameLevel levelFour = new GameLevel(new AnchorPane(), "level_four_sized.jpg", "src/main/resources/let-the-games-begin-21858.mp3");
+    public static GameLevel levelFive = new GameLevel(new AnchorPane(), "level_five_sized.png", "src/main/resources/workout-10823.mp3");
+
+
     public static EndGame end = new EndGame();
 
 
@@ -89,8 +91,7 @@ public class SceneController {
     }
 
     public static void toLevelOne(){
-        game = new GameLogic(levelOne.getLevelOnePane());
-//        player = new Human();
+        game = new GameLogic(levelOne.getLevelPane());
         Scene levelOneScene = levelOne.getScene();
         ArrayList<Goblin> list = new ArrayList<>();
         for(int i = 0; i < 5;i++){
@@ -105,7 +106,7 @@ public class SceneController {
 
     public static void toLevelTwo(){
         Scene levelTwoScene = levelTwo.getScene();
-        game.setCurrentPane(levelTwo.getLevelTwoPane());
+        game.setCurrentPane(levelTwo.getLevelPane());
         ArrayList<Goblin> list = new ArrayList<>();
         for(int i = 0; i < 10;i++){
             list.add(new Goblin());
@@ -119,7 +120,7 @@ public class SceneController {
 
     public static void toLevelThree(){
         Scene levelThreeScene = levelThree.getScene();
-        game.setCurrentPane(levelThree.getLevelThreePane());
+        game.setCurrentPane(levelThree.getLevelPane());
         ArrayList<Goblin> list = new ArrayList<>();
         for(int i = 0; i < 15;i++){
             list.add(new Goblin());
@@ -133,7 +134,7 @@ public class SceneController {
 
     public static void toLevelFour(){
         Scene levelFourScene = levelFour.getScene();
-        game.setCurrentPane(levelFour.getLevelFourPane());
+        game.setCurrentPane(levelFour.getLevelPane());
         ArrayList<Goblin> list = new ArrayList<>();
         for(int i = 0; i < 20;i++){
             list.add(new Goblin());
@@ -146,7 +147,7 @@ public class SceneController {
 
     public static void toLevelFive(){
         Scene levelFiveScene = levelFive.getScene();
-        game.setCurrentPane(levelFive.getLevelFivePane());
+        game.setCurrentPane(levelFive.getLevelPane());
         ArrayList<Goblin> list = new ArrayList<>();
         for(int i = 0; i < 25;i++){
             list.add(new Goblin());
