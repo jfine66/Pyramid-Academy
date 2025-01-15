@@ -1,17 +1,18 @@
 package view;
 
-import gameLogic.Level;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GameLevel implements Level {
+public class GameLevel {
     private final HashMap<ArrayList<Integer>, Object> gridPos = new HashMap<>();
     private final AnchorPane levelPane;
     private final Scene level;
@@ -31,6 +32,22 @@ public class GameLevel implements Level {
         Media h = new Media(Paths.get(bgMusic).toUri().toString());
         mediaPlayer = new MediaPlayer(h);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+    }
+
+    void createGrid(AnchorPane pane){
+        for(int i = 0; i < SceneController.WIDTH; i += 64){
+            for(int j = 0; j < SceneController.HEIGHT; j += 64){
+                Rectangle r = new Rectangle(i, j, 64, 64);
+                r.setFill(Color.TRANSPARENT);
+                r.setStroke(Color.BLACK);
+                pane.getChildren().add(r);
+            }
+        }
+    }
+
+    void createBattleMap(Image map, AnchorPane pane){
+        BackgroundImage background = new BackgroundImage(map, BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
+        pane.setBackground(new Background(background));
     }
 
     public Scene getScene() {
