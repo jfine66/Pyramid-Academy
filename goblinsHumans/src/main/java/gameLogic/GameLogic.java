@@ -150,7 +150,7 @@ public class GameLogic {
         player.getToken().setOnMouseEntered(mouseEvent -> {
             setStatusMenu(player.getTokenX(),player.getTokenY());
             statusPane.getChildren().add(playerStatus);
-            statusText(player.getAc(), player.getHealth(), player.getMagic());
+            statusText(player.getAC(), player.getHealth(), player.getMagic());
             currentPane.getChildren().add(statusPane);
         });
         player.getToken().setOnMouseExited(mouseEvent -> {
