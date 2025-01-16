@@ -7,6 +7,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import view.SceneController;
 
 import java.util.*;
@@ -51,15 +52,15 @@ public class ItemButton extends Button {
     }
 
     private void useItem(ITEMS item){
-        playerMsg.getPlayerDialogue(msg).setLayoutX(320);
-        playerMsg.getPlayerDialogue(msg).setLayoutY(256);
+        playerMsg.getDialogue(msg, Color.BLUE).setLayoutX(320);
+        playerMsg.getDialogue(msg, Color.BLUE).setLayoutY(256);
 
         Timer timer = new Timer();
 
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                Platform.runLater(() -> currentPane.getChildren().remove(playerMsg.getPlayerDialogue(msg)));
+                Platform.runLater(() -> currentPane.getChildren().remove(playerMsg.getDialogue(msg, Color.BLUE)));
             }
         }, 1000);
 
@@ -124,15 +125,15 @@ public class ItemButton extends Button {
     }
 
     private void itemDescription(ITEMS item){
-        itemDesc.getPlayerDialogue(msg).setLayoutX(320);
-        itemDesc.getPlayerDialogue(msg).setLayoutY(256);
+        itemDesc.getDialogue(msg, Color.BLUE).setLayoutX(320);
+        itemDesc.getDialogue(msg, Color.BLUE).setLayoutY(256);
 
         Timer timer = new Timer();
 
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                Platform.runLater(() -> currentPane.getChildren().remove(itemDesc.getPlayerDialogue(msg)));
+                Platform.runLater(() -> currentPane.getChildren().remove(itemDesc.getDialogue(msg, Color.BLUE)));
             }
         }, 3000);
 
@@ -177,7 +178,7 @@ public class ItemButton extends Button {
     private void createItemDescription(String message) {
         itemDesc.clear();
         msg = message;
-        currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+        currentPane.getChildren().add(itemDesc.getDialogue(msg, Color.BLUE));
     }
 
     private void useHealthPot(){
@@ -185,17 +186,17 @@ public class ItemButton extends Button {
 
         if(player.getHealth() == player.getMaxHP()){
             msg = "You already have full health";
-            currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+            currentPane.getChildren().add(playerMsg.getDialogue(msg, Color.BLUE));
         } else if(player.getHealth() + health > player.getMaxHP()){
             health = player.getMaxHP() - player.getHealth();
             msg = "You have regained " + health + " health";
             player.setHealth(player.getMaxHP());
-            currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+            currentPane.getChildren().add(playerMsg.getDialogue(msg, Color.BLUE));
             inventory.put(HEALTH_POTION, inventory.get(HEALTH_POTION) - 1);
             removeEmpty(HEALTH_POTION,this);
         } else{
             msg = "You have regained " + health + " health";
-            currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+            currentPane.getChildren().add(playerMsg.getDialogue(msg, Color.BLUE));
             player.setHealth(player.getHealth() + health);
             inventory.put(HEALTH_POTION, inventory.get(HEALTH_POTION) - 1);
             removeEmpty(HEALTH_POTION, this);
@@ -207,17 +208,17 @@ public class ItemButton extends Button {
 
         if(player.getMagic() == player.getMaxMP()){
             msg = "You already have full magic";
-            currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+            currentPane.getChildren().add(playerMsg.getDialogue(msg, Color.BLUE));
         } else if(player.getMagic() + magic > player.getMaxMP()){
             magic = player.getMaxMP() - player.getMagic();
             msg = "You have regained " + magic + " magic power";
             player.setMagic(player.getMaxMP());
-            currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+            currentPane.getChildren().add(playerMsg.getDialogue(msg, Color.BLUE));
             inventory.put(MAGIC_POTION, inventory.get(MAGIC_POTION) - 1);
             removeEmpty(MAGIC_POTION, this);
         } else{
             msg = "You have regained " + magic + " magic power";
-            currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+            currentPane.getChildren().add(playerMsg.getDialogue(msg, Color.BLUE));
             player.setMagic(player.getMagic() + magic);
             inventory.put(MAGIC_POTION, inventory.get(MAGIC_POTION) - 1);
             removeEmpty(MAGIC_POTION, this);
@@ -228,10 +229,10 @@ public class ItemButton extends Button {
         if(player.equipArmor(item).equals("Armor equipped")){
             inventory.put(item, inventory.get(item) - 1);
             msg = "You put on the armor";
-            currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+            currentPane.getChildren().add(playerMsg.getDialogue(msg, Color.BLUE));
         } else if(player.equipArmor(item).equals("Already equipped")){
             msg = "Already equipped";
-            currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+            currentPane.getChildren().add(playerMsg.getDialogue(msg, Color.BLUE));
         }
 
         removeEmpty(item, this);
@@ -244,7 +245,7 @@ public class ItemButton extends Button {
             lackMagic();
         } else if(player.getHealth() == player.getMaxHP()){
             msg = "You already have full health";
-            currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+            currentPane.getChildren().add(playerMsg.getDialogue(msg, Color.BLUE));
         } else {
             player.setMagic(player.getMagic() - 5);
 
@@ -256,7 +257,7 @@ public class ItemButton extends Button {
                 player.setHealth(player.getHealth() + 10);
                 msg = "You have regained 10HP";
             }
-            currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+            currentPane.getChildren().add(playerMsg.getDialogue(msg, Color.BLUE));
             inventory.put(HEALTH_SPELL, inventory.get(HEALTH_SPELL) - 1);
             removeEmpty(HEALTH_SPELL, this);
         }
@@ -274,7 +275,7 @@ public class ItemButton extends Button {
 
     private void lackMagic(){
         msg = "You don't have enough magic";
-        currentPane.getChildren().add(playerMsg.getPlayerDialogue(msg));
+        currentPane.getChildren().add(playerMsg.getDialogue(msg, Color.BLUE));
     }
 
     private void removeEmpty(ITEMS item, ItemButton btn){

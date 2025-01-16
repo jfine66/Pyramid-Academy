@@ -27,9 +27,9 @@ public class GameLogic {
     private ArrayList<Goblin> listOfGoblins = new ArrayList<>();
 
     private final Banner banner = new Banner();
-    private final StackPane playerBanner = banner.getPlayerBanner();
+    private final StackPane playerBanner = banner.getBanner(Color.BLUE, "YOUR TURN");
     private final Banner gobBanner = new Banner();
-    private final StackPane goblinBanner = gobBanner.getGoblinsBanner();
+    private final StackPane goblinBanner = gobBanner.getBanner(Color.RED, "ENEMY TURN");
     private final Banner victoryDisplay = new Banner();
     private final StackPane victoryBanner = victoryDisplay.getVictoryBanner();
     private final Banner defeatDisplay = new Banner();
@@ -275,11 +275,11 @@ public class GameLogic {
         ActionButton item = new ActionButton("ITEMS");
         ActionButton endTurn = new ActionButton("END");
 
-        playerDialogueBox.getPlayerDialogue(msg).setLayoutX(320);
-        playerDialogueBox.getPlayerDialogue(msg).setLayoutY(256);
+        playerDialogueBox.getDialogue(msg, Color.BLUE).setLayoutX(320);
+        playerDialogueBox.getDialogue(msg, Color.BLUE).setLayoutY(256);
 
-        playerDialogueBox.getPlayerDialogue(msg).setOnMouseClicked(event -> {
-            currentPane.getChildren().remove(playerDialogueBox.getPlayerDialogue(msg));
+        playerDialogueBox.getDialogue(msg, Color.BLUE).setOnMouseClicked(event -> {
+            currentPane.getChildren().remove(playerDialogueBox.getDialogue(msg, Color.BLUE));
             openMenu();
         });
 
@@ -295,7 +295,7 @@ public class GameLogic {
             if(hasAttacked){
                 closeMenu();
                 msg = "YOU HAVE ALREADY ATTACKED";
-                currentPane.getChildren().add(playerDialogueBox.getPlayerDialogue(msg));
+                currentPane.getChildren().add(playerDialogueBox.getDialogue(msg, Color.BLUE));
             } else{
                 attackGrid();
                 closeMenu();
@@ -306,7 +306,7 @@ public class GameLogic {
             if(hasMoved){
                 closeMenu();
                 msg = "YOU HAVE ALREADY MOVED";
-                currentPane.getChildren().add(playerDialogueBox.getPlayerDialogue(msg));
+                currentPane.getChildren().add(playerDialogueBox.getDialogue(msg, Color.BLUE));
             } else{
                 closeMenu();
                 getPossibleMoves();
@@ -342,7 +342,7 @@ public class GameLogic {
         Timer timer = new Timer();
 
         currentPane.getChildren().remove(menuPane);
-        currentPane.getChildren().remove(playerDialogueBox.getPlayerDialogue(msg));
+        currentPane.getChildren().remove(playerDialogueBox.getDialogue(msg, Color.BLUE));
         currentPane.getChildren().remove(playerBanner);
         hasAttacked = false;
         hasMoved = false;
@@ -469,7 +469,7 @@ public class GameLogic {
                 r.setOnMouseClicked(mouseEvent -> {
                     msg = "You casted Life Steal";
                     currentPane.getChildren().remove(back);
-                    currentPane.getChildren().add(playerDialogueBox.getPlayerDialogue(msg));
+                    currentPane.getChildren().add(playerDialogueBox.getDialogue(msg, Color.BLUE));
                     player.setHealth(player.getHealth() + 5);
                     goblinPos.get(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY())))
                             .setHealth(goblinPos.get(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY()))).getHealth() - 5);
@@ -794,7 +794,7 @@ public class GameLogic {
         r.setOnMouseClicked(mouseEvent -> {
             msg = "You casted Dragon's Breath";
             currentPane.getChildren().remove(back);
-            currentPane.getChildren().add(playerDialogueBox.getPlayerDialogue(msg));
+            currentPane.getChildren().add(playerDialogueBox.getDialogue(msg, Color.BLUE));
             player.setMagic(player.getMagic() - 10);
             fireAttack();
             clearAttackGrid();
@@ -805,7 +805,7 @@ public class GameLogic {
         r.setOnMouseClicked(mouseEvent -> {
             msg = "You casted Lighting bolt";
             currentPane.getChildren().remove(back);
-            currentPane.getChildren().add(playerDialogueBox.getPlayerDialogue(msg));
+            currentPane.getChildren().add(playerDialogueBox.getDialogue(msg, Color.BLUE));
             lightingAttack();
             clearAttackGrid();
         });
@@ -865,7 +865,7 @@ public class GameLogic {
 
             currentPane.getChildren().remove(back);
 
-            currentPane.getChildren().add(playerDialogueBox.getPlayerDialogue(msg));
+            currentPane.getChildren().add(playerDialogueBox.getDialogue(msg, Color.BLUE));
         });
     }
 
@@ -1058,8 +1058,8 @@ public class GameLogic {
     }
 
     private void setGoblinAttackGrid(Goblin goblin){
-        goblinDialogueBox.getPlayerDialogue(msg).setLayoutX(320);
-        goblinDialogueBox.getPlayerDialogue(msg).setLayoutY(256);
+        goblinDialogueBox.getDialogue(msg, Color.RED).setLayoutX(320);
+        goblinDialogueBox.getDialogue(msg, Color.RED).setLayoutY(256);
 
         Timer timer = new Timer();
         int x = player.getTokenX();
@@ -1089,7 +1089,7 @@ public class GameLogic {
                     public void run() {
                         Platform.runLater(() -> {
                             msg = temp;
-                            currentPane.getChildren().add(goblinDialogueBox.getGoblinDialogue(msg));
+                            currentPane.getChildren().add(goblinDialogueBox.getDialogue(msg, Color.RED));
                         });
                     }
                 }, 1000);
@@ -1097,7 +1097,7 @@ public class GameLogic {
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        Platform.runLater(() -> currentPane.getChildren().remove(goblinDialogueBox.getGoblinDialogue(msg)));
+                        Platform.runLater(() -> currentPane.getChildren().remove(goblinDialogueBox.getDialogue(msg, Color.RED)));
                     }
                 }, 1800);
 

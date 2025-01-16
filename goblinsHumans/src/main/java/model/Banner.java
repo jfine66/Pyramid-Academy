@@ -17,32 +17,17 @@ public class Banner {
         setFont();
     }
 
-//    Can turn these two methods into one???
-    public StackPane getPlayerBanner(){
+    public StackPane getBanner(Color color, String msg) {
         stack.getChildren().clear();
-        r.setFill(Color.BLUE);
+        r.setFill(color);
         r.setOpacity(0.8);
-        text.setText("YOUR TURN");
-        stack.getChildren().addAll(r, text);
-        return stack;
-    }
-
-    public StackPane getGoblinsBanner(){
-        stack.getChildren().clear();
-        r.setFill(Color.RED);
-        r.setOpacity(0.8);
-        text.setText("ENEMY TURN");
+        text.setText(msg);
         stack.getChildren().addAll(r, text);
         return stack;
     }
 
     public StackPane getVictoryBanner(){
-        stack.getChildren().clear();
-        r.setFill(Color.GREEN);
-        r.setOpacity(0.8);
-        r.setHeight(192);
-        text.setText("YOU HAVE SLAIN ALL THE GOBLINS\nPROCEED TO CAMP?");
-        text.setTranslateY(-50);
+        resultBanner(Color.GREEN, "YOU HAVE SLAIN ALL THE GOBLINS\nPROCEED TO CAMP?");
         ActionButton toCamp = new ActionButton("PROCEED");
         toCamp.setPrefWidth(192);
         toCamp.setTranslateY(64);
@@ -52,14 +37,18 @@ public class Banner {
     }
 
     public StackPane getDefeatBanner(ActionButton button){
-        stack.getChildren().clear();
-        r.setFill(Color.RED);
-        r.setOpacity(0.8);
-        r.setHeight(192);
-        text.setText("YOU HAVE BEEN SLAIN");
-        text.setTranslateY(-50);
+        resultBanner(Color.RED, "YOU HAVE BEEN SLAIN");
         stack.getChildren().addAll(r, text, button);
         return stack;
+    }
+
+    private void resultBanner(Color color, String msg) {
+        stack.getChildren().clear();
+        r.setFill(color);
+        r.setOpacity(0.8);
+        r.setHeight(192);
+        text.setText(msg);
+        text.setTranslateY(-50);
     }
 
     private void setFont(){
@@ -67,7 +56,6 @@ public class Banner {
             String FONT_PATH = "file:src/main/resources/IMMORTAL.ttf";
             text.setFill(Color.WHITE);
             text.setFont(Font.loadFont(FONT_PATH, 40));
-
         } catch(Exception e){
             text.setFill(Color.WHITE);
             text.setFont(Font.font("Verdana", 40));

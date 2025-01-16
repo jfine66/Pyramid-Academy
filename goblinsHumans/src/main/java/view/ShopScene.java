@@ -123,7 +123,7 @@ public class ShopScene {
            counter++;
 
            itemButton.setOnMouseEntered(mouseEvent -> wareDesc(item, false));
-           itemButton.setOnMouseExited(mouseEvent -> shopPane.getChildren().remove(itemMsg.getPlayerDialogue(msg)));
+           itemButton.setOnMouseExited(mouseEvent -> shopPane.getChildren().remove(itemMsg.getDialogue(msg, Color.BLUE)));
            itemButton.setOnMouseClicked(mouseEvent -> sellItem(item, itemButton));
 
            if(counter > 5){
@@ -152,7 +152,7 @@ public class ShopScene {
             itemButton.setTranslateX(xPos);
             itemButton.setTranslateY(yPos += 64);
             itemButton.setOnMouseEntered(mouseEvent -> wareDesc(item, true));
-            itemButton.setOnMouseExited(mouseEvent -> shopPane.getChildren().remove(itemMsg.getPlayerDialogue(msg)));
+            itemButton.setOnMouseExited(mouseEvent -> shopPane.getChildren().remove(itemMsg.getDialogue(msg, Color.BLUE)));
             itemButton.setOnMouseClicked(mouseEvent -> buyItem(item, itemButton));
 
             itemHolder.getChildren().add(itemButton);
@@ -180,12 +180,12 @@ public class ShopScene {
     public void createBuyAndSellDescription(String message) {
         itemMsg.clear();
         msg = message;
-        shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+        shopPane.getChildren().add(itemMsg.getDialogue(msg, Color.BLUE));
     }
 
     private void wareDesc(ITEMS item, boolean isBuying) {
-        itemMsg.getPlayerDialogue(msg).setLayoutX(0);
-        itemMsg.getPlayerDialogue(msg).setLayoutY(256);
+        itemMsg.getDialogue(msg, Color.BLUE).setLayoutX(0);
+        itemMsg.getDialogue(msg, Color.BLUE).setLayoutY(256);
         int numOfItem = isBuying ? shopInventory.get(item) : player.getInventory().get(item);
         String buyOrSell = isBuying ? " Buy for " : " Sell for ";
 
@@ -238,8 +238,8 @@ public class ShopScene {
     }
 
     private void buyItem(ITEMS item, ItemButton btn){
-        itemMsg.getPlayerDialogue(msg).setLayoutX(0);
-        itemMsg.getPlayerDialogue(msg).setLayoutY(256);
+        itemMsg.getDialogue(msg, Color.BLUE).setLayoutX(0);
+        itemMsg.getDialogue(msg, Color.BLUE).setLayoutY(256);
 
         switch (item){
             case HEALTH_POTION:
@@ -304,7 +304,7 @@ public class ShopScene {
 
         shopInventory.put(item, shopInventory.get(item) - 1);
         msg = "Lighting Bolt x" + shopInventory.get(item) + buyMsg;
-        itemMsg.getPlayerDialogue(msg);
+        itemMsg.getDialogue(msg, Color.BLUE);
 
         removeOutOfStock(item, btn);
         buySellItem(item, true);
@@ -333,10 +333,10 @@ public class ShopScene {
     }
 
     private void lackGold(){
-        shopPane.getChildren().remove(itemMsg.getPlayerDialogue(msg));
+        shopPane.getChildren().remove(itemMsg.getDialogue(msg, Color.BLUE));
         itemMsg.clear();
         msg = "You don't have enough Gold";
-        shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+        shopPane.getChildren().add(itemMsg.getDialogue(msg, Color.BLUE));
     }
 
     private void buySellItem(ITEMS item, boolean isBuying) {

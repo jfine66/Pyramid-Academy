@@ -9,29 +9,17 @@ import javafx.scene.text.Text;
 public class DialogueBox {
     private final Rectangle r = new Rectangle(320,256,448, 192);
     private final Text text = new Text();
-    private StackPane stack = new StackPane();
+    private final StackPane stack = new StackPane();
 
     public DialogueBox(){
         setFont();
     }
 
-//    Can two these two methods into one???
-    public StackPane getPlayerDialogue(String msg){
+    public StackPane getDialogue(String msg, Color teamColor) {
         stack.getChildren().clear();
         r.setStrokeWidth(5);
         r.setStroke(Color.WHITE);
-        r.setFill(Color.BLUE);
-        r.setOpacity(0.8);
-        text.setText(msg);
-        stack.getChildren().addAll(r, text);
-        return stack;
-    }
-
-    public StackPane getGoblinDialogue(String msg){
-        stack.getChildren().clear();
-        r.setStrokeWidth(5);
-        r.setStroke(Color.WHITE);
-        r.setFill(Color.RED);
+        r.setFill(teamColor);
         r.setOpacity(0.8);
         text.setText(msg);
         stack.getChildren().addAll(r, text);
