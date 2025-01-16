@@ -73,7 +73,6 @@ public class ShopScene {
         back.setOnMouseClicked(mouseEvent -> SceneController.toCamp());
     }
 
-
     private void setBuyBtn(){
         buy.setLayoutX(64);
         buy.setLayoutY(128);
@@ -164,13 +163,14 @@ public class ShopScene {
         shopPane.getChildren().add(itemHolder);
     }
 
+//    The continue IS needed to avoid putting Gold as a buy-able item in the shop
     public void createStock(){
         shopInventory = new HashMap<>();
         for(ITEMS item : ITEMS.values()){
-        if(item == ITEMS.LEGENDARY_ARMOR){
-                shopInventory.put(item, 1);
-            } else if(item == GOLD) {
+            if (item == GOLD) {
                 continue;
+            } else if (item == ITEMS.LEGENDARY_ARMOR) {
+                shopInventory.put(item, 1);
             } else {
                 shopInventory.put(item, (int) Math.floor(Math.random() * 5) + 1);
             }
@@ -228,58 +228,13 @@ public class ShopScene {
     }
 
     private void sellItem(ITEMS item, ItemButton btn){
-        switch (item){
-            case HEALTH_POTION:
-                player.getInventory().put(HEALTH_POTION, player.getInventory().get(HEALTH_POTION) - 1);
-                removeItemFromPlayer(item, btn);
-                break;
-            case MAGIC_POTION:
-                player.getInventory().put(MAGIC_POTION, player.getInventory().get(MAGIC_POTION) - 1);
-                removeItemFromPlayer(item, btn);
-                break;
-            case BROKEN_ARMOR:
-                player.getInventory().put(BROKEN_ARMOR, player.getInventory().get(BROKEN_ARMOR) - 1);
-                removeItemFromPlayer(item, btn);
-                break;
-            case LIGHT_ARMOR:
-                player.getInventory().put(LIGHT_ARMOR, player.getInventory().get(LIGHT_ARMOR) - 1);
-                removeItemFromPlayer(item, btn);
-                break;
-            case MEDIUM_ARMOR:
-                player.getInventory().put(MEDIUM_ARMOR, player.getInventory().get(MEDIUM_ARMOR) - 1);
-                removeItemFromPlayer(item, btn);
-                break;
-            case HEAVY_ARMOR:
-                player.getInventory().put(HEAVY_ARMOR, player.getInventory().get(HEAVY_ARMOR) - 1);
-                removeItemFromPlayer(item, btn);
-                break;
-            case LEGENDARY_ARMOR:
-                player.getInventory().put(LEGENDARY_ARMOR, player.getInventory().get(LEGENDARY_ARMOR) - 1);
-                removeItemFromPlayer(item, btn);
-                break;
-            case LIFE_STEAL:
-                player.getInventory().put(LIFE_STEAL, player.getInventory().get(LIFE_STEAL) - 1);
-                removeItemFromPlayer(item, btn);
-                break;
-            case HEALTH_SPELL:
-                player.getInventory().put(HEALTH_SPELL, player.getInventory().get(HEALTH_SPELL) - 1);
-                removeItemFromPlayer(item, btn);
-                break;
-            case FIRE_SPELL:
-                player.getInventory().put(FIRE_SPELL, player.getInventory().get(FIRE_SPELL) - 1);
-                removeItemFromPlayer(item, btn);
-                break;
-            case LIGHTING_SPELL:
-                player.getInventory().put(LIGHTING_SPELL, player.getInventory().get(LIGHTING_SPELL) - 1);
-                removeItemFromPlayer(item, btn);
-                break;
-            default:
-        }
+        player.getInventory().put(item, player.getInventory().get(item) - 1);
+        removeItemFromPlayer(item, btn);
     }
 
     private void removeItemFromPlayer(ITEMS item, ItemButton btn) {
         removeEmptyItems(item, btn);
-        itemSold(item);
+        buySellItem(item, false);
     }
 
     private void buyItem(ITEMS item, ItemButton btn){
@@ -288,161 +243,71 @@ public class ShopScene {
 
         switch (item){
             case HEALTH_POTION:
-                if(player.getGoldBag().get(GOLD) < 20){
-                    lackGold();
-                } else {
-                    updatePlayerInventory(item);
-
-                    shopInventory.put(HEALTH_POTION, shopInventory.get(HEALTH_POTION) - 1);
-                    msg = "Health Potion x" + shopInventory.get(HEALTH_POTION) + " Buy for 20G";
-                    itemMsg.getPlayerDialogue(msg);
-
-                    removeOutOfStock(item, btn);
-                    boughtItem(item);
-                }
-                break;
             case MAGIC_POTION:
                 if(player.getGoldBag().get(GOLD) < 20){
                     lackGold();
                 } else {
-                    updatePlayerInventory(item);
-
-                    shopInventory.put(MAGIC_POTION, shopInventory.get(MAGIC_POTION) - 1);
-                    msg = "Magic Potion x" + shopInventory.get(MAGIC_POTION) + " Buy for 20G";
-                    itemMsg.getPlayerDialogue(msg);
-
-                    removeOutOfStock(item, btn);
-                    boughtItem(item);
+                    updateShopInv(item, btn, " Buy for 20G");
                 }
                 break;
             case BROKEN_ARMOR:
                 if(player.getGoldBag().get(GOLD) < 10){
                     lackGold();
                 } else {
-                    updatePlayerInventory(item);
-
-                    shopInventory.put(BROKEN_ARMOR, shopInventory.get(BROKEN_ARMOR) - 1);
-                    msg = "Rusted Armor x" + shopInventory.get(BROKEN_ARMOR) + " Buy for 10G";
-                    itemMsg.getPlayerDialogue(msg);
-
-                    removeOutOfStock(item, btn);
-                    boughtItem(item);
+                    updateShopInv(item, btn, " Buy for 10G");
                 }
                 break;
             case LIGHT_ARMOR:
                 if(player.getGoldBag().get(GOLD) < 25){
                     lackGold();
                 } else {
-                    updatePlayerInventory(item);
-
-                    shopInventory.put(LIGHT_ARMOR, shopInventory.get(LIGHT_ARMOR) - 1);
-                    msg = "Light Armor x" + shopInventory.get(LIGHT_ARMOR) + " Buy for 25G";
-                    itemMsg.getPlayerDialogue(msg);
-
-                    removeOutOfStock(item, btn);
-                    boughtItem(item);
+                    updateShopInv(item, btn, " Buy for 25G");
                 }
                 break;
             case MEDIUM_ARMOR:
                 if(player.getGoldBag().get(GOLD) < 30){
                     lackGold();
                 } else {
-                    updatePlayerInventory(item);
-
-                    shopInventory.put(MEDIUM_ARMOR, shopInventory.get(MEDIUM_ARMOR) - 1);
-                    msg = "Medium Armor x" + shopInventory.get(MEDIUM_ARMOR) + " Buy for 30G";
-                    itemMsg.getPlayerDialogue(msg);
-
-                    removeOutOfStock(item, btn);
-                    boughtItem(item);
+                    updateShopInv(item, btn, " Buy for 30G");
                 }
                 break;
             case HEAVY_ARMOR:
+            case LIFE_STEAL:
+            case HEALTH_SPELL:
                 if(player.getGoldBag().get(GOLD) < 40){
                     lackGold();
                 } else {
-                    updatePlayerInventory(item);
-
-                    shopInventory.put(HEAVY_ARMOR, shopInventory.get(HEAVY_ARMOR) - 1);
-                    msg = "Heavy Armor x" + shopInventory.get(HEAVY_ARMOR) + " Buy for 40G";
-                    itemMsg.getPlayerDialogue(msg);
-
-                    removeOutOfStock(item, btn);
-                    boughtItem(item);
+                    updateShopInv(item, btn, " Buy for 40G");
                 }
                 break;
             case LEGENDARY_ARMOR:
                 if(player.getGoldBag().get(GOLD) < 100){
                     lackGold();
                 } else {
-                    updatePlayerInventory(item);
-
-                    shopInventory.put(LEGENDARY_ARMOR, shopInventory.get(LEGENDARY_ARMOR) - 1);
-                    msg = "Legendary Armor x" + shopInventory.get(LEGENDARY_ARMOR) + " Buy for 100G";
-                    itemMsg.getPlayerDialogue(msg);
-
-                    removeOutOfStock(item, btn);
-                    boughtItem(item);
-                }
-                break;
-            case LIFE_STEAL:
-                if(player.getGoldBag().get(GOLD) < 40){
-                    lackGold();
-                } else {
-                    updatePlayerInventory(item);
-
-                    shopInventory.put(LIFE_STEAL, shopInventory.get(LIFE_STEAL) - 1);
-                    msg = "Life Steal SpellBook x" + shopInventory.get(LIFE_STEAL) + " Buy for 40G";
-                    itemMsg.getPlayerDialogue(msg);
-
-                    removeOutOfStock(item, btn);
-                    boughtItem(item);
-                }
-                break;
-            case HEALTH_SPELL:
-                if(player.getGoldBag().get(GOLD) < 40){
-                    lackGold();
-                } else {
-                    updatePlayerInventory(item);
-
-                    shopInventory.put(HEALTH_SPELL, shopInventory.get(HEALTH_SPELL) - 1);
-                    msg = "Spell of Life x" + shopInventory.get(HEALTH_SPELL) + " Buy for 40G";
-                    itemMsg.getPlayerDialogue(msg);
-
-                    removeOutOfStock(item, btn);
-                    boughtItem(item);
+                    updateShopInv(item, btn, " Buy for 100G");
                 }
                 break;
             case FIRE_SPELL:
-                if(player.getGoldBag().get(GOLD) < 45){
-                    lackGold();
-                } else {
-                    updatePlayerInventory(item);
-
-                    shopInventory.put(FIRE_SPELL, shopInventory.get(FIRE_SPELL) - 1);
-                    msg = "Dragon's Breath x" + shopInventory.get(FIRE_SPELL) + " Buy for 45G";
-                    itemMsg.getPlayerDialogue(msg);
-
-                    removeOutOfStock(item, btn);
-                    boughtItem(item);
-                }
-                break;
             case LIGHTING_SPELL:
                 if(player.getGoldBag().get(GOLD) < 45){
                     lackGold();
                 } else {
-                    updatePlayerInventory(item);
-
-                    shopInventory.put(LIGHTING_SPELL, shopInventory.get(LIGHTING_SPELL) - 1);
-                    msg = "Lighting Bolt x" + shopInventory.get(LIGHTING_SPELL) + " Buy for 45G";
-                    itemMsg.getPlayerDialogue(msg);
-
-                    removeOutOfStock(item, btn);
-                    boughtItem(item);
+                    updateShopInv(item, btn, " Buy for 45G");
                 }
                 break;
             default:
         }
+    }
+
+    private void updateShopInv(ITEMS item, ItemButton btn, String buyMsg) {
+        updatePlayerInventory(item);
+
+        shopInventory.put(item, shopInventory.get(item) - 1);
+        msg = "Lighting Bolt x" + shopInventory.get(item) + buyMsg;
+        itemMsg.getPlayerDialogue(msg);
+
+        removeOutOfStock(item, btn);
+        buySellItem(item, true);
     }
 
     private void updatePlayerInventory(ITEMS item){
@@ -474,85 +339,42 @@ public class ShopScene {
         shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
     }
 
-    private void itemSold(ITEMS item){
-        switch (item){
+    private void buySellItem(ITEMS item, boolean isBuying) {
+        switch (item) {
             case HEALTH_POTION:
             case MAGIC_POTION:
-            case LIGHT_ARMOR:
-                player.getGoldBag().put(GOLD, player.getGoldBag().get(GOLD) + 10);
-                shopPane.getChildren().remove(goldHolder);
-                showPlayerGold();
+                playerGoldBag((isBuying ? 20 : 10), isBuying);
                 break;
             case BROKEN_ARMOR:
-                player.getGoldBag().put(GOLD, player.getGoldBag().get(GOLD) + 5);
-                shopPane.getChildren().remove(goldHolder);
-                showPlayerGold();
+                playerGoldBag((isBuying ? 10 : 5), isBuying);
+                break;
+            case LIGHT_ARMOR:
+                playerGoldBag((isBuying ? 25 : 10), isBuying);
                 break;
             case MEDIUM_ARMOR:
-            case LIFE_STEAL:
-            case HEALTH_SPELL:
-                player.getGoldBag().put(GOLD, player.getGoldBag().get(GOLD) + 20);
-                shopPane.getChildren().remove(goldHolder);
-                showPlayerGold();
+                playerGoldBag((isBuying ? 30 : 20), isBuying);
                 break;
             case HEAVY_ARMOR:
-            case LIGHTING_SPELL:
-            case FIRE_SPELL:
-                player.getGoldBag().put(GOLD, player.getGoldBag().get(GOLD) + 25);
-                shopPane.getChildren().remove(goldHolder);
-                showPlayerGold();
+                playerGoldBag((isBuying ? 40 : 25), isBuying);
                 break;
             case LEGENDARY_ARMOR:
-                player.getGoldBag().put(GOLD, player.getGoldBag().get(GOLD) + 75);
-                shopPane.getChildren().remove(goldHolder);
-                showPlayerGold();
+                playerGoldBag((isBuying ? 100 : 75), isBuying);
+                break;
+            case LIFE_STEAL:
+            case HEALTH_SPELL:
+                playerGoldBag((isBuying ? 40 : 20), isBuying);
+                break;
+            case FIRE_SPELL:
+            case LIGHTING_SPELL:
+                playerGoldBag((isBuying ? 45 : 25), isBuying);
                 break;
             default:
         }
     }
 
-    private void boughtItem(ITEMS item){
-        switch (item){
-            case HEALTH_POTION:
-            case MAGIC_POTION:
-                player.getGoldBag().put(GOLD, player.getGoldBag().get(GOLD) - 20);
-                shopPane.getChildren().remove(goldHolder);
-                showPlayerGold();
-                break;
-            case BROKEN_ARMOR:
-                player.getGoldBag().put(GOLD, player.getGoldBag().get(GOLD) - 10);
-                shopPane.getChildren().remove(goldHolder);
-                showPlayerGold();
-                break;
-            case LIGHT_ARMOR:
-                player.getGoldBag().put(GOLD, player.getGoldBag().get(GOLD) - 25);
-                shopPane.getChildren().remove(goldHolder);
-                showPlayerGold();
-                break;
-            case MEDIUM_ARMOR:
-                player.getGoldBag().put(GOLD, player.getGoldBag().get(GOLD) - 30);
-                shopPane.getChildren().remove(goldHolder);
-                showPlayerGold();
-                break;
-            case HEAVY_ARMOR:
-            case LIFE_STEAL:
-            case HEALTH_SPELL:
-                player.getGoldBag().put(GOLD, player.getGoldBag().get(GOLD) - 40);
-                shopPane.getChildren().remove(goldHolder);
-                showPlayerGold();
-                break;
-            case LEGENDARY_ARMOR:
-                player.getGoldBag().put(GOLD, player.getGoldBag().get(GOLD) - 100);
-                shopPane.getChildren().remove(goldHolder);
-                showPlayerGold();
-                break;
-            case FIRE_SPELL:
-            case LIGHTING_SPELL:
-                player.getGoldBag().put(GOLD, player.getGoldBag().get(GOLD) - 45);
-                shopPane.getChildren().remove(goldHolder);
-                showPlayerGold();
-                break;
-            default:
-        }
+    private void playerGoldBag(int price, boolean isBuying) {
+        player.getGoldBag().put(GOLD, player.getGoldBag().get(GOLD) + (isBuying ? -price : price));
+        shopPane.getChildren().remove(goldHolder);
+        showPlayerGold();
     }
 }
