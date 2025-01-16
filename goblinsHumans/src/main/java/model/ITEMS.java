@@ -16,7 +16,6 @@ public enum ITEMS {
     LIFE_STEAL("life_steal___.png"),
     LIGHTING_SPELL("lighting_book.png");
 
-
     private String url;
 
     ITEMS(String url){

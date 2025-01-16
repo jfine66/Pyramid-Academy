@@ -1,6 +1,5 @@
 package model;
 
-
 import javafx.scene.layout.AnchorPane;
 import java.util.HashMap;
 
@@ -17,7 +16,6 @@ public class Human extends GameEntity{
     private final HashMap<ITEMS, Integer> inventory;
     private final HashMap<ITEMS, Integer> goldBag;
     private final HashMap<String, ITEMS> equipment = new HashMap<>();
-
 
     public Human(){
         super("test_player_token.png",
@@ -58,7 +56,6 @@ public class Human extends GameEntity{
         magic = maxMP;
     }
 
-
     public String equipArmor(ITEMS item){
         if(equipment.get("ARMOR") == item){
             return "Already equipped";
@@ -66,12 +63,13 @@ public class Human extends GameEntity{
             removeArmor();
             inventory.put(equipment.get("ARMOR"), 1);
             equipment.put("ARMOR", item);
-            checkArmor();
+            equipArmor();
             return "Armor equipped";
         }
     }
 
-    private void checkArmor(){
+//    NEED TO LOOK AT THESE AGAIN
+    private void equipArmor(){
         switch (equipment.get("ARMOR")){
             case BROKEN_ARMOR:
                 ac += 1;

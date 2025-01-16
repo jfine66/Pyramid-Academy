@@ -13,6 +13,7 @@ import java.util.*;
 
 import static model.ITEMS.*;
 
+// This class needs another look
 public class ItemButton extends Button {
     private static final Human player = SceneController.getPlayer();
     private static final GameLogic game = SceneController.getGame();
@@ -137,62 +138,46 @@ public class ItemButton extends Button {
 
         switch (item){
             case HEALTH_POTION:
-                itemDesc.clear();
-                msg = "A vibrant red liquid radiating warmth\nrestores 1-10 points of health\nYou have x" + inventory.get(HEALTH_POTION) +" of this item";
-                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                createItemDescription("A vibrant red liquid radiating warmth\nrestores 1-10 points of health\nYou have x" + inventory.get(HEALTH_POTION) +" of this item");
                 break;
             case MAGIC_POTION:
-                itemDesc.clear();
-                msg = "A memorizing dark blue liquid\nrestores 1-10 points of magic power\nYou have x" + inventory.get(MAGIC_POTION) +" of this item";
-                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                createItemDescription("A memorizing dark blue liquid\nrestores 1-10 points of magic power\nYou have x" + inventory.get(MAGIC_POTION) +" of this item");
                 break;
             case BROKEN_ARMOR:
-                itemDesc.clear();
-                msg = "Rusted and in disrepair\nit offers little in the way of protection\nplus one to your AC\nLeft click to equip\nYou have x" + inventory.get(BROKEN_ARMOR) + " of this item";
-                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                createItemDescription("Rusted and in disrepair\nit offers little in the way of protection\nplus one to your AC\nLeft click to equip\nYou have x" + inventory.get(BROKEN_ARMOR) + " of this item");
                 break;
             case LIGHT_ARMOR:
-                itemDesc.clear();
-                msg = "Well kept chain-mail\nThe interwoven links provide protection\nplus two to your AC\nLeft click to equip\nYou have x" + inventory.get(LIGHT_ARMOR) + " of this item";
-                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                createItemDescription("Well kept chain-mail\nThe interwoven links provide protection\nplus two to your AC\nLeft click to equip\nYou have x" + inventory.get(LIGHT_ARMOR) + " of this item");
                 break;
             case MEDIUM_ARMOR:
-                itemDesc.clear();
-                msg = "Well kept breastplate\nplus three to your AC\nLeft click to equip\nYou have x" + inventory.get(MEDIUM_ARMOR) + " of this item";
-                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                createItemDescription("Well kept breastplate\nplus three to your AC\nLeft click to equip\nYou have x" + inventory.get(MEDIUM_ARMOR) + " of this item");
                 break;
             case HEAVY_ARMOR:
-                itemDesc.clear();
-                msg = "Heavy and thick splint mail\nplus four to your AC\nLeft click to equip\nYou have x" + inventory.get(HEAVY_ARMOR) + " of this item";
-                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                createItemDescription("Heavy and thick splint mail\nplus four to your AC\nLeft click to equip\nYou have x" + inventory.get(HEAVY_ARMOR) + " of this item");
                 break;
             case LEGENDARY_ARMOR:
-                itemDesc.clear();
-                msg = "Offers full protection\ndespite being as light as a feather\nplus five to your AC\nLeft click to equip\nYou have x" + inventory.get(LEGENDARY_ARMOR) + " of this item";
-                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                createItemDescription("Offers full protection\ndespite being as light as a feather\nplus five to your AC\nLeft click to equip\nYou have x" + inventory.get(LEGENDARY_ARMOR) + " of this item");
                 break;
             case HEALTH_SPELL:
-                itemDesc.clear();
-                msg = "A vibrant red leather bound book\nPluses with life energy\nLeft click to cast.\nRestores 10HP, Cost 5MP";
-                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                createItemDescription("A vibrant red leather bound book\nPluses with life energy\nLeft click to cast.\nRestores 10HP, Cost 5MP");
                 break;
             case LIFE_STEAL:
-                itemDesc.clear();
-                msg = "A dark purple bound book\nIt feels has like it hungers for life itself.\nSteal the life of your enemies\nRestores 5HP, Cost 5MP";
-                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                createItemDescription("A dark purple bound book\nIt feels has like it hungers for life itself.\nSteal the life of your enemies\nRestores 5HP, Cost 5MP");
                 break;
             case LIGHTING_SPELL:
-                itemDesc.clear();
-                msg = "The tips of your fingers tingle\nThe magic can barely be contained\nShoot out a lighting bolt\nCost 10MP";
-                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                createItemDescription("The tips of your fingers tingle\nThe magic can barely be contained\nShoot out a lighting bolt\nCost 10MP");
                 break;
             case FIRE_SPELL:
-                itemDesc.clear();
-                msg = "Hot to the touch\nThe magic is waiting to burst forward\nCast a cone of fire in front you\nCost 10MP";
-                currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
+                createItemDescription("Hot to the touch\nThe magic is waiting to burst forward\nCast a cone of fire in front you\nCost 10MP");
                 break;
             default:
         }
+    }
+
+    private void createItemDescription(String message) {
+        itemDesc.clear();
+        msg = message;
+        currentPane.getChildren().add(itemDesc.getPlayerDialogue(msg));
     }
 
     private void useHealthPot(){

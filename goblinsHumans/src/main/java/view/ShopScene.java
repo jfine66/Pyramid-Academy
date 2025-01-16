@@ -177,69 +177,54 @@ public class ShopScene {
         }
     }
 
+    public void createBuyAndSellDescription(String message) {
+        itemMsg.clear();
+        msg = message;
+        shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+    }
+
     private void sellDesc(ITEMS item){
         itemMsg.getPlayerDialogue(msg).setLayoutX(0);
         itemMsg.getPlayerDialogue(msg).setLayoutY(256);
 
         switch (item){
             case HEALTH_POTION:
-                itemMsg.clear();
-                msg = "Health Potion x" + player.getInventory().get(HEALTH_POTION) +" Sells for 10G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Health Potion x" + player.getInventory().get(HEALTH_POTION) +" Sells for 10G");
                 break;
             case MAGIC_POTION:
-                itemMsg.clear();
-                msg = "Magic Potion x" + player.getInventory().get(MAGIC_POTION) + " Sells for 10G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Magic Potion x" + player.getInventory().get(MAGIC_POTION) + " Sells for 10G");
                 break;
             case BROKEN_ARMOR:
-                itemMsg.clear();
-                msg = "Rusted Armor x" + player.getInventory().get(BROKEN_ARMOR) + " Sells for 5G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Rusted Armor x" + player.getInventory().get(BROKEN_ARMOR) + " Sells for 5G");
                 break;
             case LIGHT_ARMOR:
-                itemMsg.clear();
-                msg = "Light Armor x" + player.getInventory().get(LIGHT_ARMOR) + " Sells for 15G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Light Armor x" + player.getInventory().get(LIGHT_ARMOR) + " Sells for 15G");
                 break;
             case MEDIUM_ARMOR:
-                itemMsg.clear();
-                msg = "Medium Armor x" + player.getInventory().get(MEDIUM_ARMOR) + " Sells for 20G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Medium Armor x" + player.getInventory().get(MEDIUM_ARMOR) + " Sells for 20G");
                 break;
             case HEAVY_ARMOR:
-                itemMsg.clear();
-                msg = "Heavy Armor x" + player.getInventory().get(HEAVY_ARMOR) + " Sells for 25G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Heavy Armor x" + player.getInventory().get(HEAVY_ARMOR) + " Sells for 25G");
                 break;
             case LEGENDARY_ARMOR:
-                itemMsg.clear();
-                msg = "Legendary Armor x" + player.getInventory().get(LEGENDARY_ARMOR) + " Sells for 75G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Legendary Armor x" + player.getInventory().get(LEGENDARY_ARMOR) + " Sells for 75G");
                 break;
             case LIFE_STEAL:
-                itemMsg.clear();
-                msg = "Life Steal SpellBook x" + player.getInventory().get(LIFE_STEAL) + " Sells for 20G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Life Steal SpellBook x" + player.getInventory().get(LIFE_STEAL) + " Sells for 20G");
                 break;
             case HEALTH_SPELL:
-                itemMsg.clear();
-                msg = "Spell of Life x" + player.getInventory().get(HEALTH_SPELL) + " Sells for 20G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Spell of Life x" + player.getInventory().get(HEALTH_SPELL) + " Sells for 20G");
                 break;
             case FIRE_SPELL:
-                itemMsg.clear();
-                msg = "Dragon's Breath x" + player.getInventory().get(FIRE_SPELL) + " Sells for 25G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Dragon's Breath x" + player.getInventory().get(FIRE_SPELL) + " Sells for 25G");
                 break;
             case LIGHTING_SPELL:
-                itemMsg.clear();
-                msg = "Lighting Bolt x" + player.getInventory().get(LIGHTING_SPELL) + " Sells for 25G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Lighting Bolt x" + player.getInventory().get(LIGHTING_SPELL) + " Sells for 25G");
                 break;
             default:
         }
     }
+
 
     private void buyDesc(ITEMS item){
         itemMsg.getPlayerDialogue(msg).setLayoutX(0);
@@ -247,59 +232,37 @@ public class ShopScene {
 
         switch (item){
             case HEALTH_POTION:
-                itemMsg.clear();
-                msg = "Health Potion x" + shopInventory.get(HEALTH_POTION) +" Buy for 20G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Health Potion x" + shopInventory.get(HEALTH_POTION) +" Buy for 20G");
                 break;
             case MAGIC_POTION:
-                itemMsg.clear();
-                msg = "Magic Potion x" + shopInventory.get(MAGIC_POTION) + " Buy for 20G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Magic Potion x" + shopInventory.get(MAGIC_POTION) + " Buy for 20G");
                 break;
             case BROKEN_ARMOR:
-                itemMsg.clear();
-                msg = "Rusted Armor x" + shopInventory.get(BROKEN_ARMOR) + " Buy for 10G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Rusted Armor x" + shopInventory.get(BROKEN_ARMOR) + " Buy for 10G");
                 break;
             case LIGHT_ARMOR:
-                itemMsg.clear();
-                msg = "Light Armor x" +shopInventory.get(LIGHT_ARMOR) + " Buy for 25G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Light Armor x" +shopInventory.get(LIGHT_ARMOR) + " Buy for 25G");
                 break;
             case MEDIUM_ARMOR:
-                itemMsg.clear();
-                msg = "Medium Armor x" + shopInventory.get(MEDIUM_ARMOR) + " Buy for 30G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Medium Armor x" + shopInventory.get(MEDIUM_ARMOR) + " Buy for 30G");
                 break;
             case HEAVY_ARMOR:
-                itemMsg.clear();
-                msg = "Heavy Armor x" + shopInventory.get(HEAVY_ARMOR) + " Buy for 40G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Heavy Armor x" + shopInventory.get(HEAVY_ARMOR) + " Buy for 40G");
                 break;
             case LEGENDARY_ARMOR:
-                itemMsg.clear();
-                msg = "Legendary Armor x" + shopInventory.get(LEGENDARY_ARMOR) + " Buy for 100G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Legendary Armor x" + shopInventory.get(LEGENDARY_ARMOR) + " Buy for 100G");
                 break;
             case LIFE_STEAL:
-                itemMsg.clear();
-                msg = "Life Steal SpellBook x" + shopInventory.get(LIFE_STEAL) + " Buy for 40G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Life Steal SpellBook x" + shopInventory.get(LIFE_STEAL) + " Buy for 40G");
                 break;
             case HEALTH_SPELL:
-                itemMsg.clear();
-                msg = "Spell of Life x" + shopInventory.get(HEALTH_SPELL) + " Buy for 40G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Spell of Life x" + shopInventory.get(HEALTH_SPELL) + " Buy for 40G");
                 break;
             case FIRE_SPELL:
-                itemMsg.clear();
-                msg = "Dragon's Breath x" + shopInventory.get(FIRE_SPELL) + " Buy for 45G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Dragon's Breath x" + shopInventory.get(FIRE_SPELL) + " Buy for 45G");
                 break;
             case LIGHTING_SPELL:
-                itemMsg.clear();
-                msg = "Lighting Bolt x" + shopInventory.get(LIGHTING_SPELL) + " Buy for 45G";
-                shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
+                createBuyAndSellDescription("Lighting Bolt x" + shopInventory.get(LIGHTING_SPELL) + " Buy for 45G");
                 break;
             default:
         }
@@ -309,61 +272,55 @@ public class ShopScene {
         switch (item){
             case HEALTH_POTION:
                 player.getInventory().put(HEALTH_POTION, player.getInventory().get(HEALTH_POTION) - 1);
-                removeEmptyItems(item, btn);
-                itemSold(item);
+                removeItemFromPlayer(item, btn);
                 break;
             case MAGIC_POTION:
                 player.getInventory().put(MAGIC_POTION, player.getInventory().get(MAGIC_POTION) - 1);
-                removeEmptyItems(item, btn);
-                itemSold(item);
+                removeItemFromPlayer(item, btn);
                 break;
             case BROKEN_ARMOR:
                 player.getInventory().put(BROKEN_ARMOR, player.getInventory().get(BROKEN_ARMOR) - 1);
-                removeEmptyItems(item, btn);
-                itemSold(item);
+                removeItemFromPlayer(item, btn);
                 break;
             case LIGHT_ARMOR:
                 player.getInventory().put(LIGHT_ARMOR, player.getInventory().get(LIGHT_ARMOR) - 1);
-                removeEmptyItems(item, btn);
-                itemSold(item);
+                removeItemFromPlayer(item, btn);
                 break;
             case MEDIUM_ARMOR:
                 player.getInventory().put(MEDIUM_ARMOR, player.getInventory().get(MEDIUM_ARMOR) - 1);
-                removeEmptyItems(item, btn);
-                itemSold(item);
+                removeItemFromPlayer(item, btn);
                 break;
             case HEAVY_ARMOR:
                 player.getInventory().put(HEAVY_ARMOR, player.getInventory().get(HEAVY_ARMOR) - 1);
-                removeEmptyItems(item, btn);
-                itemSold(item);
+                removeItemFromPlayer(item, btn);
                 break;
             case LEGENDARY_ARMOR:
                 player.getInventory().put(LEGENDARY_ARMOR, player.getInventory().get(LEGENDARY_ARMOR) - 1);
-                removeEmptyItems(item, btn);
-                itemSold(item);
+                removeItemFromPlayer(item, btn);
                 break;
             case LIFE_STEAL:
                 player.getInventory().put(LIFE_STEAL, player.getInventory().get(LIFE_STEAL) - 1);
-                removeEmptyItems(item, btn);
-                itemSold(item);
+                removeItemFromPlayer(item, btn);
                 break;
             case HEALTH_SPELL:
                 player.getInventory().put(HEALTH_SPELL, player.getInventory().get(HEALTH_SPELL) - 1);
-                removeEmptyItems(item, btn);
-                itemSold(item);
+                removeItemFromPlayer(item, btn);
                 break;
             case FIRE_SPELL:
                 player.getInventory().put(FIRE_SPELL, player.getInventory().get(FIRE_SPELL) - 1);
-                removeEmptyItems(item, btn);
-                itemSold(item);
+                removeItemFromPlayer(item, btn);
                 break;
             case LIGHTING_SPELL:
                 player.getInventory().put(LIGHTING_SPELL, player.getInventory().get(LIGHTING_SPELL) - 1);
-                removeEmptyItems(item, btn);
-                itemSold(item);
+                removeItemFromPlayer(item, btn);
                 break;
             default:
         }
+    }
+
+    private void removeItemFromPlayer(ITEMS item, ItemButton btn) {
+        removeEmptyItems(item, btn);
+        itemSold(item);
     }
 
     private void buyItem(ITEMS item, ItemButton btn){

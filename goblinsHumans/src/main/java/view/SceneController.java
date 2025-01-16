@@ -36,18 +36,12 @@ public class SceneController {
     public static GameLevel levelFour = new GameLevel(new AnchorPane(), "level_four_sized.jpg", "src/main/resources/let-the-games-begin-21858.mp3");
     public static GameLevel levelFive = new GameLevel(new AnchorPane(), "level_five_sized.png", "src/main/resources/workout-10823.mp3");
 
-
     public static EndGame end = new EndGame();
-
-
 
     private static final ArmoryScene armory = new ArmoryScene();
     private static final Scene armoryScene = armory.getArmoryScene();
     private static final ShopScene shop = new ShopScene();
     private static final Scene shopScene = shop.getShopScene();
-
-    public static MediaPlayer mediaPlayer;
-
 
     public SceneController(){
         mainStage = new Stage();
@@ -60,7 +54,6 @@ public class SceneController {
 
         mainStage.setScene(menuScene);
     }
-
 
     public Stage getMainStage(){
         return mainStage;

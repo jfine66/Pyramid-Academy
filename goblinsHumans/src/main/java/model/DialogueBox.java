@@ -15,6 +15,7 @@ public class DialogueBox {
         setFont();
     }
 
+//    Can two these two methods into one???
     public StackPane getPlayerDialogue(String msg){
         stack.getChildren().clear();
         r.setStrokeWidth(5);

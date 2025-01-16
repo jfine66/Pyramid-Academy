@@ -17,7 +17,7 @@ public class Banner {
         setFont();
     }
 
-
+//    Can turn these two methods into one???
     public StackPane getPlayerBanner(){
         stack.getChildren().clear();
         r.setFill(Color.BLUE);

@@ -16,7 +16,6 @@ public class Goblin extends GameEntity {
         drops.add(ITEMS.getRandomItem());
     }
 
-
     public ITEMS didDrop(){
         boolean anyDrop;
 

@@ -84,62 +84,46 @@ public class ArmoryScene {
 
         switch (item){
             case HEALTH_POTION:
-                itemMsg.clear();
-                msg = "A vibrant red liquid,\nradiating warmth\nrestores 1-10 points of health\nYou have x" + player.getInventory().get(HEALTH_POTION) +" of this item";
-                armoryPane.getChildren().add(itemMsg.armoryDesc(msg));
+                itemDescription("A vibrant red liquid,\nradiating warmth\nrestores 1-10 points of health\nYou have x" + player.getInventory().get(HEALTH_POTION) +" of this item");
                 break;
             case MAGIC_POTION:
-                itemMsg.clear();
-                msg = "A memorizing dark blue,\nliquid restores 1-10\npoints of magic power\nYou have x" + player.getInventory().get(MAGIC_POTION) +" of this item";
-                armoryPane.getChildren().add(itemMsg.armoryDesc(msg));
+                itemDescription("A memorizing dark blue,\nliquid restores 1-10\npoints of magic power\nYou have x" + player.getInventory().get(MAGIC_POTION) +" of this item");
                 break;
             case BROKEN_ARMOR:
-                itemMsg.clear();
-                msg = "Rusted and in disrepair\nit offers little,\nin the way of protection\nplus one to your AC\nYou have x" + player.getInventory().get(BROKEN_ARMOR) + " of this item";
-                armoryPane.getChildren().add(itemMsg.armoryDesc(msg));
+                itemDescription("Rusted and in disrepair\nit offers little,\nin the way of protection\nplus one to your AC\nYou have x" + player.getInventory().get(BROKEN_ARMOR) + " of this item");
                 break;
             case LIGHT_ARMOR:
-                itemMsg.clear();
-                msg = "Well kept chain-mail\nThe interwoven links provide protection\nplus two to your AC\nYou have x" + player.getInventory().get(LIGHT_ARMOR) + " of this item";
-                armoryPane.getChildren().add(itemMsg.armoryDesc(msg));
+                itemDescription("Well kept chain-mail\nThe interwoven links provide protection\nplus two to your AC\nYou have x" + player.getInventory().get(LIGHT_ARMOR) + " of this item");
                 break;
             case MEDIUM_ARMOR:
-                itemMsg.clear();
-                msg = "Well kept breastplate\nplus three to your AC\nLeft click to equip\nYou have x" + player.getInventory().get(MEDIUM_ARMOR) + " of this item";
-                armoryPane.getChildren().add(itemMsg.armoryDesc(msg));
+                itemDescription("Well kept breastplate\nplus three to your AC\nLeft click to equip\nYou have x" + player.getInventory().get(MEDIUM_ARMOR) + " of this item");
                 break;
             case HEAVY_ARMOR:
-                itemMsg.clear();
-                msg = "Heavy and thick splint mail\nplus four to your AC\nLeft click to equip\nYou have x" + player.getInventory().get(HEAVY_ARMOR) + " of this item";
-                armoryPane.getChildren().add(itemMsg.armoryDesc(msg));
+                itemDescription("Heavy and thick splint mail\nplus four to your AC\nLeft click to equip\nYou have x" + player.getInventory().get(HEAVY_ARMOR) + " of this item");
                 break;
             case LEGENDARY_ARMOR:
-                itemMsg.clear();
-                msg = "Offers full protection\ndespite being so light\nplus five to your AC\nYou have x" + player.getInventory().get(LEGENDARY_ARMOR) + " of this item";
-                armoryPane.getChildren().add(itemMsg.armoryDesc(msg));
+                itemDescription("Offers full protection\ndespite being so light\nplus five to your AC\nYou have x" + player.getInventory().get(LEGENDARY_ARMOR) + " of this item");
                 break;
             case LIFE_STEAL:
-                itemMsg.clear();
-                msg = "A dark purple bound book\nIt feels has like it hungers,\nfor life itself.\nSteal the life\nof your enemies\nRestores 5HP, Cost 5MP";
-                armoryPane.getChildren().add(itemMsg.armoryDesc(msg));
+                itemDescription("A dark purple bound book\nIt feels has like it hungers,\nfor life itself.\nSteal the life\nof your enemies\nRestores 5HP, Cost 5MP");
                 break;
             case HEALTH_SPELL:
-                itemMsg.clear();
-                msg = "A vibrant red leather book\nPluses with life energy\nRestores 10HP, Cost 5MP";
-                armoryPane.getChildren().add(itemMsg.armoryDesc(msg));
+                itemDescription("A vibrant red leather book\nPluses with life energy\nRestores 10HP, Cost 5MP");
                 break;
             case FIRE_SPELL:
-                itemMsg.clear();
-                msg = "Hot to the touch\nThe magic is waiting,\nto burst forward\nCast a cone of fire,\nin front you\nCost 10MP";
-                armoryPane.getChildren().add(itemMsg.armoryDesc(msg));
+                itemDescription("Hot to the touch\nThe magic is waiting,\nto burst forward\nCast a cone of fire,\nin front you\nCost 10MP");
                 break;
             case LIGHTING_SPELL:
-                itemMsg.clear();
-                msg = "The tips of your fingers,\ntingle, The magic can,\nbarely be contained\nShoot out a lighting bolt\nCost 10MP";
-                armoryPane.getChildren().add(itemMsg.armoryDesc(msg));
+                itemDescription("The tips of your fingers,\ntingle, The magic can,\nbarely be contained\nShoot out a lighting bolt\nCost 10MP");
                 break;
             default:
         }
+    }
+
+    private void itemDescription(String message) {
+        itemMsg.clear();
+        msg = message;
+        armoryPane.getChildren().add(itemMsg.armoryDesc(msg));
     }
 
     private void playSound(){
