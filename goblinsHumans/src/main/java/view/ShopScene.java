@@ -123,7 +123,7 @@ public class ShopScene {
            itemButton.setTranslateY(yPos += 64);
            counter++;
 
-           itemButton.setOnMouseEntered(mouseEvent -> sellDesc(item));
+           itemButton.setOnMouseEntered(mouseEvent -> wareDesc(item, false));
            itemButton.setOnMouseExited(mouseEvent -> shopPane.getChildren().remove(itemMsg.getPlayerDialogue(msg)));
            itemButton.setOnMouseClicked(mouseEvent -> sellItem(item, itemButton));
 
@@ -152,7 +152,7 @@ public class ShopScene {
             ItemButton itemButton = new ItemButton(item, itemHolder, shopPane);
             itemButton.setTranslateX(xPos);
             itemButton.setTranslateY(yPos += 64);
-            itemButton.setOnMouseEntered(mouseEvent -> buyDesc(item));
+            itemButton.setOnMouseEntered(mouseEvent -> wareDesc(item, true));
             itemButton.setOnMouseExited(mouseEvent -> shopPane.getChildren().remove(itemMsg.getPlayerDialogue(msg)));
             itemButton.setOnMouseClicked(mouseEvent -> buyItem(item, itemButton));
 
@@ -183,86 +183,45 @@ public class ShopScene {
         shopPane.getChildren().add(itemMsg.getPlayerDialogue(msg));
     }
 
-    private void sellDesc(ITEMS item){
+    private void wareDesc(ITEMS item, boolean isBuying) {
         itemMsg.getPlayerDialogue(msg).setLayoutX(0);
         itemMsg.getPlayerDialogue(msg).setLayoutY(256);
+        int numOfItem = isBuying ? shopInventory.get(item) : player.getInventory().get(item);
+        String buyOrSell = isBuying ? " Buy for " : " Sell for ";
 
         switch (item){
             case HEALTH_POTION:
-                createBuyAndSellDescription("Health Potion x" + player.getInventory().get(HEALTH_POTION) +" Sells for 10G");
+                createBuyAndSellDescription("Health Potion x" + numOfItem + buyOrSell + (isBuying ? "20G" : "10G"));
                 break;
             case MAGIC_POTION:
-                createBuyAndSellDescription("Magic Potion x" + player.getInventory().get(MAGIC_POTION) + " Sells for 10G");
+                createBuyAndSellDescription("Magic Potion x" + numOfItem + buyOrSell + (isBuying ? "20G" : "10G"));
                 break;
             case BROKEN_ARMOR:
-                createBuyAndSellDescription("Rusted Armor x" + player.getInventory().get(BROKEN_ARMOR) + " Sells for 5G");
+                createBuyAndSellDescription("Rusted Armor x" + numOfItem + buyOrSell + (isBuying ? "10G" : "5G"));
                 break;
             case LIGHT_ARMOR:
-                createBuyAndSellDescription("Light Armor x" + player.getInventory().get(LIGHT_ARMOR) + " Sells for 15G");
+                createBuyAndSellDescription("Light Armor x" + numOfItem + buyOrSell + (isBuying ? "25G" : "15G"));
                 break;
             case MEDIUM_ARMOR:
-                createBuyAndSellDescription("Medium Armor x" + player.getInventory().get(MEDIUM_ARMOR) + " Sells for 20G");
+                createBuyAndSellDescription("Medium Armor x" + numOfItem + buyOrSell + (isBuying ? "30G" : "20G"));
                 break;
             case HEAVY_ARMOR:
-                createBuyAndSellDescription("Heavy Armor x" + player.getInventory().get(HEAVY_ARMOR) + " Sells for 25G");
+                createBuyAndSellDescription("Heavy Armor x" + numOfItem + buyOrSell + (isBuying ? "40G" : "25G"));
                 break;
             case LEGENDARY_ARMOR:
-                createBuyAndSellDescription("Legendary Armor x" + player.getInventory().get(LEGENDARY_ARMOR) + " Sells for 75G");
+                createBuyAndSellDescription("Legendary Armor x" + numOfItem + buyOrSell + (isBuying ? "100G" : "75G"));
                 break;
             case LIFE_STEAL:
-                createBuyAndSellDescription("Life Steal SpellBook x" + player.getInventory().get(LIFE_STEAL) + " Sells for 20G");
+                createBuyAndSellDescription("Life Steal SpellBook x" + numOfItem + buyOrSell + (isBuying ? "40G" : "20G"));
                 break;
             case HEALTH_SPELL:
-                createBuyAndSellDescription("Spell of Life x" + player.getInventory().get(HEALTH_SPELL) + " Sells for 20G");
+                createBuyAndSellDescription("Spell of Life x" + numOfItem + buyOrSell + (isBuying ? "40G" : "20G"));
                 break;
             case FIRE_SPELL:
-                createBuyAndSellDescription("Dragon's Breath x" + player.getInventory().get(FIRE_SPELL) + " Sells for 25G");
+                createBuyAndSellDescription("Dragon's Breath x" + numOfItem + buyOrSell + (isBuying ? "45G" : "25G"));
                 break;
             case LIGHTING_SPELL:
-                createBuyAndSellDescription("Lighting Bolt x" + player.getInventory().get(LIGHTING_SPELL) + " Sells for 25G");
-                break;
-            default:
-        }
-    }
-
-
-    private void buyDesc(ITEMS item){
-        itemMsg.getPlayerDialogue(msg).setLayoutX(0);
-        itemMsg.getPlayerDialogue(msg).setLayoutY(256);
-
-        switch (item){
-            case HEALTH_POTION:
-                createBuyAndSellDescription("Health Potion x" + shopInventory.get(HEALTH_POTION) +" Buy for 20G");
-                break;
-            case MAGIC_POTION:
-                createBuyAndSellDescription("Magic Potion x" + shopInventory.get(MAGIC_POTION) + " Buy for 20G");
-                break;
-            case BROKEN_ARMOR:
-                createBuyAndSellDescription("Rusted Armor x" + shopInventory.get(BROKEN_ARMOR) + " Buy for 10G");
-                break;
-            case LIGHT_ARMOR:
-                createBuyAndSellDescription("Light Armor x" +shopInventory.get(LIGHT_ARMOR) + " Buy for 25G");
-                break;
-            case MEDIUM_ARMOR:
-                createBuyAndSellDescription("Medium Armor x" + shopInventory.get(MEDIUM_ARMOR) + " Buy for 30G");
-                break;
-            case HEAVY_ARMOR:
-                createBuyAndSellDescription("Heavy Armor x" + shopInventory.get(HEAVY_ARMOR) + " Buy for 40G");
-                break;
-            case LEGENDARY_ARMOR:
-                createBuyAndSellDescription("Legendary Armor x" + shopInventory.get(LEGENDARY_ARMOR) + " Buy for 100G");
-                break;
-            case LIFE_STEAL:
-                createBuyAndSellDescription("Life Steal SpellBook x" + shopInventory.get(LIFE_STEAL) + " Buy for 40G");
-                break;
-            case HEALTH_SPELL:
-                createBuyAndSellDescription("Spell of Life x" + shopInventory.get(HEALTH_SPELL) + " Buy for 40G");
-                break;
-            case FIRE_SPELL:
-                createBuyAndSellDescription("Dragon's Breath x" + shopInventory.get(FIRE_SPELL) + " Buy for 45G");
-                break;
-            case LIGHTING_SPELL:
-                createBuyAndSellDescription("Lighting Bolt x" + shopInventory.get(LIGHTING_SPELL) + " Buy for 45G");
+                createBuyAndSellDescription("Lighting Bolt x" + numOfItem + buyOrSell + (isBuying ? "45G" : "25G"));
                 break;
             default:
         }

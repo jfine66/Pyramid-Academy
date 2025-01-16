@@ -52,7 +52,8 @@ public class SceneController {
         mainStage.getIcons().add(icon);
         mainStage.setResizable(false);
 
-        mainStage.setScene(menuScene);
+//        mainStage.setScene(menuScene);
+        mainStage.setScene(shopScene);
     }
 
     public Stage getMainStage(){
