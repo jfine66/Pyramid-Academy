@@ -23,23 +23,29 @@ public class GameEntity extends ImageView {
         this.attackSoundUrl = attackSoundUrl;
     }
 
-    public ImageView getToken() {
-        token.setFitWidth(64);
-        token.setFitHeight(64);
-        return token;
+    protected void attackSound(){
+        String url = attackSoundUrl;
+        Media h = new Media(Paths.get(url).toUri().toString());
+        mediaPlayer = new MediaPlayer(h);
+        mediaPlayer.play();
     }
 
-    public int getTokenX(){
-        return (int) token.getLayoutX();
+    protected String damage(GameEntity gameEntity){
+        attackSound();
+        int attack = (int) Math.floor(Math.random() * strength);
+        gameEntity.setHealth(gameEntity.getHealth() - attack);
+        String entityName = getEntityName();
+        return entityName.equals("Human") ? "Hit Goblin for " + attack + " damage" :
+            "Goblin you for " + attack + " damage";
     }
 
-    public int getTokenY(){
-        return (int) token.getLayoutY();
-    }
-
-    public void setTokenPos(int x, int y){
-        token.setLayoutX(x);
-        token.setLayoutY(y);
+    public String toHit(GameEntity gameEntity){
+        int toHit = (int) Math.floor(Math.random() * 20) + 1;
+        if(toHit > gameEntity.getAC()){
+            return damage(gameEntity);
+        } else {
+            return "Attacked missed";
+        }
     }
 
     public int getAC() {
@@ -54,18 +60,31 @@ public class GameEntity extends ImageView {
         return magic;
     }
 
+    public int getTokenX(){
+        return (int) token.getLayoutX();
+    }
+
+    public int getTokenY(){
+        return (int) token.getLayoutY();
+    }
+
+    public ImageView getToken() {
+        token.setFitWidth(64);
+        token.setFitHeight(64);
+        return token;
+    }
+
+    private String getEntityName() {
+       return getClass().getSimpleName();
+    }
+
+    public void setTokenPos(int x, int y){
+        token.setLayoutX(x);
+        token.setLayoutY(y);
+    }
+
     public void setHealth(int health) {
         this.health = health;
     }
-
-
-
-    protected void attackSound(){
-        String url = attackSoundUrl;
-        Media h = new Media(Paths.get(url).toUri().toString());
-        mediaPlayer = new MediaPlayer(h);
-        mediaPlayer.play();
-    }
-
 
 }
