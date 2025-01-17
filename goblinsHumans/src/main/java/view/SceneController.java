@@ -93,7 +93,7 @@ public class SceneController {
         game.setListOfGoblins(list);
         game.removePlayer();
         game.gameStart();
-        levelOne.getMediaPlayer().play();
+//        levelOne.getMediaPlayer().play();
         mainStage.setScene(levelOneScene);
     }
 
@@ -171,7 +171,6 @@ public class SceneController {
 
     public static GameLogic getGame(){return game;}
 
-
     //SCENE MUSIC
     private static void menuMusic(){
         String url = "src/main/resources/2019-07-29_-_Elven_Forest_-_FesliyanStudios.com_-_David_Renda.mp3";
@@ -181,6 +180,4 @@ public class SceneController {
         System.out.println("Scene Player is playing");
         mediaPlayer.play();
     }
-
-
 }

@@ -7,13 +7,14 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import model.GameEntity;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameLevel {
-    private final HashMap<ArrayList<Integer>, Object> gridPos = new HashMap<>();
+    private final HashMap<ArrayList<Integer>, GameEntity> gridPos = new HashMap<>();
     private final AnchorPane levelPane;
     private final Scene level;
     private MediaPlayer mediaPlayer;
@@ -58,7 +59,7 @@ public class GameLevel {
         return levelPane;
     }
 
-    public HashMap<ArrayList<Integer>, Object> getGridPos() {
+    public HashMap<ArrayList<Integer>, GameEntity> getGridPos() {
         return gridPos;
     }
 

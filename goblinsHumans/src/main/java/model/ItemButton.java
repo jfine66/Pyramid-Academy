@@ -14,7 +14,6 @@ import java.util.*;
 
 import static model.ITEMS.*;
 
-// This class needs another look
 public class ItemButton extends Button {
     private static final Human player = SceneController.getPlayer();
     private static final GameLogic game = SceneController.getGame();
@@ -109,7 +108,7 @@ public class ItemButton extends Button {
                    lackMagic();
                 } else {
                     game.closeMenu();
-                    game.directionMenu();
+//                    game.directionMenu();
                 }
                 break;
             case FIRE_SPELL:
@@ -117,7 +116,7 @@ public class ItemButton extends Button {
                     lackMagic();
                 } else {
                     game.closeMenu();
-                    game.fireDirection();
+//                    game.fireDirection();
                 }
                 break;
             default:
@@ -267,7 +266,7 @@ public class ItemButton extends Button {
         currentPane.getChildren().remove(game.getBack());
         game.closeMenu();
         game.createAttackOptions();
-        game.setLifeStealListeners();
+//        game.setLifeStealListeners();
         player.setMagic(player.getMagic() - 5);
         inventory.put(LIFE_STEAL, inventory.get(LIFE_STEAL) - 1);
         removeEmpty(LIFE_STEAL, this);

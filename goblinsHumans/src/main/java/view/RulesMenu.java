@@ -15,8 +15,6 @@ public class RulesMenu{
     private final StackPane rules = new StackPane();
     private final DialogueBox gameRules = new DialogueBox();
 
-
-
     public RulesMenu(){
         rulesPane = new AnchorPane();
         ruleScene = new Scene(rulesPane, SceneController.WIDTH, SceneController.HEIGHT);
@@ -52,8 +50,4 @@ public class RulesMenu{
         gameRules.rules(newRules).setLayoutX(130);
         rulesPane.getChildren().add(gameRules.rules(newRules));
     }
-
-
-
-
 }

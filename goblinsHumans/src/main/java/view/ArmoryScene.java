@@ -132,5 +132,4 @@ public class ArmoryScene {
         MediaPlayer mediaPlayer = new MediaPlayer(h);
         mediaPlayer.play();
     }
-
 }
