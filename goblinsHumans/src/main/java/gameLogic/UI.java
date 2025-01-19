@@ -186,7 +186,7 @@ public class UI {
             closeMenu();
             grid.clearMovementGrid();
             grid.clearAttackGrid();
-            grid.itemGridLogic.clearDirctMenu();
+            grid.itemGridLogic.clearDirectionMenu();
             openMenu();
             currentPane.getChildren().remove(back);
         });

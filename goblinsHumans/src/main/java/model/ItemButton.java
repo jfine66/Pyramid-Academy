@@ -108,7 +108,7 @@ public class ItemButton extends Button {
                 if(player.getMagic() < 10){
                    lackMagic();
                 } else {
-                    game.directionMenu();
+                    game.directionMenu("lighting");
                     game.closeMenu();
                 }
                 break;
@@ -116,7 +116,7 @@ public class ItemButton extends Button {
                 if(player.getMagic() < 10){
                     lackMagic();
                 } else {
-                    game.fireDirection();
+                    game.fireDirection("fire");
                     game.closeMenu();
                 }
                 break;

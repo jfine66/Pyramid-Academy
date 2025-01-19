@@ -66,12 +66,12 @@ public class GameLogic {
         grid.itemGridLogic.setLifeStealListeners();
     }
 
-    public void fireDirection() {
-        grid.itemGridLogic.fireDirection();
+    public void fireDirection(String attackName) {
+        grid.itemGridLogic.spellDirection(attackName);
     }
 
-    public void directionMenu() {
-        grid.itemGridLogic.lightingDirection();
+    public void directionMenu(String attackName) {
+        grid.itemGridLogic.spellDirection(attackName);;
     }
 
     public void setListOfGoblins(ArrayList<Goblin> listOfGoblins) {

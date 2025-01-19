@@ -54,29 +54,45 @@ public class ItemGridLogic {
         }
     }
 
-    public void lightingDirection(){
+    public void spellDirection(String attackName) {
         ActionButton up = new ActionButton("UP");
         ActionButton left = new ActionButton("LEFT");
         ActionButton right = new ActionButton("RIGHT");
         ActionButton down = new ActionButton("DOWN");
 
         up.setOnMouseClicked(mouseEvent -> {
-            createUpAttack();
+            if(attackName.equals("fire")) {
+                createCone("up");
+            } else {
+                createLightingDirectionAttack("up");
+            }
             currentPane.getChildren().remove(directionPane);
         });
 
         left.setOnMouseClicked(mouseEvent -> {
-            createLeftAttack();
+            if(attackName.equals("fire")) {
+                createCone("left");
+            } else {
+                createLightingDirectionAttack("left");
+            }
             currentPane.getChildren().remove(directionPane);
         });
 
         right.setOnMouseClicked(mouseEvent -> {
-            createRightAttack();
+            if(attackName.equals("fire")) {
+                createCone("right");
+            } else {
+                createLightingDirectionAttack("right");
+            }
             currentPane.getChildren().remove(directionPane);
         });
 
         down.setOnMouseClicked(mouseEvent -> {
-            createDownAttack();
+            if(attackName.equals("fire")) {
+                createCone("down");
+            } else {
+                createLightingDirectionAttack("down");
+            }
             currentPane.getChildren().remove(directionPane);
         });
 
@@ -97,60 +113,18 @@ public class ItemGridLogic {
         currentPane.getChildren().add(directionPane);
     }
 
-    public void fireDirection(){
-        ActionButton up = new ActionButton("UP");
-        ActionButton left = new ActionButton("LEFT");
-        ActionButton right = new ActionButton("RIGHT");
-        ActionButton down = new ActionButton("DOWN");
-
-        up.setOnMouseClicked(mouseEvent -> {
-            createUpCone();
-            currentPane.getChildren().remove(directionPane);
-        });
-
-        left.setOnMouseClicked(mouseEvent -> {
-            createLeftCone();
-            currentPane.getChildren().remove(directionPane);
-        });
-
-        right.setOnMouseClicked(mouseEvent -> {
-            createRightCone();
-            currentPane.getChildren().remove(directionPane);
-        });
-
-        down.setOnMouseClicked(mouseEvent -> {
-            createDownCone();
-            currentPane.getChildren().remove(directionPane);
-        });
-
-        back.setLayoutX(896);
-        back.setLayoutY(704);
-
-        up.setTranslateX(player.getTokenX() + 64);
-        left.setTranslateX(player.getTokenX() + 64);
-        right.setTranslateX(player.getTokenX() + 64);
-        down.setTranslateX(player.getTokenX() + 64);
-
-        up.setTranslateY(player.getTokenY());
-        left.setTranslateY(player.getTokenY() + 64);
-        right.setTranslateY(player.getTokenY() + 128);
-        down.setTranslateY(player.getTokenY() + 192);
-
-
-        directionPane.getChildren().addAll(up,left,right,down);
-        currentPane.getChildren().add(directionPane);
-    }
-
-    public void clearDirctMenu() {
+    public void clearDirectionMenu() {
         clearAttackGrid(this.recList);
         directionPane.getChildren().clear();
         currentPane.getChildren().remove(directionPane);
     }
 
-    private void createUpAttack(){
+    private void createLightingDirectionAttack(String direction) {
+        boolean isVerticalAxis = direction.equals("up") || direction.equals("down");
+        int tileDirection = direction.equals("left") || direction.equals("up") ? -64 : 64;
         recList = new ArrayList<>();
-        int x = player.getTokenX();
-        int y = player.getTokenY() - 64;
+        int x = player.getTokenX() + (direction.equals("left") || direction.equals("right") ? tileDirection : 0);
+        int y = player.getTokenY() + (isVerticalAxis ? tileDirection : 0);
 
         for(int i = 0; i < 4; i++){
             Rectangle r = new Rectangle(0,0, 64,64);
@@ -164,85 +138,22 @@ public class ItemGridLogic {
         for(Rectangle r : recList){
             r.setLayoutX(x);
             r.setLayoutY(y);
-            y -= 64;
-            setLightingListeners(r);
+            if(isVerticalAxis) {
+                y += tileDirection;
+            } else {
+                x += tileDirection;
+            }
+            setListeners(r, "lighting");
             currentPane.getChildren().add(r);
         }
     }
 
-    private void createLeftAttack(){
+    private void createCone(String direction) {
+        boolean isVerticalAxis = direction.equals("up") || direction.equals("down");
+        boolean isRightOrDown = direction.equals("right") || direction.equals("down");
         recList = new ArrayList<>();
-        int x = player.getTokenX() - 64;
-        int y = player.getTokenY();
-
-        for(int i = 0; i < 4; i++){
-            Rectangle r = new Rectangle(0,0, 64,64);
-            r.setOpacity(0.4);
-            r.setFill(Color.RED);
-            r.setStroke(Color.WHITE);
-
-            recList.add(r);
-        }
-
-        for(Rectangle r : recList){
-            r.setLayoutX(x);
-            r.setLayoutY(y);
-            x -= 64;
-            setLightingListeners(r);
-            currentPane.getChildren().add(r);
-        }
-    }
-
-    private void createRightAttack(){
-        recList = new ArrayList<>();
-        int x = player.getTokenX() + 64;
-        int y = player.getTokenY();
-
-        for(int i = 0; i < 4; i++){
-            Rectangle r = new Rectangle(0,0, 64,64);
-            r.setOpacity(0.4);
-            r.setFill(Color.RED);
-            r.setStroke(Color.WHITE);
-
-            recList.add(r);
-        }
-
-        for(Rectangle r : recList){
-            r.setLayoutX(x);
-            r.setLayoutY(y);
-            x += 64;
-            setLightingListeners(r);
-            currentPane.getChildren().add(r);
-        }
-    }
-
-    private void createDownAttack(){
-        recList = new ArrayList<>();
-        int x = player.getTokenX();
-        int y = player.getTokenY() + 64;
-
-        for(int i = 0; i < 4; i++){
-            Rectangle r = new Rectangle(0,0, 64,64);
-            r.setOpacity(0.4);
-            r.setFill(Color.RED);
-            r.setStroke(Color.WHITE);
-
-            recList.add(r);
-        }
-
-        for(Rectangle r : recList){
-            r.setLayoutX(x);
-            r.setLayoutY(y);
-            y += 64;
-            setLightingListeners(r);
-            currentPane.getChildren().add(r);
-        }
-    }
-
-    private void createUpCone(){
-        recList = new ArrayList<>();
-        int x = player.getTokenX() - 128;
-        int y = player.getTokenY() - 128;
+        int x = player.getTokenX() + (direction.equals("right") ? 128 : -128);
+        int y = player.getTokenY() + (isRightOrDown ? 128 : -128);
 
         for(int i = 0; i < 8; i++){
             Rectangle r = new Rectangle(0,0, 64,64);
@@ -256,171 +167,61 @@ public class ItemGridLogic {
         for(int i = 0; i < 5; i++){
             recList.get(i).setLayoutX(x);
             recList.get(i).setLayoutY(y);
-            x += 64;
-            setFireListeners(recList.get(i));
+            if (isVerticalAxis) {
+                x += 64;
+            } else {
+                y += direction.equals("left") ? 64 : -64;
+            }
+            setListeners(recList.get(i), "fire");
             currentPane.getChildren().add(recList.get(i));
         }
 
-        x = player.getTokenX() - 64;
-        y = player.getTokenY() -64;
+        x = player.getTokenX() + (direction.equals("right") ? 64 : -64);
+        y = player.getTokenY() + (isRightOrDown ? 64 : -64);
 
         for(int j = 5; j < recList.size(); j++){
             recList.get(j).setLayoutX(x);
             recList.get(j).setLayoutY(y);
-            x += 64;
-            setFireListeners(recList.get(j));
+            if(isVerticalAxis) {
+                x += 64;
+            } else {
+                y += direction.equals("left") ? 64 : -64;
+            }
+            setListeners(recList.get(j), "fire");
             currentPane.getChildren().add(recList.get(j));
         }
+
     }
 
-    private void createLeftCone(){
-        recList = new ArrayList<>();
-        int x = player.getTokenX() - 128;
-        int y = player.getTokenY() - 128;
-
-        for(int i = 0; i < 8; i++){
-            Rectangle r = new Rectangle(0,0, 64,64);
-            r.setOpacity(0.4);
-            r.setFill(Color.RED);
-            r.setStroke(Color.WHITE);
-
-            recList.add(r);
-        }
-
-        for(int i = 0; i < 5; i++){
-            recList.get(i).setLayoutX(x);
-            recList.get(i).setLayoutY(y);
-            y += 64;
-            setFireListeners(recList.get(i));
-            currentPane.getChildren().add(recList.get(i));
-        }
-
-        x = player.getTokenX() - 64;
-        y = player.getTokenY() -64;
-
-        for(int j = 5; j < recList.size(); j++){
-            recList.get(j).setLayoutX(x);
-            recList.get(j).setLayoutY(y);
-            y += 64;
-            setFireListeners(recList.get(j));
-            currentPane.getChildren().add(recList.get(j));
-        }
-    }
-
-    private void createRightCone(){
-        recList = new ArrayList<>();
-        int x = player.getTokenX() + 128;
-        int y = player.getTokenY() + 128;
-
-        for(int i = 0; i < 8; i++){
-            Rectangle r = new Rectangle(0,0, 64,64);
-            r.setOpacity(0.4);
-            r.setFill(Color.RED);
-            r.setStroke(Color.WHITE);
-
-            recList.add(r);
-        }
-
-        for(int i = 0; i < 5; i++){
-            recList.get(i).setLayoutX(x);
-            recList.get(i).setLayoutY(y);
-            y -= 64;
-            setFireListeners(recList.get(i));
-            currentPane.getChildren().add(recList.get(i));
-        }
-
-        x = player.getTokenX() + 64;
-        y = player.getTokenY() + 64;
-
-        for(int j = 5; j < recList.size(); j++){
-            recList.get(j).setLayoutX(x);
-            recList.get(j).setLayoutY(y);
-            y -= 64;
-            setFireListeners(recList.get(j));
-            currentPane.getChildren().add(recList.get(j));
-        }
-    }
-
-    private void createDownCone(){
-        recList = new ArrayList<>();
-        int x = player.getTokenX() - 128;
-        int y = player.getTokenY() + 128;
-
-        for(int i = 0; i < 8; i++){
-            Rectangle r = new Rectangle(0,0, 64,64);
-            r.setOpacity(0.4);
-            r.setFill(Color.RED);
-            r.setStroke(Color.WHITE);
-
-            recList.add(r);
-        }
-
-        for(int i = 0; i < 5; i++){
-            recList.get(i).setLayoutX(x);
-            recList.get(i).setLayoutY(y);
-            x += 64;
-            setFireListeners(recList.get(i));
-            currentPane.getChildren().add(recList.get(i));
-        }
-
-        x = player.getTokenX() - 64;
-        y = player.getTokenY() + 64;
-
-        for(int j = 5; j < recList.size(); j++){
-            recList.get(j).setLayoutX(x);
-            recList.get(j).setLayoutY(y);
-            x += 64;
-            setFireListeners(recList.get(j));
-            currentPane.getChildren().add(recList.get(j));
-        }
-    }
-
-    private void setFireListeners(Rectangle r){
+    private void setListeners(Rectangle r, String type) {
+        boolean isFire = type.equals("fire");
         r.setOnMouseClicked(mouseEvent -> {
-            msg = "You casted Dragon's Breath";
+            msg = isFire ? "You casted Dragon's Breath" : "You casted Lighting Bolt";
             currentPane.getChildren().remove(back);
             currentPane.getChildren().add(announcements.getPlayerDialogueBox().getDialogue(msg, Color.BLUE));
             player.setMagic(player.getMagic() - 10);
-            fireAttack();
-            clearDirctMenu();
+            if(isFire) {
+                spellAttack(ITEMS.FIRE_SPELL);
+            } else {
+                spellAttack(ITEMS.LIGHTING_SPELL);
+            }
+            clearDirectionMenu();
         });
     }
 
-    private void setLightingListeners(Rectangle r){
-        r.setOnMouseClicked(mouseEvent -> {
-            msg = "You casted Lighting bolt";
-            currentPane.getChildren().remove(back);
-            currentPane.getChildren().add(announcements.getPlayerDialogueBox().getDialogue(msg, Color.BLUE));
-            lightingAttack();
-            clearDirctMenu();
-        });
-    }
+    private void spellAttack(ITEMS item){
+        int damage = item == ITEMS.LIGHTING_SPELL ? 7 : 4;
 
-    private void fireAttack(){
         for(Rectangle r : recList){
             if(gridPos.containsKey(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY())))){
                 gridPos.get(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY())))
-                        .setHealth(gridPos.get(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY()))).getHealth() - 4);
+                        .setHealth(gridPos.get(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY()))).getHealth() - damage);
             }
         }
 
-        player.getInventory().put(ITEMS.FIRE_SPELL, player.getInventory().get(ITEMS.FIRE_SPELL) - 1);
-        if(player.getInventory().get(ITEMS.FIRE_SPELL) <= 0){
-            player.getInventory().remove(ITEMS.FIRE_SPELL);
-        }
-    }
-
-    private void lightingAttack(){
-        for(Rectangle r : recList){
-            if(gridPos.containsKey(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY())))){
-                gridPos.get(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY())))
-                        .setHealth(gridPos.get(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY()))).getHealth() - 7);
-            }
-        }
-
-        player.getInventory().put(ITEMS.LIGHTING_SPELL, player.getInventory().get(ITEMS.LIGHTING_SPELL) - 1);
-        if(player.getInventory().get(ITEMS.LIGHTING_SPELL) <= 0){
-            player.getInventory().remove(ITEMS.LIGHTING_SPELL);
+        player.getInventory().put(item, player.getInventory().get(item) - 1);
+        if(player.getInventory().get(item) <= 0){
+            player.getInventory().remove(item);
         }
     }
 
