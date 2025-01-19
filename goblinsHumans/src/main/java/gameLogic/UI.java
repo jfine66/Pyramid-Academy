@@ -37,10 +37,7 @@ public class UI {
     public UI(Human player,
               AnchorPane currentPane,
               GameAnnouncement announcements,
-              Grid grid,
-              PlayerGridLogic playerGridLogic,
-              GoblinGridLogic goblinGridLogic,
-              ItemGridLogic itemGridLogic) {
+              Grid grid) {
         this.player = player;
         this.currentPane = currentPane;
         this.announcements = announcements;
@@ -189,6 +186,7 @@ public class UI {
             closeMenu();
             grid.clearMovementGrid();
             grid.clearAttackGrid();
+            grid.itemGridLogic.clearDirctMenu();
             openMenu();
             currentPane.getChildren().remove(back);
         });
@@ -199,7 +197,6 @@ public class UI {
                 displayMsg = "YOU HAVE ALREADY ATTACKED";
                 currentPane.getChildren().add(announcements.getPlayerDialogueBox().getDialogue(displayMsg, Color.BLUE));
             } else{
-//                Look at again was formally AttackOptions
                 grid.createAttackGrid();
                 closeMenu();
             }

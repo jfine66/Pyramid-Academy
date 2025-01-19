@@ -18,9 +18,6 @@ public class GameLogic {
     ArrayList<Rectangle> recList = new ArrayList<>();
     UI uiLogic;
     Grid grid;
-    PlayerGridLogic playerGridLogic;
-    GoblinGridLogic goblinGridLogic;
-    ItemGridLogic itemGridLogic;
 
 
     public GameLogic(AnchorPane pane){
@@ -33,10 +30,7 @@ public class GameLogic {
         this.uiLogic = new UI(player,
                 currentPane,
                 announcements,
-                grid,
-                playerGridLogic,
-                goblinGridLogic,
-                itemGridLogic
+                grid
         );
     }
 
@@ -69,15 +63,15 @@ public class GameLogic {
     }
 
     public void setLifeStealListeners() {
-        itemGridLogic.setLifeStealListeners();
+        grid.itemGridLogic.setLifeStealListeners();
     }
 
     public void fireDirection() {
-        itemGridLogic.fireDirection();
+        grid.itemGridLogic.fireDirection();
     }
 
     public void directionMenu() {
-        itemGridLogic.directionMenu();
+        grid.itemGridLogic.lightingDirection();
     }
 
     public void setListOfGoblins(ArrayList<Goblin> listOfGoblins) {

@@ -29,9 +29,10 @@ public class PlayerGridLogic {
         int x = player.getTokenX();
         int y = player.getTokenY();
 
-        back.setLayoutX(x - 128);
-        back.setLayoutY(y + 64);
         currentPane.getChildren().add(back);
+
+        back.setLayoutX(896);
+        back.setLayoutY(704);
 
         recList.get(0).setLayoutX(x - 64);
         recList.get(0).setLayoutY(y);
@@ -158,6 +159,8 @@ public class PlayerGridLogic {
                 gridPos.put(new ArrayList<>(Arrays.asList(player.getTokenX(), player.getTokenY())), player);
                 player.setHasMoved(true);
                 clearMovementGrid(moveGrid);
+                back.setTranslateX(0.0);
+                back.setTranslateY(0.0);
                 currentPane.getChildren().remove(back);
                 uiLogic.openMenu();
             });

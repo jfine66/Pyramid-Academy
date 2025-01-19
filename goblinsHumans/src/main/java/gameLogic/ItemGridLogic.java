@@ -14,19 +14,17 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import static gameLogic.GameLogic.back;
+import static model.ITEMS.LIFE_STEAL;
 
 public class ItemGridLogic {
 
-    private final StackPane menuPane = new StackPane();
-    private AnchorPane currentPane;
+    private final StackPane directionPane = new StackPane();
+    private final AnchorPane currentPane;
     private ArrayList<Rectangle> recList;
-    private Human player;
-    private GameAnnouncement announcements;
+    private final Human player;
+    private final GameAnnouncement announcements;
     private HashMap<ArrayList<Integer>, GameEntity> gridPos;
     private String msg;
-
-    public ItemGridLogic() {
-    }
 
     public ItemGridLogic(Human player,
                          AnchorPane currentPane,
@@ -35,6 +33,7 @@ public class ItemGridLogic {
         this.player = player;
         this.currentPane = currentPane;
         this.recList = recList;
+        this.announcements = announcements;
     }
 
     public void setLifeStealListeners(){
@@ -48,15 +47,14 @@ public class ItemGridLogic {
                     gridPos.get(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY())))
                             .setHealth(gridPos.get(new ArrayList<>(Arrays.asList((int) r.getLayoutX(),(int) r.getLayoutY()))).getHealth() - 5);
                     clearAttackGrid(this.recList);
+                    player.setMagic(player.getMagic() - 5);
+                    player.getInventory().put(LIFE_STEAL, player.getInventory().get(LIFE_STEAL) - 1);
                 });
             }
         }
     }
 
-    public void directionMenu(){
-        menuPane.getChildren().clear();
-        currentPane.getChildren().remove(menuPane);
-
+    public void lightingDirection(){
         ActionButton up = new ActionButton("UP");
         ActionButton left = new ActionButton("LEFT");
         ActionButton right = new ActionButton("RIGHT");
@@ -64,37 +62,42 @@ public class ItemGridLogic {
 
         up.setOnMouseClicked(mouseEvent -> {
             createUpAttack();
-            currentPane.getChildren().remove(menuPane);
+            currentPane.getChildren().remove(directionPane);
         });
 
         left.setOnMouseClicked(mouseEvent -> {
             createLeftAttack();
-            currentPane.getChildren().remove(menuPane);
+            currentPane.getChildren().remove(directionPane);
         });
 
         right.setOnMouseClicked(mouseEvent -> {
             createRightAttack();
-            currentPane.getChildren().remove(menuPane);
+            currentPane.getChildren().remove(directionPane);
         });
 
         down.setOnMouseClicked(mouseEvent -> {
             createDownAttack();
-            currentPane.getChildren().remove(menuPane);
+            currentPane.getChildren().remove(directionPane);
         });
 
-        up.setTranslateY(-128);
-        left.setTranslateY(-64);
-        right.setTranslateY(0);
-        down.setTranslateY(64);
+        back.setLayoutX(896);
+        back.setLayoutY(704);
 
-        menuPane.getChildren().addAll(up,left,right,down);
-        currentPane.getChildren().add(menuPane);
+        up.setTranslateX(player.getTokenX() + 64);
+        left.setTranslateX(player.getTokenX() + 64);
+        right.setTranslateX(player.getTokenX() + 64);
+        down.setTranslateX(player.getTokenX() + 64);
+
+        up.setTranslateY(player.getTokenY());
+        left.setTranslateY(player.getTokenY() + 64);
+        right.setTranslateY(player.getTokenY() + 128);
+        down.setTranslateY(player.getTokenY() + 192);
+
+        directionPane.getChildren().addAll(up,left,right,down);
+        currentPane.getChildren().add(directionPane);
     }
 
     public void fireDirection(){
-        menuPane.getChildren().clear();
-        currentPane.getChildren().remove(menuPane);
-
         ActionButton up = new ActionButton("UP");
         ActionButton left = new ActionButton("LEFT");
         ActionButton right = new ActionButton("RIGHT");
@@ -102,31 +105,46 @@ public class ItemGridLogic {
 
         up.setOnMouseClicked(mouseEvent -> {
             createUpCone();
-            currentPane.getChildren().remove(menuPane);
+            currentPane.getChildren().remove(directionPane);
         });
 
         left.setOnMouseClicked(mouseEvent -> {
             createLeftCone();
-            currentPane.getChildren().remove(menuPane);
+            currentPane.getChildren().remove(directionPane);
         });
 
         right.setOnMouseClicked(mouseEvent -> {
             createRightCone();
-            currentPane.getChildren().remove(menuPane);
+            currentPane.getChildren().remove(directionPane);
         });
 
         down.setOnMouseClicked(mouseEvent -> {
             createDownCone();
-            currentPane.getChildren().remove(menuPane);
+            currentPane.getChildren().remove(directionPane);
         });
 
-        up.setTranslateY(-128);
-        left.setTranslateY(-64);
-        right.setTranslateY(0);
-        down.setTranslateY(64);
+        back.setLayoutX(896);
+        back.setLayoutY(704);
 
-        menuPane.getChildren().addAll(up,left,right,down);
-        currentPane.getChildren().add(menuPane);
+        up.setTranslateX(player.getTokenX() + 64);
+        left.setTranslateX(player.getTokenX() + 64);
+        right.setTranslateX(player.getTokenX() + 64);
+        down.setTranslateX(player.getTokenX() + 64);
+
+        up.setTranslateY(player.getTokenY());
+        left.setTranslateY(player.getTokenY() + 64);
+        right.setTranslateY(player.getTokenY() + 128);
+        down.setTranslateY(player.getTokenY() + 192);
+
+
+        directionPane.getChildren().addAll(up,left,right,down);
+        currentPane.getChildren().add(directionPane);
+    }
+
+    public void clearDirctMenu() {
+        clearAttackGrid(this.recList);
+        directionPane.getChildren().clear();
+        currentPane.getChildren().remove(directionPane);
     }
 
     private void createUpAttack(){
@@ -287,9 +305,6 @@ public class ItemGridLogic {
             setFireListeners(recList.get(j));
             currentPane.getChildren().add(recList.get(j));
         }
-
-        back.setLayoutX(player.getTokenX() + 64);
-        back.setLayoutY(player.getTokenY() - 64);
     }
 
     private void createRightCone(){
@@ -358,8 +373,6 @@ public class ItemGridLogic {
             setFireListeners(recList.get(j));
             currentPane.getChildren().add(recList.get(j));
         }
-
-        back.setLayoutY(player.getTokenY());
     }
 
     private void setFireListeners(Rectangle r){
@@ -369,7 +382,7 @@ public class ItemGridLogic {
             currentPane.getChildren().add(announcements.getPlayerDialogueBox().getDialogue(msg, Color.BLUE));
             player.setMagic(player.getMagic() - 10);
             fireAttack();
-            clearAttackGrid(this.recList);
+            clearDirctMenu();
         });
     }
 
@@ -379,7 +392,7 @@ public class ItemGridLogic {
             currentPane.getChildren().remove(back);
             currentPane.getChildren().add(announcements.getPlayerDialogueBox().getDialogue(msg, Color.BLUE));
             lightingAttack();
-            clearAttackGrid(this.recList);
+            clearDirctMenu();
         });
     }
 

@@ -12,6 +12,7 @@ import view.SceneController;
 
 import java.util.*;
 
+import static gameLogic.GameLogic.back;
 import static model.ITEMS.*;
 
 public class ItemButton extends Button {
@@ -107,16 +108,16 @@ public class ItemButton extends Button {
                 if(player.getMagic() < 10){
                    lackMagic();
                 } else {
+                    game.directionMenu();
                     game.closeMenu();
-//                    game.directionMenu();
                 }
                 break;
             case FIRE_SPELL:
                 if(player.getMagic() < 10){
                     lackMagic();
                 } else {
+                    game.fireDirection();
                     game.closeMenu();
-//                    game.fireDirection();
                 }
                 break;
             default:
@@ -263,12 +264,12 @@ public class ItemButton extends Button {
     }
 
     private void useLifeSteal(){
-        currentPane.getChildren().remove(game.getBack());
+        currentPane.getChildren().remove(back);
         game.closeMenu();
+        // these two methods override "BACK" button
+        // causing it to break when changing spells
         game.createAttackOptions();
-//        game.setLifeStealListeners();
-        player.setMagic(player.getMagic() - 5);
-        inventory.put(LIFE_STEAL, inventory.get(LIFE_STEAL) - 1);
+        game.setLifeStealListeners();
         removeEmpty(LIFE_STEAL, this);
     }
 

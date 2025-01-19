@@ -47,14 +47,12 @@ public class Human extends GameEntity{
 
     private void fillStarterInv() {
         inventory.put(ITEMS.FIRE_SPELL, 1);
+        inventory.put(ITEMS.LIFE_STEAL, 1);
+        inventory.put(ITEMS.LIGHTING_SPELL, 1);
+
         inventory.put(ITEMS.HEALTH_SPELL, 1);
         inventory.put(ITEMS.HEALTH_POTION, 3);
         inventory.put(ITEMS.MAGIC_POTION, 3);
-
-        inventory.put(ITEMS.LIGHT_ARMOR, 1);
-        inventory.put(ITEMS.MEDIUM_ARMOR, 1);
-        inventory.put(ITEMS.HEAVY_ARMOR, 1);
-        inventory.put(ITEMS.LEGENDARY_ARMOR, 1);
 
         goldBag.put(ITEMS.GOLD, 30);
     }
